@@ -6,68 +6,112 @@ Konfigurasi GitHub Codespaces / VS Code Dev Containers untuk proyek Laravel 13 +
 
 | Berkas | Peran |
 |---|---|
-| `devcontainer.json` | Image dasar (PHP 8.4), feature (Node 22, GitHub CLI), port forward, VS Code extension, volume mount untuk `~/.claude` |
-| `post-create.sh` | Setup sekali: composer/npm install, migrate seed, build, install Claude Code, link memory |
-| `post-start.sh` | Tiap container start: re-link symlink memory bila terputus |
+| `devcontainer.json` | Image PHP 8.4 + Node 22, port forward 8000/5173, volume mount `~/.claude`, VS Code extension |
+| `post-create.sh` | Setup sekali: composer/npm install, migrate seed, build, install Claude Code, symlink memory & sessions, restore credential |
+| `post-start.sh` | Setiap container start: re-link symlink memory & sessions bila terputus |
 
-## Autentikasi Claude Code
+---
 
-Proyek ini diasumsikan dipakai dengan **langganan Claude Max/Pro**. Login Claude Code
-memakai OAuth (browser flow) sehingga seluruh pemakaian terhitung dalam kuota
-langganan — **bukan** API pay-per-token.
+## Persistensi Claude Code lintas Codespaces
 
-### Login OAuth (default — pakai kuota Max)
+Tiga hal yang perlu di-persist supaya Claude Code "lanjut" di Codespace mana pun:
 
-Setelah Codespace siap, di terminal:
+### 1. Project context (CLAUDE.md, memory, skills) — via git
+
+Sudah otomatis: file ada di repo, `git pull` membawanya ke Codespace baru.
+
+### 2. Session transcripts (history percakapan) — via symlink + git
+
+`post-create.sh` membuat symlink:
+
+```
+~/.claude/projects/<slug>/sessions  →  /workspaces/simaftunsur/.claude/sessions/
+```
+
+Setiap session yang ditulis Claude Code masuk ke `.claude/sessions/` di repo.
+`git commit && git push` membuatnya tersedia di Codespace lain.
+Pakai `claude --resume` di Codespace baru untuk melanjutkan sesi sebelumnya.
+
+> ⚠️ **PRIVASI**: Sessions berisi seluruh percakapan termasuk potongan kode,
+> error log, dan pertanyaan kamu. **Repo harus PRIVATE**. Jangan pernah
+> ubah ke public selama sessions ter-commit.
+
+### 3. OAuth credential (login Max) — via Codespaces user secret
+
+Tujuan: tidak perlu login OAuth ulang setiap kali buat Codespace baru.
+
+#### Cara setup (sekali saja):
+
+**Langkah 1.** Login dulu sekali di Codespace mana pun via OAuth biasa:
 
 ```bash
 claude
+# pilih "Log in with Anthropic account" → ikuti alur browser
 ```
 
-Pilih "Log in with Anthropic account" saat ditanya. Terminal akan menampilkan
-URL + kode singkat. Buka URL di browser → login akun Anthropic → tempel kode
-balik ke terminal. Credential tersimpan di `~/.claude/` (di-mount sebagai
-Docker volume → **bertahan lintas rebuild**, tidak perlu login ulang).
+**Langkah 2.** Encode file credential ke base64:
 
-### Alternatif: API key (hanya untuk CI/headless)
-
-Kalau benar-benar butuh (mis. headless run, atau bukan subscriber):
-
-1. **GitHub → Settings → Codespaces → Secrets and variables → Codespaces**
-2. **New secret** — Nama: `ANTHROPIC_API_KEY`, nilai: token API
-3. Centang repo `simaftunsur`
-
-⚠️ Mode API = billing pay-per-token, **terpisah dari Max**. Pakai OAuth dulu.
-
-## Persistensi Memory Claude Code
-
-`post-create.sh` membuat **symlink** dari direktori memory user-level Claude Code
-ke `.claude/memory/` di dalam repo:
-
-```
-~/.claude/projects/workspaces-simaftunsur/memory  →  /workspaces/simaftunsur/.claude/memory
+```bash
+base64 -w 0 ~/.claude/.credentials.json
+# Salin output ke clipboard
 ```
 
-Implikasi:
+Setara di PowerShell Windows (kalau login dilakukan di mesin lokal):
 
-- Setiap memory yang ditulis Claude Code masuk ke `.claude/memory/` di repo.
-- Tinggal `git add .claude/memory && git commit && git push` untuk membawanya
-  ke mesin lain (mesin lokal, Codespace berbeda, dst.).
-- Saat membuka Codespaces baru, post-create akan re-link otomatis dan
-  Claude Code langsung membaca memory yang sudah ada.
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:USERPROFILE\.claude\.credentials.json"))
+```
 
-## Persistensi Konfigurasi & Credential
+**Langkah 3.** Simpan sebagai **Codespaces user secret** di GitHub:
 
-`devcontainer.json` me-mount Docker volume bernama `simaftunsur-claude-<id>` ke
-`/home/vscode/.claude`. Volume ini menyimpan:
+1. Buka **https://github.com/settings/codespaces**
+   (atau Profile → Settings → Codespaces)
+2. Klik **New secret**
+3. Nama: `CLAUDE_CREDENTIALS_B64`
+4. Nilai: paste hasil base64
+5. **Repository access**: pilih repo `simaftunsur` (atau "All repositories" kalau mau dipakai di proyek lain juga)
 
-- Credential login OAuth (`~/.claude/.credentials.json`)
-- Settings personal (`~/.claude.json`)
-- Symlink memory ke repo
+**Langkah 4.** Buat Codespace baru — `post-create.sh` otomatis restore credential
+ke `~/.claude/.credentials.json`. Jalankan `claude` langsung pakai tanpa login.
 
-Volume bertahan lintas rebuild container (selama Codespace itu sendiri masih
-ada). Untuk pindah ke Codespace baru tetap perlu login ulang sekali —
-tapi memory & CLAUDE.md langsung terbaca karena tersinkron lewat git.
+> 🔑 **Rotasi**: kalau access token expire / kamu logout di tempat lain,
+> ulangi langkah 1-3 untuk update secret. Refresh token biasanya bertahan
+> berbulan-bulan; access token short-lived (auto-refresh oleh Claude Code).
+
+#### Helper otomatis
+
+Daripada manual encode + paste tiap rotasi, jalankan helper:
+
+```bash
+bash .devcontainer/capture-credentials.sh
+```
+
+Script ini:
+
+1. Encode `~/.claude/.credentials.json` ke base64
+2. Coba update secret via `gh` CLI (kalau auth gh punya scope `codespace:secrets`)
+3. Fallback: print base64 + URL settings + instruksi manual
+
+Bila `gh` belum punya scope yang cukup, refresh dulu:
+
+```bash
+gh auth refresh -h github.com -s codespace:secrets
+bash .devcontainer/capture-credentials.sh   # ulangi
+```
+
+---
+
+## Volume Mount
+
+`devcontainer.json` me-mount Docker volume `simaftunsur-claude-<id>` ke
+`/home/vscode/.claude`. Volume ini menyimpan credential dan state lain
+**dalam satu Codespace** lintas rebuild — pelengkap secret di atas.
+
+Kalau buat Codespace baru, volume baru juga dibuat (kosong). Tapi:
+- Credential dipulihkan otomatis dari `CLAUDE_CREDENTIALS_B64`
+- Memory & sessions dipulihkan otomatis lewat symlink ke repo
+
+---
 
 ## Cara Pakai
 
@@ -81,6 +125,9 @@ npm run dev        # http://localhost:5173 — hot reload Vite
 
 # Mulai Claude Code:
 claude
+
+# Lanjutkan sesi sebelumnya (history terbaca dari .claude/sessions/):
+claude --resume
 ```
 
 ## Reset Database

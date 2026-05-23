@@ -13,7 +13,10 @@ print_step "Memasang dependency Composer"
 composer install --no-interaction --prefer-dist --optimize-autoloader
 
 print_step "Memasang dependency npm"
-npm ci
+# Catatan: pakai `npm install` (bukan `npm ci`) supaya transitive optional deps
+# Linux yang tidak ada di lock file Windows (mis. @emnapi/*, *-linux-x64-gnu)
+# bisa di-resolve ulang. Trade-off: lock file mungkin sedikit berubah lintas OS.
+npm install
 
 print_step "Menyiapkan berkas .env"
 if [ ! -f .env ]; then
@@ -40,29 +43,54 @@ else
     print_ok "claude-code sudah terpasang"
 fi
 
-print_step "Menautkan direktori memory ke repo (.claude/memory)"
-# Claude Code menyimpan memory di ~/.claude/projects/<slug>/memory.
+print_step "Menautkan memory & sessions ke repo (lintas-Codespace persistence)"
+# Claude Code menyimpan data per-proyek di ~/.claude/projects/<slug>/.
 # Slug diturunkan dari path absolut proyek, dengan / diganti -.
 PROJECT_PATH="$(pwd)"
 SLUG="$(echo "$PROJECT_PATH" | sed 's|/|-|g' | sed 's|^-||')"
-USER_MEMORY_DIR="$HOME/.claude/projects/$SLUG"
-USER_MEMORY_LINK="$USER_MEMORY_DIR/memory"
-REPO_MEMORY="$PROJECT_PATH/.claude/memory"
+USER_PROJECT_DIR="$HOME/.claude/projects/$SLUG"
+mkdir -p "$USER_PROJECT_DIR"
 
-mkdir -p "$USER_MEMORY_DIR"
-mkdir -p "$REPO_MEMORY"
+# Helper: pindahkan isi direktori user-level ke repo lalu ganti dengan symlink
+relink_to_repo() {
+    local nama="$1"            # mis. "memory" atau "sessions"
+    local user_path="$USER_PROJECT_DIR/$nama"
+    local repo_path="$PROJECT_PATH/.claude/$nama"
 
-# Bila lokasi memory sudah ada sebagai direktori biasa (bukan symlink),
-# pindahkan isinya ke repo lalu hapus untuk dibuatkan symlink.
-if [ -d "$USER_MEMORY_LINK" ] && [ ! -L "$USER_MEMORY_LINK" ]; then
-    if [ "$(ls -A "$USER_MEMORY_LINK" 2>/dev/null)" ]; then
-        cp -rn "$USER_MEMORY_LINK/." "$REPO_MEMORY/" || true
+    mkdir -p "$repo_path"
+
+    if [ -d "$user_path" ] && [ ! -L "$user_path" ]; then
+        if [ "$(ls -A "$user_path" 2>/dev/null)" ]; then
+            cp -rn "$user_path/." "$repo_path/" || true
+        fi
+        rm -rf "$user_path"
     fi
-    rm -rf "$USER_MEMORY_LINK"
-fi
+    ln -sfn "$repo_path" "$user_path"
+    print_ok "$user_path → $repo_path"
+}
 
-ln -sfn "$REPO_MEMORY" "$USER_MEMORY_LINK"
-print_ok "$USER_MEMORY_LINK → $REPO_MEMORY"
+relink_to_repo "memory"
+relink_to_repo "sessions"
+
+print_step "Memulihkan OAuth credential Claude Code (jika ada secret)"
+# Tujuan: tidak perlu login ulang setiap Codespace baru.
+# Cara: simpan isi ~/.claude/.credentials.json sebagai user-secret
+# `CLAUDE_CREDENTIALS_B64` di GitHub. Lihat .devcontainer/README.md.
+CRED_FILE="$HOME/.claude/.credentials.json"
+if [ -n "${CLAUDE_CREDENTIALS_B64:-}" ] && [ ! -f "$CRED_FILE" ]; then
+    mkdir -p "$HOME/.claude"
+    if echo "$CLAUDE_CREDENTIALS_B64" | base64 -d > "$CRED_FILE" 2>/dev/null; then
+        chmod 600 "$CRED_FILE"
+        print_ok "credential dipulihkan dari secret — tidak perlu login ulang"
+    else
+        rm -f "$CRED_FILE"
+        echo "    ⚠ CLAUDE_CREDENTIALS_B64 ada tapi gagal di-decode; lewati"
+    fi
+elif [ -f "$CRED_FILE" ]; then
+    print_ok "credential sudah ada (mungkin dari volume mount) — lewati restore"
+else
+    echo "    (CLAUDE_CREDENTIALS_B64 belum diset — jalankan 'claude' untuk login OAuth)"
+fi
 
 print_step "Selesai!"
 cat <<'EOF'

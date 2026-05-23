@@ -1,0 +1,3 @@
+# Direktori ini di-symlink ke ~/.claude/projects/<slug>/sessions oleh post-create.sh.
+# Session transcripts Claude Code (history percakapan) tersimpan di sini agar
+# tetap tersedia lintas Codespace. WAJIB repo PRIVATE.

@@ -23,10 +23,13 @@ yarn-error.log
 /.vscode
 /.zed
 
-# Claude Code: ignore lokal settings & cache, tapi PERTAHANKAN .claude/memory/
-# (memory di-commit agar tersinkron antara mesin lokal & Codespaces).
+# Claude Code: ignore lokal settings & cache, tapi PERTAHANKAN
+# .claude/memory/ dan .claude/sessions/ (di-commit agar tersinkron lintas
+# mesin lokal ↔ Codespaces). WAJIB repo PRIVATE — sessions berisi transkrip
+# percakapan termasuk potongan kode yang dibahas.
 /.claude/settings.local.json
-/.claude/sessions/
 /.claude/projects/
 /.claude/cache/
 /.claude/skills/**/__pycache__/
+/.claude/todos/
+# Catatan: .claude/sessions/ TIDAK di-ignore (sengaja di-track).
