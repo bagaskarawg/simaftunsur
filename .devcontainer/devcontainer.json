@@ -37,6 +37,13 @@
         "APP_ENV": "local"
     },
 
+    // Persist konfigurasi & credential login Claude Code (OAuth) lintas rebuild
+    // Codespace. Volume ini juga menampung symlink ~/.claude/projects/<slug>/memory
+    // yang menunjuk ke .claude/memory/ dalam repo.
+    "mounts": [
+        "source=simaftunsur-claude-${devcontainerId},target=/home/vscode/.claude,type=volume"
+    ],
+
     "customizations": {
         "vscode": {
             "extensions": [

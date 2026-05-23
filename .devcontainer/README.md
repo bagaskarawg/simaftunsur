@@ -6,9 +6,38 @@ Konfigurasi GitHub Codespaces / VS Code Dev Containers untuk proyek Laravel 13 +
 
 | Berkas | Peran |
 |---|---|
-| `devcontainer.json` | Image dasar (PHP 8.4), feature (Node 22, GitHub CLI), port forward, VS Code extension |
+| `devcontainer.json` | Image dasar (PHP 8.4), feature (Node 22, GitHub CLI), port forward, VS Code extension, volume mount untuk `~/.claude` |
 | `post-create.sh` | Setup sekali: composer/npm install, migrate seed, build, install Claude Code, link memory |
 | `post-start.sh` | Tiap container start: re-link symlink memory bila terputus |
+
+## Autentikasi Claude Code
+
+Proyek ini diasumsikan dipakai dengan **langganan Claude Max/Pro**. Login Claude Code
+memakai OAuth (browser flow) sehingga seluruh pemakaian terhitung dalam kuota
+langganan — **bukan** API pay-per-token.
+
+### Login OAuth (default — pakai kuota Max)
+
+Setelah Codespace siap, di terminal:
+
+```bash
+claude
+```
+
+Pilih "Log in with Anthropic account" saat ditanya. Terminal akan menampilkan
+URL + kode singkat. Buka URL di browser → login akun Anthropic → tempel kode
+balik ke terminal. Credential tersimpan di `~/.claude/` (di-mount sebagai
+Docker volume → **bertahan lintas rebuild**, tidak perlu login ulang).
+
+### Alternatif: API key (hanya untuk CI/headless)
+
+Kalau benar-benar butuh (mis. headless run, atau bukan subscriber):
+
+1. **GitHub → Settings → Codespaces → Secrets and variables → Codespaces**
+2. **New secret** — Nama: `ANTHROPIC_API_KEY`, nilai: token API
+3. Centang repo `simaftunsur`
+
+⚠️ Mode API = billing pay-per-token, **terpisah dari Max**. Pakai OAuth dulu.
 
 ## Persistensi Memory Claude Code
 
@@ -20,27 +49,25 @@ ke `.claude/memory/` di dalam repo:
 ```
 
 Implikasi:
+
 - Setiap memory yang ditulis Claude Code masuk ke `.claude/memory/` di repo.
 - Tinggal `git add .claude/memory && git commit && git push` untuk membawanya
   ke mesin lain (mesin lokal, Codespace berbeda, dst.).
 - Saat membuka Codespaces baru, post-create akan re-link otomatis dan
   Claude Code langsung membaca memory yang sudah ada.
 
-## Mengatur API Key untuk Claude Code
+## Persistensi Konfigurasi & Credential
 
-Di GitHub:
+`devcontainer.json` me-mount Docker volume bernama `simaftunsur-claude-<id>` ke
+`/home/vscode/.claude`. Volume ini menyimpan:
 
-1. Buka **Settings → Codespaces → Secrets and variables → Codespaces**
-   (untuk per-user, atau di repo settings untuk per-repo).
-2. Klik **New repository secret** (atau **New secret** untuk user-level).
-3. Nama: `ANTHROPIC_API_KEY`. Nilai: token API Claude.
-4. Pilih repo target (kalau user-level): centang repo `simaftunsur`.
+- Credential login OAuth (`~/.claude/.credentials.json`)
+- Settings personal (`~/.claude.json`)
+- Symlink memory ke repo
 
-Codespaces akan otomatis inject env var saat startup. Claude Code CLI
-membacanya tanpa perlu login interaktif.
-
-Alternatif: jalankan `claude` di terminal Codespaces dan ikuti alur OAuth.
-Port-forward Codespaces sudah mendukung callback browser.
+Volume bertahan lintas rebuild container (selama Codespace itu sendiri masih
+ada). Untuk pindah ke Codespace baru tetap perlu login ulang sekali —
+tapi memory & CLAUDE.md langsung terbaca karena tersinkron lewat git.
 
 ## Cara Pakai
 
