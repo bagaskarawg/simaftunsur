@@ -69,34 +69,46 @@ else
     print_ok "claude-code sudah terpasang"
 fi
 
-print_step "Menautkan memory & sessions ke repo (lintas-Codespace persistence)"
-# Claude Code menyimpan data per-proyek di ~/.claude/projects/<slug>/.
-# Slug diturunkan dari path absolut proyek, dengan / diganti -.
+print_step "Menautkan memory & sessions ke repo (lintas-Codespace + lintas-device)"
+# Claude Code menulis session transcripts (.jsonl) LANGSUNG di
+# ~/.claude/projects/<slug>/ (bukan di subfolder). Jadi untuk membuat
+# session ikut git, kita symlink seluruh <slug>/ ke repo .claude/sessions/.
+# Memory subfolder di-symlink-balik ke repo .claude/memory/ supaya tetap
+# bisa diakses lewat path Claude (~/.claude/projects/<slug>/memory/).
+#
+# Hasil layout:
+#   ~/.claude/projects/<slug>/         → symlink → repo .claude/sessions/
+#       ├── *.jsonl                    (real files, di repo)
+#       └── memory/                    → symlink → repo .claude/memory/
 PROJECT_PATH="$(pwd)"
 SLUG="$(echo "$PROJECT_PATH" | sed 's|/|-|g' | sed 's|^-||')"
 USER_PROJECT_DIR="$HOME/.claude/projects/$SLUG"
-mkdir -p "$USER_PROJECT_DIR"
+REPO_SESSIONS="$PROJECT_PATH/.claude/sessions"
+REPO_MEMORY="$PROJECT_PATH/.claude/memory"
 
-# Helper: pindahkan isi direktori user-level ke repo lalu ganti dengan symlink
-relink_to_repo() {
-    local nama="$1"            # mis. "memory" atau "sessions"
-    local user_path="$USER_PROJECT_DIR/$nama"
-    local repo_path="$PROJECT_PATH/.claude/$nama"
+mkdir -p "$REPO_SESSIONS" "$REPO_MEMORY"
+mkdir -p "$(dirname "$USER_PROJECT_DIR")"
 
-    mkdir -p "$repo_path"
-
-    if [ -d "$user_path" ] && [ ! -L "$user_path" ]; then
-        if [ "$(ls -A "$user_path" 2>/dev/null)" ]; then
-            cp -rn "$user_path/." "$repo_path/" || true
-        fi
-        rm -rf "$user_path"
+# Jika dir <slug> sudah ada sebagai dir nyata (bukan symlink) — mis. dari
+# instalasi Claude Code yang sudah berjalan sebelumnya — pindahkan isinya
+# ke repo dulu, baru ganti dengan symlink.
+if [ -d "$USER_PROJECT_DIR" ] && [ ! -L "$USER_PROJECT_DIR" ]; then
+    if [ "$(ls -A "$USER_PROJECT_DIR" 2>/dev/null)" ]; then
+        # Pindahkan jsonl & file lain ke repo (skip duplikat)
+        cp -rn "$USER_PROJECT_DIR/." "$REPO_SESSIONS/" 2>/dev/null || true
     fi
-    ln -sfn "$repo_path" "$user_path"
-    print_ok "$user_path → $repo_path"
-}
+    rm -rf "$USER_PROJECT_DIR"
+fi
 
-relink_to_repo "memory"
-relink_to_repo "sessions"
+# Symlink <slug>/ → repo .claude/sessions/
+ln -sfn "$REPO_SESSIONS" "$USER_PROJECT_DIR"
+print_ok "~/.claude/projects/$SLUG → .claude/sessions/"
+
+# Symlink <sessions>/memory → repo .claude/memory/ (agar memory tetap di
+# .claude/memory/, terpisah dari sessions, sambil tetap accessible lewat
+# path Claude yang menanti <slug>/memory/).
+ln -sfn "$REPO_MEMORY" "$REPO_SESSIONS/memory"
+print_ok ".claude/sessions/memory → .claude/memory/"
 
 print_step "Memulihkan OAuth credential Claude Code (jika ada secret)"
 # Tujuan: tidak perlu login ulang setiap Codespace baru.

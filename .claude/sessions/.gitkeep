@@ -1,3 +1,14 @@
-# Direktori ini di-symlink ke ~/.claude/projects/<slug>/sessions oleh post-create.sh.
-# Session transcripts Claude Code (history percakapan) tersimpan di sini agar
-# tetap tersedia lintas Codespace. WAJIB repo PRIVATE.
+# Direktori ini adalah TARGET symlink untuk Claude Code's project directory:
+#   ~/.claude/projects/<slug>/  → symlink → /workspaces/simaftunsur/.claude/sessions/
+#
+# Setup symlink dilakukan oleh .devcontainer/post-create.sh saat Codespace
+# dibuat/rebuild, ATAU manual oleh user di mesin lain (mis. laptop Windows).
+#
+# Isi:
+#   - *.jsonl  → transcript percakapan Claude Code (ikut git agar history
+#                percakapan tersedia lintas device & lintas Codespace).
+#   - memory/  → symlink ke ../memory (memory fisik tetap di .claude/memory/,
+#                tapi tetap accessible via path Claude `<slug>/memory/`).
+#
+# WAJIB repo PRIVATE karena transcript bisa berisi data sensitif (kode,
+# nama pengguna, percakapan internal).

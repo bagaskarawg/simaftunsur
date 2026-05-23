@@ -4,5 +4,6 @@
 - [Laravel Setup](laravel_setup.md) — Keputusan struktural: model Pengguna, kolom kata_sandi, NIP-as-username, Fortify minimal, akun demo & cara run.
 - [Subscription](subscription.md) — User berlangganan Claude Max → default ke OAuth login, bukan ANTHROPIC_API_KEY.
 - [Konvensi NPM FT UNSUR](project_npm_konvensi.md) — Pakai `npm` (bukan `nim`); jangan tertukar dengan `pengguna.nip` SDM/dosen.
+- [Strategi Migrasi](project_strategi_migrasi.md) — Fase 1: migrasi semua fitur lama dari WD III dulu, baru Fase 2: polish + K-Means. Track di ROADMAP.md.
 - [Lokasi Memory](feedback_memory_lokasi.md) — Simpan memory di `.claude/memory/` project (ikut git), BUKAN di home `~/.claude/`.
-- [Sidebar Submenu](feedback_sidebar_submenu.md) — Submenu sidebar hidden sampai parent route aktif; route-driven, bukan Alpine toggle.
+- [Sidebar Submenu](feedback_sidebar_submenu.md) — Pola @persist sidebar + wire:current + Alpine collapsible (caret toggle); state submenu tidak ter-reset saat wire:navigate.

@@ -22,10 +22,17 @@ Sudah otomatis: file ada di repo, `git pull` membawanya ke Codespace baru.
 
 ### 2. Session transcripts (history percakapan) — via symlink + git
 
-`post-create.sh` membuat symlink:
+Claude Code menulis `*.jsonl` (transcript) langsung di
+`~/.claude/projects/<slug>/`, **bukan** di subfolder `sessions/` di dalamnya.
+Karena itu yang di-symlink adalah seluruh direktori `<slug>` ke
+`.claude/sessions/` di repo, bukan subfoldernya.
+
+`post-create.sh` membangun layout berikut:
 
 ```
-~/.claude/projects/<slug>/sessions  →  /workspaces/simaftunsur/.claude/sessions/
+~/.claude/projects/<slug>/         → symlink → /workspaces/simaftunsur/.claude/sessions/
+    ├── *.jsonl                    (file fisik — ikut git)
+    └── memory/                    → symlink → /workspaces/simaftunsur/.claude/memory/
 ```
 
 Setiap session yang ditulis Claude Code masuk ke `.claude/sessions/` di repo.
@@ -35,6 +42,61 @@ Pakai `claude --resume` di Codespace baru untuk melanjutkan sesi sebelumnya.
 > ⚠️ **PRIVASI**: Sessions berisi seluruh percakapan termasuk potongan kode,
 > error log, dan pertanyaan kamu. **Repo harus PRIVATE**. Jangan pernah
 > ubah ke public selama sessions ter-commit.
+
+#### Setup di Laptop Windows (luar Codespaces)
+
+Kalau kamu `git pull` repo ini ke Windows dan ingin Claude Code lokal membaca
+history yang sama (dan menulis sesi baru ke repo agar bisa di-push balik),
+buat symlink manual ekuivalen `post-create.sh`. PowerShell **as Administrator**
+(symbolic link butuh hak admin di Windows default):
+
+```powershell
+# Sesuaikan jalur project di laptop kamu
+$Project = "D:\simaftunsur"
+
+# Slug dihitung dari path absolut, '/' diganti '-' (Claude Code Linux convention).
+# Untuk path Windows: lower-case drive + slash, mis. D:\simaftunsur → -d-simaftunsur
+# Cek dulu slug aktual yang dipakai Claude Code di mesin kamu:
+#   ls "$env:USERPROFILE\.claude\projects"
+$Slug = "-d-simaftunsur"   # sesuaikan dengan hasil di atas
+
+$ClaudeProjects = "$env:USERPROFILE\.claude\projects"
+$UserSlugDir   = Join-Path $ClaudeProjects $Slug
+$RepoSessions  = Join-Path $Project ".claude\sessions"
+$RepoMemory    = Join-Path $Project ".claude\memory"
+
+# 1. Backup & pindahkan jsonl lokal (jika ada) ke repo
+if (Test-Path $UserSlugDir -PathType Container) {
+    if (-not ((Get-Item $UserSlugDir).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        Get-ChildItem -Path $UserSlugDir -Filter "*.jsonl" -ErrorAction SilentlyContinue |
+            ForEach-Object { Copy-Item $_.FullName -Destination $RepoSessions -Force }
+        Remove-Item $UserSlugDir -Recurse -Force
+    }
+}
+
+# 2. Symlink <slug>/ → repo .claude/sessions/
+New-Item -ItemType SymbolicLink -Path $UserSlugDir -Target $RepoSessions
+
+# 3. Symlink sessions/memory → repo .claude/memory/
+$MemLink = Join-Path $RepoSessions "memory"
+if (Test-Path $MemLink) { Remove-Item $MemLink -Force }
+New-Item -ItemType SymbolicLink -Path $MemLink -Target $RepoMemory
+```
+
+Atau pakai `cmd` (juga butuh Administrator):
+
+```cmd
+mklink /D "%USERPROFILE%\.claude\projects\-d-simaftunsur" "D:\simaftunsur\.claude\sessions"
+mklink /D "D:\simaftunsur\.claude\sessions\memory" "D:\simaftunsur\.claude\memory"
+```
+
+Setelah symlink dibuat, jalankan `claude` dari `D:\simaftunsur\` — history
+percakapan dari Codespaces langsung tersedia. Sesi baru yang ditulis di
+Windows akan masuk ke repo, push & pull balik ke Codespaces.
+
+> 💡 **Catatan slug Windows**: format penamaan `<slug>` di Windows kadang
+> berbeda. Cek folder `%USERPROFILE%\.claude\projects\` setelah pertama
+> kali menjalankan Claude Code di project ini untuk tahu nama persisnya.
 
 ### 3. OAuth credential (login Max) — via Codespaces user secret
 
