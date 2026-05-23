@@ -15,7 +15,7 @@ class extends Component {
 
     public Mahasiswa $mahasiswa;
 
-    public string $nim = '';
+    public string $npm = '';
     public string $nama = '';
     public ?int $program_studi_id = null;
     public ?int $angkatan = null;
@@ -32,7 +32,7 @@ class extends Component {
 
         $this->mahasiswa = $mahasiswa;
         $this->fill($mahasiswa->only([
-            'nim', 'nama', 'program_studi_id', 'angkatan',
+            'npm', 'nama', 'program_studi_id', 'angkatan',
             'semester_aktif', 'jenis_kelamin', 'status', 'status_akhir',
             'email', 'nomor_telepon',
         ]));
@@ -47,8 +47,8 @@ class extends Component {
     protected function rules(): array
     {
         return [
-            'nim' => ['required', 'string', 'size:11',
-                Rule::unique('mahasiswa', 'nim')->ignore($this->mahasiswa->id),
+            'npm' => ['required', 'string', 'size:11',
+                Rule::unique('mahasiswa', 'npm')->ignore($this->mahasiswa->id),
             ],
             'nama'             => ['required', 'string', 'min:3', 'max:120'],
             'program_studi_id' => ['required', 'exists:program_studi,id'],
@@ -88,7 +88,7 @@ class extends Component {
             <span class="text-slate-900 font-medium">Ubah</span>
         </div>
         <h1 class="text-display text-slate-900">Ubah Mahasiswa</h1>
-        <p class="mt-1 text-sm text-slate-500">NIM: <span class="font-mono">{{ $mahasiswa->nim }}</span></p>
+        <p class="mt-1 text-sm text-slate-500">NPM: <span class="font-mono">{{ $mahasiswa->npm }}</span></p>
     </div>
 
     <form wire:submit="simpan" class="grid grid-cols-1 gap-4 lg:grid-cols-3">
@@ -97,10 +97,10 @@ class extends Component {
             <x-card title="Identitas">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div class="sm:col-span-1">
-                        <label for="nim" class="block text-sm font-medium text-slate-700 mb-1.5">NIM</label>
-                        <input wire:model="nim" id="nim" type="text" maxlength="11"
+                        <label for="npm" class="block text-sm font-medium text-slate-700 mb-1.5">NPM</label>
+                        <input wire:model="npm" id="npm" type="text" maxlength="11"
                                class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-mono text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
-                        @error('nim') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        @error('npm') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="sm:col-span-1">

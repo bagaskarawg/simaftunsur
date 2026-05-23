@@ -35,12 +35,28 @@
             <thead class="bg-slate-50">
                 <tr>
                     @php
-                        // Tambahkan kelas padding & style default ke setiap <th> tanpa
-                        // mengulang kelas di tiap kolom pemanggil.
+                        // Suntik kelas padding & gaya default ke tiap <th>.
+                        // Jika <th> sudah punya atribut class (mis. "text-center"),
+                        // kelas default di-prepend agar kelas user tetap menang
+                        // untuk konflik (alignment, dsb.). Jika belum ada class,
+                        // ditambahkan baru.
                         $headHtml = trim($head ?? '');
-                        $headHtml = preg_replace(
-                            '/<th(\s|>)/i',
-                            '<th class="'.$paddingTh.' text-left font-semibold text-eyebrow text-slate-600"$1',
+                        $kelasDefault = $paddingTh.' text-left font-semibold text-eyebrow text-slate-600';
+                        $headHtml = preg_replace_callback(
+                            '/<th([^>]*)>/i',
+                            function ($cocok) use ($kelasDefault) {
+                                $atribut = $cocok[1];
+                                if (preg_match('/\bclass="([^"]*)"/i', $atribut)) {
+                                    $atributBaru = preg_replace(
+                                        '/\bclass="([^"]*)"/i',
+                                        'class="'.$kelasDefault.' $1"',
+                                        $atribut,
+                                    );
+                                } else {
+                                    $atributBaru = ' class="'.$kelasDefault.'"'.$atribut;
+                                }
+                                return '<th'.$atributBaru.'>';
+                            },
                             $headHtml,
                         );
                     @endphp

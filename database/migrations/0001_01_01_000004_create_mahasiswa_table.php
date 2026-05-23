@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('mahasiswa', function (Blueprint $tabel) {
             $tabel->id();
-            $tabel->string('nim', 11)->unique();
+            $tabel->string('npm', 11)->unique()->comment('Nomor Pokok Mahasiswa — istilah resmi FT UNSUR');
             $tabel->string('nama');
             $tabel->foreignId('program_studi_id')
                 ->constrained('program_studi')

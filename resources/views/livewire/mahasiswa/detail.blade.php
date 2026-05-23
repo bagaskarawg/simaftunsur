@@ -59,7 +59,7 @@ class extends Component {
             <div>
                 <h1 class="text-display text-slate-900">{{ $mahasiswa->nama }}</h1>
                 <p class="mt-1 text-sm text-slate-500">
-                    <span class="font-mono">{{ $mahasiswa->nim }}</span>
+                    <span class="font-mono">{{ $mahasiswa->npm }}</span>
                     &middot; {{ $mahasiswa->programStudi->kode }}
                     &middot; Angkatan {{ $mahasiswa->angkatan }}
                     &middot; Semester {{ $mahasiswa->semester_aktif }}

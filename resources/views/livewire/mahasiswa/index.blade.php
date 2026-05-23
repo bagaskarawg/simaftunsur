@@ -77,13 +77,13 @@ class extends Component {
             ->with(['programStudi', 'nilaiIpkSemester'])
             ->when($this->kataKunci !== '', function ($q) {
                 $istilah = '%'.$this->kataKunci.'%';
-                $q->where(fn ($w) => $w->where('nim', 'like', $istilah)
+                $q->where(fn ($w) => $w->where('npm', 'like', $istilah)
                                        ->orWhere('nama', 'like', $istilah));
             })
             ->when($this->filterProdi !== '', fn ($q) => $q->where('program_studi_id', $this->filterProdi))
             ->when($this->filterAngkatan !== '', fn ($q) => $q->where('angkatan', $this->filterAngkatan))
             ->when($this->filterStatus !== '', fn ($q) => $q->where('status', $this->filterStatus))
-            ->orderBy('nim')
+            ->orderBy('npm')
             ->paginate(15);
     }
 
@@ -112,14 +112,14 @@ class extends Component {
             {{-- Baris 1: pencarian (kiri, lebar fleksibel) + tombol aksi (kanan, lebar konten) --}}
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div class="relative w-full sm:max-w-xs">
-                    <label for="cari" class="sr-only">Cari NIM atau nama</label>
+                    <label for="cari" class="sr-only">Cari NPM atau nama</label>
                     <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
                         </svg>
                     </span>
                     <input wire:model.live.debounce.300ms="kataKunci" id="cari" type="search"
-                           placeholder="Cari NIM atau nama"
+                           placeholder="Cari NPM atau nama"
                            class="block w-full rounded-md border border-slate-300 bg-white pl-10 pr-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                 </div>
 
@@ -180,21 +180,28 @@ class extends Component {
         </x-slot:toolbar>
 
         <x-slot:head>
-            <th>NIM</th>
+            <th>NPM</th>
             <th>Nama</th>
             <th>Prodi</th>
             <th class="text-center">Angkatan</th>
             <th class="text-center">Smt</th>
             <th>Status</th>
             <th class="text-right">IPK Rata-rata</th>
-            <th class="text-right">Aksi</th>
         </x-slot:head>
 
         @forelse ($mahasiswa as $m)
             <tr wire:key="mhs-{{ $m->id }}" class="hover:bg-slate-50 transition-colors">
-                <x-data-table.cell mono>{{ $m->nim }}</x-data-table.cell>
+                <x-data-table.cell mono>
+                    <a href="{{ route('mahasiswa.detail', $m) }}" wire:navigate
+                       class="text-primary-700 hover:text-primary-900 hover:underline">
+                        {{ $m->npm }}
+                    </a>
+                </x-data-table.cell>
                 <x-data-table.cell>
-                    <div class="font-medium text-slate-900">{{ $m->nama }}</div>
+                    <a href="{{ route('mahasiswa.detail', $m) }}" wire:navigate
+                       class="font-medium text-slate-900 hover:text-primary-700">
+                        {{ $m->nama }}
+                    </a>
                     <div class="text-xs text-slate-500">{{ $m->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}</div>
                 </x-data-table.cell>
                 <x-data-table.cell>
@@ -224,12 +231,6 @@ class extends Component {
                     @else
                         <span class="text-slate-300">—</span>
                     @endif
-                </x-data-table.cell>
-                <x-data-table.cell align="right">
-                    <a href="{{ route('mahasiswa.detail', $m) }}" wire:navigate
-                       class="text-xs font-medium text-primary-700 hover:text-primary-900">
-                        Detail
-                    </a>
                 </x-data-table.cell>
             </tr>
         @empty

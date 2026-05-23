@@ -37,7 +37,7 @@ class MahasiswaFactory extends Factory
         $jenisKelamin = fake()->randomElement(['L', 'P']);
 
         return [
-            'nim' => fake()->unique()->numerify('20#########'),
+            'npm' => fake()->unique()->numerify('20#########'),
             'nama' => fake()->randomElement(self::$namaDepan).' '
                 .fake()->randomElement(self::$namaBelakang),
             'program_studi_id' => ProgramStudi::factory(),

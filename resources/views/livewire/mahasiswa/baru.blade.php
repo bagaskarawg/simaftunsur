@@ -13,7 +13,7 @@ new
 #[Title('Tambah Mahasiswa')]
 class extends Component {
 
-    public string $nim = '';
+    public string $npm = '';
     public string $nama = '';
     public ?int $program_studi_id = null;
     public ?int $angkatan = null;
@@ -41,7 +41,7 @@ class extends Component {
     protected function rules(): array
     {
         return [
-            'nim'              => ['required', 'string', 'size:11', Rule::unique('mahasiswa', 'nim')],
+            'npm'              => ['required', 'string', 'size:11', Rule::unique('mahasiswa', 'npm')],
             'nama'             => ['required', 'string', 'min:3', 'max:120'],
             'program_studi_id' => ['required', 'exists:program_studi,id'],
             'angkatan'         => ['required', 'integer', 'between:2000,'.now()->year],
@@ -59,9 +59,9 @@ class extends Component {
     protected function messages(): array
     {
         return [
-            'nim.required' => 'NIM wajib diisi.',
-            'nim.size'     => 'NIM harus 11 karakter.',
-            'nim.unique'   => 'NIM ini sudah terdaftar.',
+            'npm.required' => 'NPM wajib diisi.',
+            'npm.size'     => 'NPM harus 11 karakter.',
+            'npm.unique'   => 'NPM ini sudah terdaftar.',
             'nama.required'             => 'Nama wajib diisi.',
             'program_studi_id.required' => 'Program studi wajib dipilih.',
             'angkatan.required'         => 'Tahun angkatan wajib diisi.',
@@ -101,13 +101,13 @@ class extends Component {
         <div class="lg:col-span-2 space-y-4">
             <x-card title="Identitas">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {{-- NIM --}}
+                    {{-- NPM --}}
                     <div class="sm:col-span-1">
-                        <label for="nim" class="block text-sm font-medium text-slate-700 mb-1.5">NIM</label>
-                        <input wire:model="nim" id="nim" type="text" maxlength="11"
+                        <label for="npm" class="block text-sm font-medium text-slate-700 mb-1.5">NPM</label>
+                        <input wire:model="npm" id="npm" type="text" maxlength="11"
                                placeholder="11 digit, mis. 20231234567"
                                class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
-                        @error('nim') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        @error('npm') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Jenis Kelamin --}}

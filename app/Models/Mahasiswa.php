@@ -19,7 +19,7 @@ class Mahasiswa extends Model
     protected $table = 'mahasiswa';
 
     protected $fillable = [
-        'nim',
+        'npm',
         'nama',
         'program_studi_id',
         'angkatan',
