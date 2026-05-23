@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Volt;
 
 Route::get('/', function () {
     return auth()->check()
@@ -10,6 +11,16 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::view('beranda', 'beranda')->name('beranda');
+
+    // Modul Data Mahasiswa — dapat diakses oleh seluruh peran yang
+    // setidaknya berizin `mahasiswa.lihat`. Otorisasi finer-grained
+    // (kelola vs lihat) dilakukan di dalam Volt component lewat Gate.
+    Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+        Volt::route('/',           'mahasiswa.index')->name('index');
+        Volt::route('/baru',       'mahasiswa.baru')->name('baru');
+        Volt::route('/{mahasiswa}', 'mahasiswa.detail')->name('detail');
+        Volt::route('/{mahasiswa}/ubah', 'mahasiswa.ubah')->name('ubah');
+    });
 });
 
 // Rute demo untuk memverifikasi middleware `peran`. Hanya dipakai pada
