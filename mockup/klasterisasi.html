@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Klasterisasi K-Means — SIMAFTUNSUR</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.0/dist/apexcharts.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'], mono: ['"JetBrains Mono"','monospace'] },
+                    colors: {
+                        primary: { 50:'#EFF6FF',100:'#DBEAFE',200:'#BFDBFE',300:'#93C5FD',400:'#60A5FA',500:'#3B82F6',600:'#2563EB',700:'#1D4ED8',800:'#1E40AF',900:'#1E3A8A',950:'#0F2C5C' },
+                    },
+                    boxShadow: { card: '0 1px 2px 0 rgb(15 44 92 / 0.04), 0 1px 3px 0 rgb(15 44 92 / 0.06)' },
+                },
+            },
+        };
+    </script>
+
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+        .tabular { font-variant-numeric: tabular-nums; }
+        .nav-active { background: #EFF6FF; color: #1D4ED8; border-left: 2px solid #1D4ED8; }
+        .nav-inactive { color: #475569; border-left: 2px solid transparent; }
+        .nav-inactive:hover { background: #F8FAFC; color: #0F172A; }
+        .apexcharts-text, .apexcharts-legend-text { font-family: 'Inter', sans-serif !important; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+<div class="min-h-screen flex">
+
+    <!-- ============================ SIDEBAR ============================ -->
+    <aside class="w-60 shrink-0 bg-white border-r border-slate-200 flex flex-col fixed inset-y-0 z-30">
+        <div class="h-14 flex items-center gap-2.5 px-4 border-b border-slate-200">
+            <div class="h-8 w-8 rounded-md grid place-items-center text-white font-bold text-sm" style="background: linear-gradient(135deg, #1D4ED8 0%, #1E3A8A 100%);">U</div>
+            <div class="leading-tight">
+                <p class="text-sm font-semibold text-slate-900 tracking-tight">SIMAFTUNSUR</p>
+                <p class="text-[10px] uppercase tracking-wider text-slate-500">FT UNSUR</p>
+            </div>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-3 text-sm">
+            <p class="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Utama</p>
+            <a href="dashboard.html" class="nav-inactive flex items-center gap-3 px-4 py-2 font-medium transition-colors">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+                Beranda
+            </a>
+            <a href="#" class="nav-inactive flex items-center gap-3 px-4 py-2 font-medium transition-colors">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+                Data Mahasiswa
+            </a>
+            <a href="#" class="nav-active flex items-center gap-3 px-4 py-2 font-medium" aria-current="page">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"/></svg>
+                Klasterisasi
+                <span class="ml-auto inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold bg-primary-700 text-white">K-Means</span>
+            </a>
+            <a href="#" class="nav-inactive flex items-center gap-3 px-4 py-2 font-medium transition-colors">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"/></svg>
+                Prestasi
+            </a>
+            <a href="#" class="nav-inactive flex items-center gap-3 px-4 py-2 font-medium transition-colors">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+                Tracer Study
+            </a>
+            <a href="#" class="nav-inactive flex items-center gap-3 px-4 py-2 font-medium transition-colors">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46"/></svg>
+                Promosi / PMB
+            </a>
+            <a href="#" class="nav-inactive flex items-center gap-3 px-4 py-2 font-medium transition-colors">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                Laporan
+            </a>
+            <p class="px-4 py-1.5 mt-4 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Administrasi</p>
+            <a href="#" class="nav-inactive flex items-center gap-3 px-4 py-2 font-medium transition-colors">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                Pengguna
+            </a>
+            <a href="#" class="nav-inactive flex items-center gap-3 px-4 py-2 font-medium transition-colors">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a6.759 6.759 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Pengaturan Sistem
+            </a>
+        </nav>
+        <div class="border-t border-slate-200 p-3">
+            <a href="login.html" class="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-900 transition-colors px-2 py-1.5 rounded cursor-pointer">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg>
+                Keluar
+            </a>
+            <p class="mt-2 px-2 text-[10px] font-mono text-slate-400">v1.0.0 &middot; 2026.05</p>
+        </div>
+    </aside>
+
+    <!-- ============================ KONTEN UTAMA ============================ -->
+    <div class="flex-1 ml-60 flex flex-col min-w-0">
+
+        <!-- Topbar -->
+        <header class="h-14 bg-white border-b border-slate-200 sticky top-0 z-20 flex items-center px-6 gap-4">
+            <nav class="text-sm flex items-center gap-1.5 text-slate-500" aria-label="Breadcrumb">
+                <a href="dashboard.html" class="hover:text-slate-700">Beranda</a>
+                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                <span class="text-slate-900 font-medium">Klasterisasi K-Means</span>
+            </nav>
+            <div class="ml-auto flex items-center gap-2.5 pl-4 border-l border-slate-200">
+                <div class="h-8 w-8 rounded-full bg-primary-700 text-white grid place-items-center text-xs font-semibold">BS</div>
+                <div class="leading-tight">
+                    <p class="text-xs font-semibold text-slate-900">Dr. Budi Santoso</p>
+                    <p class="text-[11px] text-slate-500">Wakil Dekan III</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 p-6 lg:p-8">
+
+            <!-- Page header -->
+            <div class="mb-6 flex items-end justify-between flex-wrap gap-4">
+                <div>
+                    <h1 class="text-display text-slate-900 text-[1.75rem] font-bold tracking-tight">Klasterisasi Profil Mahasiswa</h1>
+                    <p class="mt-1 text-sm text-slate-500 max-w-2xl">
+                        Pengelompokan mahasiswa berdasarkan profil akademik menggunakan algoritma
+                        <span class="font-mono text-slate-700">K-Means Clustering</span> untuk mendukung
+                        perumusan strategi pembinaan.
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 cursor-pointer">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+                        Ekspor PDF
+                    </button>
+                    <button class="inline-flex items-center gap-1.5 rounded-md bg-primary-700 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-800 cursor-pointer">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+                        Jalankan Ulang K-Means
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============ KONFIGURASI ============ -->
+            <section class="bg-white border border-slate-200 rounded-lg shadow-card mb-6">
+                <header class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base font-semibold text-slate-900">Konfigurasi Klasterisasi</h2>
+                        <p class="mt-0.5 text-xs text-slate-500">Terakhir dijalankan: 22 Mei 2026, 14:32 WIB &middot; durasi 8.4 detik</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-success ring-1 ring-inset ring-green-600/20">
+                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-current"></span> Konvergen
+                    </span>
+                </header>
+                <div class="p-5 grid grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-4">
+                    <div>
+                        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Jumlah Cluster (k)</p>
+                        <p class="mt-1 text-xl font-bold text-slate-900 tabular">4</p>
+                        <p class="text-xs text-slate-500">Dipilih via Elbow</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Jumlah Data</p>
+                        <p class="mt-1 text-xl font-bold text-slate-900 tabular">287</p>
+                        <p class="text-xs text-slate-500">mahasiswa aktif smt 3+</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Fitur Input</p>
+                        <p class="mt-1 text-xl font-bold text-slate-900 tabular">5</p>
+                        <p class="text-xs text-slate-500">setelah scaling</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Iterasi</p>
+                        <p class="mt-1 text-xl font-bold text-slate-900 tabular">17</p>
+                        <p class="text-xs text-slate-500">max_iter=300</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Inisialisasi</p>
+                        <p class="mt-1 text-base font-semibold text-slate-900">k-means++</p>
+                        <p class="text-xs text-slate-500">random_state=42</p>
+                    </div>
+                </div>
+                <div class="px-5 pb-5 -mt-1">
+                    <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Fitur yang Dipakai</p>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">IPK Rata-rata</span>
+                        <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">Konsistensi IPK (std)</span>
+                        <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">Tren IPK</span>
+                        <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">Semester Berjalan</span>
+                        <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">Status Aktif</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ METRIK EVALUASI ============ -->
+            <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white border border-slate-200 rounded-lg shadow-card p-5">
+                    <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Silhouette Score</p>
+                    <p class="mt-2 text-[2rem] font-bold leading-none tracking-tight text-slate-900 tabular">0.62</p>
+                    <p class="mt-2 text-xs text-success font-medium">Baik (rentang 0–1, &gt;0.5 dianggap baik)</p>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-lg shadow-card p-5">
+                    <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Davies-Bouldin Index</p>
+                    <p class="mt-2 text-[2rem] font-bold leading-none tracking-tight text-slate-900 tabular">0.78</p>
+                    <p class="mt-2 text-xs text-success font-medium">Baik (semakin kecil semakin baik)</p>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-lg shadow-card p-5">
+                    <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">WCSS (Inertia)</p>
+                    <p class="mt-2 text-[2rem] font-bold leading-none tracking-tight text-slate-900 tabular">142.6</p>
+                    <p class="mt-2 text-xs text-slate-500">Sum of squared distances</p>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-lg shadow-card p-5">
+                    <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Calinski-Harabasz</p>
+                    <p class="mt-2 text-[2rem] font-bold leading-none tracking-tight text-slate-900 tabular">312.4</p>
+                    <p class="mt-2 text-xs text-slate-500">Variance ratio criterion</p>
+                </div>
+            </section>
+
+            <!-- ============ VALIDASI K (ELBOW + SILHOUETTE BAR) ============ -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+                <div class="bg-white border border-slate-200 rounded-lg shadow-card">
+                    <header class="px-5 py-4 border-b border-slate-100">
+                        <h2 class="text-base font-semibold text-slate-900">Elbow Method</h2>
+                        <p class="mt-0.5 text-xs text-slate-500">Penurunan WCSS untuk setiap nilai k &middot; titik "elbow" pada k=4</p>
+                    </header>
+                    <div class="p-3"><div id="elbow-chart" class="min-h-[300px]"></div></div>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-lg shadow-card">
+                    <header class="px-5 py-4 border-b border-slate-100">
+                        <h2 class="text-base font-semibold text-slate-900">Silhouette per Cluster</h2>
+                        <p class="mt-0.5 text-xs text-slate-500">Skor silhouette rata-rata setiap cluster</p>
+                    </header>
+                    <div class="p-3"><div id="silhouette-chart" class="min-h-[300px]"></div></div>
+                </div>
+            </section>
+
+            <!-- ============ SCATTER + RADAR ============ -->
+            <section class="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white border border-slate-200 rounded-lg shadow-card xl:col-span-2">
+                    <header class="flex items-start justify-between gap-4 px-5 py-4 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-base font-semibold text-slate-900">Visualisasi Cluster (PCA 2D)</h2>
+                            <p class="mt-0.5 text-xs text-slate-500">Proyeksi 5 fitur ke 2 komponen utama untuk visualisasi</p>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button class="inline-flex items-center gap-1 rounded-md border border-slate-300 px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer">PCA</button>
+                            <button class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-50 cursor-pointer">t-SNE</button>
+                        </div>
+                    </header>
+                    <div class="p-3"><div id="scatter-chart" class="min-h-[380px]"></div></div>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-lg shadow-card">
+                    <header class="px-5 py-4 border-b border-slate-100">
+                        <h2 class="text-base font-semibold text-slate-900">Profil Cluster</h2>
+                        <p class="mt-0.5 text-xs text-slate-500">Komparasi karakteristik 5 dimensi</p>
+                    </header>
+                    <div class="p-3"><div id="radar-chart" class="min-h-[380px]"></div></div>
+                </div>
+            </section>
+
+            <!-- ============ TABEL RINGKASAN CLUSTER ============ -->
+            <section class="bg-white border border-slate-200 rounded-lg shadow-card mb-6 overflow-hidden">
+                <header class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base font-semibold text-slate-900">Ringkasan Tiap Cluster</h2>
+                        <p class="mt-0.5 text-xs text-slate-500">Karakteristik &amp; rekomendasi tindak lanjut</p>
+                    </div>
+                </header>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-200 text-sm">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-600">Cluster</th>
+                                <th class="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-600">Label</th>
+                                <th class="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-slate-600">Jml</th>
+                                <th class="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-slate-600">IPK Avg</th>
+                                <th class="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-slate-600">Std</th>
+                                <th class="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-600">Prodi Dominan</th>
+                                <th class="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-600">Rekomendasi Strategi</th>
+                                <th class="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-slate-600">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white">
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-700 ring-blue-600/20">
+                                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-current"></span>Cluster 1
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 font-medium text-slate-900">Berprestasi</td>
+                                <td class="px-4 py-3 text-right tabular text-slate-700">68</td>
+                                <td class="px-4 py-3 text-right tabular font-semibold text-slate-900">3.62</td>
+                                <td class="px-4 py-3 text-right tabular text-slate-500">0.18</td>
+                                <td class="px-4 py-3 text-slate-700">Teknik Informatika</td>
+                                <td class="px-4 py-3 text-slate-700">Beasiswa, kompetisi, asisten dosen</td>
+                                <td class="px-4 py-3 text-right">
+                                    <a href="#" class="text-xs font-medium text-primary-700 hover:underline">Lihat 68 →</a>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset bg-green-50 text-green-700 ring-green-600/20">
+                                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-current"></span>Cluster 2
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 font-medium text-slate-900">Stabil</td>
+                                <td class="px-4 py-3 text-right tabular text-slate-700">132</td>
+                                <td class="px-4 py-3 text-right tabular font-semibold text-slate-900">3.18</td>
+                                <td class="px-4 py-3 text-right tabular text-slate-500">0.22</td>
+                                <td class="px-4 py-3 text-slate-700">Teknik Industri</td>
+                                <td class="px-4 py-3 text-slate-700">Pertahankan pola; tawarkan pengayaan</td>
+                                <td class="px-4 py-3 text-right">
+                                    <a href="#" class="text-xs font-medium text-primary-700 hover:underline">Lihat 132 →</a>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset bg-amber-50 text-amber-700 ring-amber-600/20">
+                                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-current"></span>Cluster 3
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 font-medium text-slate-900">Perlu Perhatian</td>
+                                <td class="px-4 py-3 text-right tabular text-slate-700">45</td>
+                                <td class="px-4 py-3 text-right tabular font-semibold text-slate-900">2.72</td>
+                                <td class="px-4 py-3 text-right tabular text-slate-500">0.31</td>
+                                <td class="px-4 py-3 text-slate-700">Teknik Sipil</td>
+                                <td class="px-4 py-3 text-slate-700">Konseling dosen wali, kelompok belajar</td>
+                                <td class="px-4 py-3 text-right">
+                                    <a href="#" class="text-xs font-medium text-primary-700 hover:underline">Lihat 45 →</a>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset bg-red-50 text-red-700 ring-red-600/20">
+                                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-current"></span>Cluster 4
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 font-medium text-slate-900">Pembinaan Intensif</td>
+                                <td class="px-4 py-3 text-right tabular text-slate-700">42</td>
+                                <td class="px-4 py-3 text-right tabular font-semibold text-slate-900">2.31</td>
+                                <td class="px-4 py-3 text-right tabular text-slate-500">0.42</td>
+                                <td class="px-4 py-3 text-slate-700">Beragam</td>
+                                <td class="px-4 py-3 text-slate-700">Evaluasi mendalam, mentoring 1-on-1</td>
+                                <td class="px-4 py-3 text-right">
+                                    <a href="#" class="text-xs font-medium text-primary-700 hover:underline">Lihat 42 →</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-5 py-3 border-t border-slate-200 bg-slate-50 text-xs text-slate-500 flex items-center justify-between">
+                    <span>Total: <span class="font-semibold text-slate-900 tabular">287</span> mahasiswa terklaster</span>
+                    <span class="font-mono">Algoritma: K-Means &middot; scikit-learn 1.4 &middot; Python 3.12</span>
+                </div>
+            </section>
+
+            <!-- ============ CATATAN ILMIAH ============ -->
+            <aside class="bg-primary-50 border border-primary-200 rounded-lg p-5 flex items-start gap-4">
+                <svg class="h-5 w-5 mt-0.5 text-primary-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+                <div class="text-sm text-slate-700">
+                    <p class="font-semibold text-slate-900">Catatan Interpretasi</p>
+                    <p class="mt-1 leading-relaxed">
+                        Label cluster (Berprestasi, Stabil, dll.) merupakan <em>interpretasi</em> berdasarkan
+                        karakteristik dominan tiap kelompok, <strong>bukan keputusan akhir tentang status mahasiswa</strong>.
+                        K-Means adalah algoritma <em>unsupervised</em> sehingga hasil pengelompokan harus
+                        divalidasi lebih lanjut oleh dosen wali sebelum dijadikan dasar tindakan.
+                    </p>
+                </div>
+            </aside>
+
+        </main>
+    </div>
+</div>
+
+<!-- ============================ APEX CHARTS ============================ -->
+<script>
+    const CLUSTER_COLORS = ['#1D4ED8', '#16A34A', '#F59E0B', '#DC2626'];
+
+    function gen(cx, cy, n, spread) {
+        const arr = [];
+        for (let i = 0; i < n; i++) {
+            const u1 = Math.random(), u2 = Math.random();
+            const z1 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+            const z2 = Math.sqrt(-2 * Math.log(u1)) * Math.sin(2 * Math.PI * u2);
+            arr.push([+(cx + z1 * spread).toFixed(2), +(cy + z2 * spread).toFixed(2)]);
+        }
+        return arr;
+    }
+
+    // ====== Elbow Method ======
+    new ApexCharts(document.querySelector('#elbow-chart'), {
+        chart: { type: 'line', height: 300, toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+        colors: ['#1D4ED8'],
+        series: [{ name: 'WCSS (Inertia)', data: [
+            { x: 2, y: 612.3 }, { x: 3, y: 384.7 }, { x: 4, y: 142.6 },
+            { x: 5, y: 128.9 }, { x: 6, y: 119.4 }, { x: 7, y: 112.8 },
+            { x: 8, y: 107.2 }, { x: 9, y: 103.1 }, { x: 10, y: 99.8 },
+        ]}],
+        stroke: { width: 2.5, curve: 'straight' },
+        markers: { size: 5, colors: ['#1D4ED8'], strokeColors: '#fff', strokeWidth: 2, hover: { size: 7 } },
+        xaxis: {
+            type: 'numeric', tickAmount: 8,
+            title: { text: 'Jumlah Cluster (k)', style: { fontSize: '11px', color: '#64748B', fontWeight: 500 } },
+            labels: { style: { fontSize: '11px', colors: '#94A3B8' } },
+        },
+        yaxis: {
+            title: { text: 'WCSS', style: { fontSize: '11px', color: '#64748B', fontWeight: 500 } },
+            labels: { style: { fontSize: '11px', colors: '#94A3B8' }, formatter: (v) => v.toFixed(0) },
+        },
+        grid: { borderColor: '#F1F5F9', strokeDashArray: 3 },
+        annotations: {
+            xaxis: [{ x: 4, borderColor: '#DC2626', strokeDashArray: 4, label: { text: 'Titik Elbow', borderColor: '#DC2626', style: { color: '#fff', background: '#DC2626', fontSize: '10px', fontWeight: 600 } } }],
+            points: [{ x: 4, y: 142.6, marker: { size: 8, fillColor: '#DC2626', strokeColor: '#fff', strokeWidth: 3 } }],
+        },
+        tooltip: { theme: 'light', y: { formatter: (v) => v.toFixed(1) } },
+    }).render();
+
+    // ====== Silhouette per Cluster ======
+    new ApexCharts(document.querySelector('#silhouette-chart'), {
+        chart: { type: 'bar', height: 300, toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+        colors: CLUSTER_COLORS,
+        series: [{ name: 'Skor Silhouette', data: [
+            { x: 'Cluster 1', y: 0.71, fillColor: '#1D4ED8' },
+            { x: 'Cluster 2', y: 0.65, fillColor: '#16A34A' },
+            { x: 'Cluster 3', y: 0.54, fillColor: '#F59E0B' },
+            { x: 'Cluster 4', y: 0.58, fillColor: '#DC2626' },
+        ]}],
+        plotOptions: { bar: { horizontal: true, borderRadius: 4, barHeight: '50%', distributed: true, dataLabels: { position: 'top' } } },
+        dataLabels: {
+            enabled: true, textAnchor: 'start', offsetX: 8,
+            formatter: (v) => v.toFixed(2),
+            style: { fontSize: '11px', fontWeight: 600, colors: ['#0F172A'] },
+        },
+        xaxis: {
+            max: 1, min: 0,
+            title: { text: 'Skor Silhouette (0–1)', style: { fontSize: '11px', color: '#64748B', fontWeight: 500 } },
+            labels: { style: { fontSize: '11px', colors: '#94A3B8' }, formatter: (v) => v.toFixed(1) },
+        },
+        yaxis: { labels: { style: { fontSize: '12px', colors: '#475569', fontWeight: 500 } } },
+        legend: { show: false },
+        grid: { borderColor: '#F1F5F9', strokeDashArray: 3 },
+        annotations: {
+            xaxis: [{ x: 0.62, borderColor: '#64748B', strokeDashArray: 4, label: { text: 'Rata-rata 0.62', borderColor: '#64748B', style: { color: '#fff', background: '#64748B', fontSize: '10px' } } }],
+        },
+        tooltip: { y: { formatter: (v) => v.toFixed(3) } },
+    }).render();
+
+    // ====== Scatter ======
+    new ApexCharts(document.querySelector('#scatter-chart'), {
+        chart: { type: 'scatter', height: 380, zoom: { enabled: true, type: 'xy' }, toolbar: { tools: { download: false, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true } }, fontFamily: 'Inter, sans-serif' },
+        colors: CLUSTER_COLORS,
+        series: [
+            { name: 'Cluster 1 — Berprestasi (68)',        data: gen( 2.5,  1.8, 68, 0.55) },
+            { name: 'Cluster 2 — Stabil (132)',            data: gen(-1.0,  0.8, 132, 0.65) },
+            { name: 'Cluster 3 — Perlu Perhatian (45)',    data: gen( 0.8, -1.5, 45, 0.50) },
+            { name: 'Cluster 4 — Pembinaan Intensif (42)', data: gen(-2.2, -1.2, 42, 0.45) },
+        ],
+        xaxis: { type: 'numeric', tickAmount: 8, title: { text: 'PC1 (komponen utama 1)', style: { fontSize: '11px', color: '#64748B', fontWeight: 500 } }, labels: { style: { fontSize: '11px', colors: '#94A3B8' }, formatter: (v) => v.toFixed(1) } },
+        yaxis: { tickAmount: 6, title: { text: 'PC2 (komponen utama 2)', style: { fontSize: '11px', color: '#64748B', fontWeight: 500 } }, labels: { style: { fontSize: '11px', colors: '#94A3B8' }, formatter: (v) => v.toFixed(1) } },
+        legend: { position: 'top', horizontalAlign: 'left', fontSize: '12px', fontWeight: 500, labels: { colors: '#475569' }, markers: { radius: 4 }, itemMargin: { horizontal: 12 } },
+        grid: { borderColor: '#F1F5F9', strokeDashArray: 3 },
+        markers: { size: 5, strokeWidth: 0, hover: { size: 7 } },
+        tooltip: { theme: 'light' },
+    }).render();
+
+    // ====== Radar ======
+    new ApexCharts(document.querySelector('#radar-chart'), {
+        chart: { type: 'radar', height: 380, toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+        colors: CLUSTER_COLORS,
+        series: [
+            { name: 'Cluster 1', data: [92, 88, 78, 90, 82] },
+            { name: 'Cluster 2', data: [75, 80, 60, 78, 70] },
+            { name: 'Cluster 3', data: [55, 50, 48, 62, 58] },
+            { name: 'Cluster 4', data: [38, 32, 30, 45, 40] },
+        ],
+        xaxis: { categories: ['IPK', 'Konsistensi', 'Aktivitas', 'Progres Smt', 'Kehadiran'], labels: { style: { fontSize: '11px', colors: ['#475569','#475569','#475569','#475569','#475569'], fontWeight: 500 } } },
+        yaxis: { show: false, min: 0, max: 100 },
+        legend: { position: 'bottom', fontSize: '11px', labels: { colors: '#475569' }, markers: { radius: 4 } },
+        stroke: { width: 2 },
+        fill: { opacity: 0.12 },
+        markers: { size: 3, strokeWidth: 0 },
+        plotOptions: { radar: { polygons: { strokeColors: '#E2E8F0', connectorColors: '#E2E8F0' } } },
+    }).render();
+</script>
+
+</body>
+</html>

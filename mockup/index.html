@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mockup SIMAFTUNSUR — Pratinjau Desain</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+<div class="max-w-5xl mx-auto px-6 py-12 lg:py-16">
+
+    <!-- Header -->
+    <header class="mb-12 flex items-start gap-4">
+        <div class="h-12 w-12 rounded-md grid place-items-center text-white font-bold text-lg shrink-0"
+             style="background: linear-gradient(135deg, #1D4ED8 0%, #1E3A8A 100%);">U</div>
+        <div>
+            <p class="text-xs uppercase tracking-[0.16em] text-slate-500 font-semibold">Mockup &middot; Pratinjau Desain</p>
+            <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-900">SIMAFTUNSUR</h1>
+            <p class="mt-1.5 text-sm text-slate-600 max-w-2xl">
+                Pratinjau visual untuk Tugas Akhir <span class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">Rancang Bangun Sistem Informasi Kemahasiswaan
+                untuk Klasterisasi Profil Mahasiswa Menggunakan Algoritma K-Means</span>.
+                Halaman-halaman di bawah ini bisa langsung dibuka di browser — belum terhubung dengan Laravel.
+            </p>
+        </div>
+    </header>
+
+    <!-- Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+
+        <a href="login.html" class="group bg-white border border-slate-200 rounded-lg p-5 hover:border-primary-500 hover:shadow-md transition-all cursor-pointer">
+            <div class="h-9 w-9 rounded-md bg-primary-50 text-primary-700 grid place-items-center mb-4">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3 3m0 0l-3 3m3-3H2.25"/></svg>
+            </div>
+            <h2 class="font-semibold text-slate-900 group-hover:text-primary-700">Halaman Masuk</h2>
+            <p class="mt-1 text-sm text-slate-500">Split-screen dengan panel branding institusi di kiri, form login di kanan.</p>
+            <p class="mt-3 text-xs font-mono text-slate-400">login.html</p>
+        </a>
+
+        <a href="dashboard.html" class="group bg-white border border-slate-200 rounded-lg p-5 hover:border-primary-500 hover:shadow-md transition-all cursor-pointer">
+            <div class="h-9 w-9 rounded-md bg-primary-50 text-primary-700 grid place-items-center mb-4">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+            </div>
+            <h2 class="font-semibold text-slate-900 group-hover:text-primary-700">Dashboard Beranda</h2>
+            <p class="mt-1 text-sm text-slate-500">Ringkasan untuk pimpinan: 4 KPI, scatter plot cluster, radar profil, tabel mahasiswa.</p>
+            <p class="mt-3 text-xs font-mono text-slate-400">dashboard.html</p>
+        </a>
+
+        <a href="klasterisasi.html" class="group bg-white border border-slate-200 rounded-lg p-5 hover:border-primary-500 hover:shadow-md transition-all cursor-pointer">
+            <div class="h-9 w-9 rounded-md bg-primary-50 text-primary-700 grid place-items-center mb-4">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"/></svg>
+            </div>
+            <h2 class="font-semibold text-slate-900 group-hover:text-primary-700">Klasterisasi K-Means</h2>
+            <p class="mt-1 text-sm text-slate-500">Halaman ML penuh: konfigurasi, metrik evaluasi, Elbow, Silhouette, scatter, radar, ringkasan cluster.</p>
+            <p class="mt-3 text-xs font-mono text-slate-400">klasterisasi.html</p>
+        </a>
+
+    </div>
+
+    <!-- Spec sheet -->
+    <section class="bg-white border border-slate-200 rounded-lg p-6">
+        <h2 class="text-lg font-semibold text-slate-900 mb-4">Spesifikasi Visual</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-sm">
+            <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Palet Warna</p>
+                <div class="grid grid-cols-5 gap-2">
+                    <div><div class="h-12 rounded border border-slate-200" style="background:#0F2C5C"></div><p class="mt-1 font-mono text-[10px] text-slate-500">primary-950</p></div>
+                    <div><div class="h-12 rounded border border-slate-200" style="background:#1D4ED8"></div><p class="mt-1 font-mono text-[10px] text-slate-500">primary-700</p></div>
+                    <div><div class="h-12 rounded border border-slate-200" style="background:#3B82F6"></div><p class="mt-1 font-mono text-[10px] text-slate-500">primary-500</p></div>
+                    <div><div class="h-12 rounded border border-slate-200" style="background:#DBEAFE"></div><p class="mt-1 font-mono text-[10px] text-slate-500">primary-100</p></div>
+                    <div><div class="h-12 rounded border border-slate-200" style="background:#F8FAFC"></div><p class="mt-1 font-mono text-[10px] text-slate-500">slate-50</p></div>
+                </div>
+
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mt-5 mb-2">Cluster Colors (Colorblind-safe)</p>
+                <div class="grid grid-cols-5 gap-2">
+                    <div><div class="h-10 rounded border border-slate-200" style="background:#1D4ED8"></div><p class="mt-1 font-mono text-[10px] text-slate-500">cluster-1</p></div>
+                    <div><div class="h-10 rounded border border-slate-200" style="background:#16A34A"></div><p class="mt-1 font-mono text-[10px] text-slate-500">cluster-2</p></div>
+                    <div><div class="h-10 rounded border border-slate-200" style="background:#F59E0B"></div><p class="mt-1 font-mono text-[10px] text-slate-500">cluster-3</p></div>
+                    <div><div class="h-10 rounded border border-slate-200" style="background:#7C3AED"></div><p class="mt-1 font-mono text-[10px] text-slate-500">cluster-4</p></div>
+                    <div><div class="h-10 rounded border border-slate-200" style="background:#DC2626"></div><p class="mt-1 font-mono text-[10px] text-slate-500">cluster-5</p></div>
+                </div>
+            </div>
+
+            <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Tipografi</p>
+                <div class="space-y-2">
+                    <div class="border border-slate-200 rounded p-3">
+                        <p class="text-[10px] uppercase tracking-wider text-slate-500">Inter / 700 / 1.75rem</p>
+                        <p class="text-[1.75rem] font-bold leading-none tracking-tight text-slate-900">SIMAFTUNSUR</p>
+                    </div>
+                    <div class="border border-slate-200 rounded p-3">
+                        <p class="text-[10px] uppercase tracking-wider text-slate-500">Inter / 600 / 1rem</p>
+                        <p class="text-base font-semibold text-slate-900">Klasterisasi Profil Mahasiswa</p>
+                    </div>
+                    <div class="border border-slate-200 rounded p-3">
+                        <p class="text-[10px] uppercase tracking-wider text-slate-500">Inter / 400 / 0.875rem</p>
+                        <p class="text-sm text-slate-700">Sistem Informasi Kemahasiswaan Fakultas Teknik UNSUR.</p>
+                    </div>
+                    <div class="border border-slate-200 rounded p-3">
+                        <p class="text-[10px] uppercase tracking-wider text-slate-500">JetBrains Mono / 700 / 2.25rem · tabular</p>
+                        <p class="text-[2.25rem] font-bold leading-none tracking-tight text-slate-900 font-mono" style="font-variant-numeric: tabular-nums;">287</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 pt-6 border-t border-slate-100 text-xs text-slate-500 leading-relaxed">
+            <p><strong class="text-slate-700">Catatan:</strong> Mockup ini menggunakan Tailwind CSS via CDN dan ApexCharts via CDN.
+            Saat dipindah ke proyek Laravel 13 + Livewire 4 nanti, gunakan
+            <code class="font-mono bg-slate-100 px-1 py-0.5 rounded">design-system/tailwind.config.js</code>
+            sebagai sumber kebenaran token desain, dan
+            <code class="font-mono bg-slate-100 px-1 py-0.5 rounded">design-system/components/</code>
+            sebagai dasar Blade component reusable.</p>
+        </div>
+    </section>
+
+    <footer class="mt-10 text-center text-xs text-slate-400">
+        SIMAFTUNSUR &middot; Fakultas Teknik Universitas Suryakancana &middot; Mockup desain v1.0.0
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+{
+    "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+    "name": "SIMAFTUNSUR — Laravel 13 + Livewire 4",
+
+    // Image dasar: PHP 8.4 di atas Debian Bookworm (sesuai versi lokal: PHP 8.4.19).
+    // Sudah include composer, git, dan ekstensi PHP umum (pdo, pdo_sqlite, mbstring, dll).
+    "image": "mcr.microsoft.com/devcontainers/php:1-8.4-bookworm",
+
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "22"
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+
+    // Port yang di-forward otomatis oleh Codespaces.
+    "forwardPorts": [8000, 5173],
+    "portsAttributes": {
+        "8000": {
+            "label": "Laravel (artisan serve)",
+            "onAutoForward": "openBrowser"
+        },
+        "5173": {
+            "label": "Vite Dev Server",
+            "onAutoForward": "silent"
+        }
+    },
+
+    // postCreate: dijalankan sekali saat Codespace dibuat (atau di-rebuild).
+    // postStart: dijalankan setiap kali container start (termasuk resume dari stopped).
+    "postCreateCommand": "bash .devcontainer/post-create.sh",
+    "postStartCommand": "bash .devcontainer/post-start.sh",
+
+    "remoteUser": "vscode",
+
+    "containerEnv": {
+        "APP_ENV": "local"
+    },
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "amiralizadeh9480.laravel-extra-intellisense",
+                "onecentlin.laravel-blade",
+                "bradlc.vscode-tailwindcss",
+                "MehediDracula.php-namespace-resolver",
+                "ryannaddy.laravel-artisan",
+                "EditorConfig.EditorConfig",
+                "anthropic.claude-code"
+            ],
+            "settings": {
+                "files.eol": "\n",
+                "files.associations": {
+                    "*.blade.php": "blade"
+                },
+                "[php]": {
+                    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+                    "editor.tabSize": 4
+                },
+                "[blade]": {
+                    "editor.defaultFormatter": "onecentlin.laravel-blade",
+                    "editor.tabSize": 4
+                },
+                "intelephense.environment.phpVersion": "8.4.0",
+                "intelephense.format.braces": "psr12"
+            }
+        }
+    }
+}

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Masuk — SIMAFTUNSUR | Fakultas Teknik UNSUR</title>
+    <meta name="description" content="Sistem Informasi Kemahasiswaan Fakultas Teknik Universitas Suryakancana" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50:'#EFF6FF',100:'#DBEAFE',200:'#BFDBFE',300:'#93C5FD',
+                            400:'#60A5FA',500:'#3B82F6',600:'#2563EB',700:'#1D4ED8',
+                            800:'#1E40AF',900:'#1E3A8A',950:'#0F2C5C',
+                        },
+                    },
+                    boxShadow: {
+                        card: '0 1px 2px 0 rgb(15 44 92 / 0.04), 0 1px 3px 0 rgb(15 44 92 / 0.06)',
+                    },
+                },
+            },
+        };
+    </script>
+
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+        /* Pola halus untuk panel kiri — institusional, bukan glow */
+        .pattern-grid {
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        /* Logo UNSUR placeholder — biru institusional */
+        .logo-mark {
+            background: linear-gradient(135deg, #1D4ED8 0%, #1E3A8A 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+<main class="min-h-screen grid lg:grid-cols-5">
+
+    <!-- ============ PANEL KIRI: BRANDING INSTITUSI ============ -->
+    <aside class="hidden lg:flex lg:col-span-3 bg-primary-950 text-white relative overflow-hidden">
+        <div class="pattern-grid absolute inset-0 opacity-50" aria-hidden="true"></div>
+
+        <!-- Garis aksen kanan -->
+        <div class="absolute right-0 top-0 bottom-0 w-px bg-white/10" aria-hidden="true"></div>
+
+        <div class="relative z-10 flex flex-col justify-between p-12 xl:p-16 w-full max-w-2xl">
+            <!-- Header brand -->
+            <div class="flex items-center gap-3">
+                <div class="logo-mark h-11 w-11 rounded-md grid place-items-center ring-1 ring-white/20">
+                    <!-- Placeholder logo UNSUR (ganti dengan SVG asli nanti) -->
+                    <span class="font-bold text-lg tracking-tight">U</span>
+                </div>
+                <div class="leading-tight">
+                    <p class="text-[11px] uppercase tracking-[0.16em] text-blue-200">Universitas Suryakancana</p>
+                    <p class="text-base font-semibold">Fakultas Teknik</p>
+                </div>
+            </div>
+
+            <!-- Headline tengah -->
+            <div class="space-y-6">
+                <div>
+                    <p class="text-[11px] uppercase tracking-[0.16em] text-blue-300 mb-3">Sistem Internal</p>
+                    <h1 class="text-4xl xl:text-5xl font-bold leading-tight tracking-tight">
+                        SIMAFTUNSUR
+                    </h1>
+                    <p class="mt-3 text-lg text-blue-100/90 max-w-md">
+                        Sistem Informasi Kemahasiswaan Fakultas Teknik
+                        Universitas Suryakancana
+                    </p>
+                </div>
+
+                <div class="h-px w-16 bg-blue-400/60" aria-hidden="true"></div>
+
+                <p class="text-sm text-blue-100/80 max-w-md leading-relaxed">
+                    Platform pengelolaan data kemahasiswaan terintegrasi untuk
+                    mendukung pengambilan keputusan strategis pimpinan fakultas
+                    melalui klasterisasi profil mahasiswa.
+                </p>
+            </div>
+
+            <!-- Footer brand -->
+            <div class="space-y-2 text-xs text-blue-200/70">
+                <div class="flex items-center gap-2">
+                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Akses terbatas untuk staf, dosen, dan pimpinan FT UNSUR</span>
+                </div>
+                <p class="font-mono text-[10px] text-blue-300/50">v1.0.0 &middot; Build 2026.05</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ============ PANEL KANAN: FORM LOGIN ============ -->
+    <section class="lg:col-span-2 flex items-center justify-center px-6 py-12 sm:px-12 bg-white">
+        <div class="w-full max-w-sm">
+
+            <!-- Header mobile (tampil di bawah lg) -->
+            <div class="lg:hidden mb-10 flex items-center gap-3">
+                <div class="logo-mark h-10 w-10 rounded-md grid place-items-center text-white">
+                    <span class="font-bold text-base">U</span>
+                </div>
+                <div class="leading-tight">
+                    <p class="text-[11px] uppercase tracking-wider text-slate-500">FT UNSUR</p>
+                    <p class="text-sm font-semibold text-slate-900">SIMAFTUNSUR</p>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Masuk ke akun Anda</h2>
+                <p class="mt-1.5 text-sm text-slate-500">
+                    Gunakan kredensial yang diberikan oleh administrator.
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form class="space-y-5" autocomplete="on" novalidate>
+                <!-- NIP / Username -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-slate-700 mb-1.5">
+                        NIP / NIDN
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                            </svg>
+                        </span>
+                        <input id="username" name="username" type="text" required autocomplete="username"
+                               placeholder="Masukkan NIP atau NIDN"
+                               class="block w-full rounded-md border border-slate-300 bg-white pl-10 pr-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition" />
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label for="password" class="block text-sm font-medium text-slate-700">
+                            Kata Sandi
+                        </label>
+                        <a href="#" class="text-xs font-medium text-primary-700 hover:text-primary-800 hover:underline">
+                            Lupa kata sandi?
+                        </a>
+                    </div>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                            </svg>
+                        </span>
+                        <input id="password" name="password" type="password" required autocomplete="current-password"
+                               placeholder="Masukkan kata sandi"
+                               class="block w-full rounded-md border border-slate-300 bg-white pl-10 pr-10 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition" />
+                        <button type="button" aria-label="Tampilkan kata sandi"
+                                onclick="const i=document.getElementById('password');i.type=i.type==='password'?'text':'password';"
+                                class="absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember -->
+                <div class="flex items-center">
+                    <input id="remember" name="remember" type="checkbox"
+                           class="h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-500 cursor-pointer" />
+                    <label for="remember" class="ml-2 text-sm text-slate-600 cursor-pointer select-none">
+                        Tetap masuk di perangkat ini
+                    </label>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit"
+                        class="w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-800 active:bg-primary-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 transition-colors cursor-pointer">
+                    Masuk
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Catatan keamanan -->
+            <div class="mt-8 rounded-md bg-slate-50 border border-slate-200 p-3.5 flex items-start gap-2.5">
+                <svg class="h-4 w-4 mt-0.5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Belum punya akun? Hubungi <span class="font-medium text-slate-900">Bagian Akademik FT UNSUR</span>
+                    untuk permintaan akses.
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-10 text-center text-xs text-slate-400">
+                &copy; 2026 Fakultas Teknik &middot; Universitas Suryakancana
+            </footer>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>

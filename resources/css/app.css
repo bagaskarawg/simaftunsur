@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    /* Tipografi — Inter sebagai font utama, dimuat dari Google Fonts */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    /* Palet utama — biru institusional UNSUR Teknik Informatika */
+    --color-primary-50:  #EFF6FF;
+    --color-primary-100: #DBEAFE;
+    --color-primary-200: #BFDBFE;
+    --color-primary-300: #93C5FD;
+    --color-primary-400: #60A5FA;
+    --color-primary-500: #3B82F6;
+    --color-primary-600: #2563EB;
+    --color-primary-700: #1D4ED8;
+    --color-primary-800: #1E40AF;
+    --color-primary-900: #1E3A8A;
+    --color-primary-950: #0F2C5C;
+
+    /* Palet cluster K-Means — colorblind-safe */
+    --color-cluster-1: #1D4ED8;
+    --color-cluster-2: #16A34A;
+    --color-cluster-3: #F59E0B;
+    --color-cluster-4: #7C3AED;
+    --color-cluster-5: #DC2626;
+
+    /* Override accent Flux untuk mengikuti palet UNSUR */
+    --color-accent: #1D4ED8;
+    --color-accent-content: #1D4ED8;
+    --color-accent-foreground: #FFFFFF;
+
+    /* Bayangan halus untuk card institusional */
+    --shadow-card: 0 1px 2px 0 rgb(15 44 92 / 0.04), 0 1px 3px 0 rgb(15 44 92 / 0.06);
+    --shadow-card-hover: 0 4px 6px -1px rgb(15 44 92 / 0.08), 0 2px 4px -2px rgb(15 44 92 / 0.06);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: #60A5FA;
+        --color-accent-content: #60A5FA;
+        --color-accent-foreground: #0F2C5C;
+    }
+}
+
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Angka tabular untuk data IPK, NIM, KPI */
+    .tabular {
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+@layer utilities {
+    /* Token typography institusional */
+    .text-eyebrow {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        line-height: 1;
+    }
+    .text-kpi {
+        font-size: 2.25rem;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.02em;
+    }
+    .text-display {
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+    }
+}
+
+/* Flux UI customisation supaya selaras dengan palet UNSUR */
+[data-flux-field]:not(ui-radio, ui-checkbox) { @apply grid gap-2; }
+[data-flux-label] { @apply !mb-0 !leading-tight; }
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
