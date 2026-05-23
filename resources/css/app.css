@@ -65,6 +65,12 @@
         -moz-osx-font-smoothing: grayscale;
     }
 
+    /* Cegah flash konten Alpine sebelum x-data dimount.
+       Wajib karena beberapa elemen sidebar pakai x-show. */
+    [x-cloak] {
+        display: none !important;
+    }
+
     /* Angka tabular untuk data IPK, NIM, KPI */
     .tabular {
         font-variant-numeric: tabular-nums;

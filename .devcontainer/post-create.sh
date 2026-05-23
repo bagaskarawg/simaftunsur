@@ -9,6 +9,32 @@ cd "$(dirname "$0")/.."
 print_step() { printf "\n\033[1;34m==>\033[0m \033[1m%s\033[0m\n" "$1"; }
 print_ok()   { printf "    \033[32m✓\033[0m %s\n" "$1"; }
 
+print_step "Memastikan ekstensi PHP (gd, zip) siap untuk maatwebsite/excel"
+# phpoffice/phpspreadsheet (dep maatwebsite/excel) WAJIB ext-gd & ext-zip.
+# Image base php:8.4-bookworm tidak menyertakan keduanya, jadi pasang manual.
+EXT_CONF_DIR="$(php -r 'echo PHP_CONFIG_FILE_SCAN_DIR;')"
+needs_install=0
+php -m | grep -q '^gd$'  || needs_install=1
+php -m | grep -q '^zip$' || needs_install=1
+
+if [ "$needs_install" -eq 1 ]; then
+    sudo apt-get update -qq
+    sudo apt-get install -y -qq libfreetype-dev libjpeg-dev libpng-dev libzip-dev
+
+    if ! php -m | grep -q '^gd$'; then
+        sudo docker-php-ext-configure gd --with-freetype --with-jpeg >/dev/null
+        sudo docker-php-ext-install -j"$(nproc)" gd >/dev/null
+        echo 'extension=gd.so'  | sudo tee "$EXT_CONF_DIR/docker-php-ext-gd.ini"  >/dev/null
+    fi
+    if ! php -m | grep -q '^zip$'; then
+        sudo docker-php-ext-install zip >/dev/null
+        echo 'extension=zip.so' | sudo tee "$EXT_CONF_DIR/docker-php-ext-zip.ini" >/dev/null
+    fi
+    print_ok "ekstensi gd & zip terpasang"
+else
+    print_ok "ekstensi gd & zip sudah aktif"
+fi
+
 print_step "Memasang dependency Composer"
 composer install --no-interaction --prefer-dist --optimize-autoloader
 

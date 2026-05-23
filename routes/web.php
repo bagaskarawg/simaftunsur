@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TemplateIpkController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -18,7 +19,13 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
         Volt::route('/',           'mahasiswa.index')->name('index');
         Volt::route('/baru',       'mahasiswa.baru')->name('baru');
-        Volt::route('/{mahasiswa}', 'mahasiswa.detail')->name('detail');
+
+        // Halaman impor IPK massal — daftarkan SEBELUM /{mahasiswa}
+        // supaya tidak ditangkap sebagai route model binding.
+        Volt::route('/ipk/impor',  'mahasiswa.impor')->name('ipk.impor');
+        Route::get('/ipk/template', [TemplateIpkController::class, 'unduh'])->name('ipk.template');
+
+        Volt::route('/{mahasiswa}',      'mahasiswa.detail')->name('detail');
         Volt::route('/{mahasiswa}/ubah', 'mahasiswa.ubah')->name('ubah');
     });
 });
