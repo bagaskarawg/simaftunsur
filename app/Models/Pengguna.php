@@ -6,6 +6,7 @@ use Database\Factories\PenggunaFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 /**
@@ -96,5 +97,73 @@ class Pengguna extends Authenticatable
             'dosen'   => 'Dosen',
             default   => 'Pengguna',
         };
+    }
+
+    /**
+     * Cek apakah pengguna memiliki izin tertentu.
+     *
+     * Aturan:
+     *  - Peran yang punya wildcard '*' otomatis lulus untuk izin apa pun.
+     *  - Selain itu, cek kecocokan persis pada daftar izin di config/peran.php.
+     */
+    public function punyaIzin(string $kode): bool
+    {
+        $daftar = $this->daftarIzinPeran();
+
+        if (in_array('*', $daftar, true)) {
+            return true;
+        }
+
+        return in_array($kode, $daftar, true);
+    }
+
+    /**
+     * Cek apakah peran pengguna termasuk dalam daftar peran yang diberikan.
+     *
+     * @param  string|array<int, string>  $peran
+     */
+    public function punyaPeran(string|array $peran): bool
+    {
+        $kandidat = is_array($peran) ? $peran : [$peran];
+
+        return in_array($this->peran, $kandidat, true);
+    }
+
+    /**
+     * Daftar lengkap kode izin (sudah resolusi wildcard) milik pengguna.
+     *
+     * @return array<int, string>
+     */
+    public function semuaIzin(): array
+    {
+        $daftar = $this->daftarIzinPeran();
+
+        if (! in_array('*', $daftar, true)) {
+            return $daftar;
+        }
+
+        // Wildcard → kembalikan gabungan unik seluruh izin yang pernah
+        // didefinisikan di config (agar konsumen API dapat melihat
+        // cakupan akses admin secara eksplisit).
+        $semua = collect((array) Config::get('peran.peta', []))
+            ->flatten()
+            ->reject(fn ($v) => $v === '*')
+            ->unique()
+            ->values()
+            ->all();
+
+        return $semua;
+    }
+
+    /**
+     * Daftar izin mentah sesuai konfigurasi untuk peran pengguna.
+     *
+     * @return array<int, string>
+     */
+    protected function daftarIzinPeran(): array
+    {
+        $peta = (array) Config::get('peran.peta', []);
+
+        return array_values((array) ($peta[$this->peran] ?? []));
     }
 }
