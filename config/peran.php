@@ -31,6 +31,7 @@ return [
             'laporan.lihat',
             'prestasi.lihat',
             'tracer.lihat',
+            'promosi.lihat',
         ],
 
         'wd3' => [
@@ -43,6 +44,8 @@ return [
             'prestasi.kelola',
             'tracer.lihat',
             'tracer.kelola',
+            'promosi.lihat',
+            'promosi.kelola',
         ],
 
         'kaprodi' => [
@@ -50,6 +53,7 @@ return [
             'laporan.lihat',
             'prestasi.lihat',
             'tracer.lihat',
+            'promosi.lihat',
         ],
 
         'staf' => [
@@ -59,6 +63,8 @@ return [
             'prestasi.kelola',
             'tracer.lihat',
             'tracer.kelola',
+            'promosi.lihat',
+            'promosi.kelola',
         ],
 
         'dosen' => [

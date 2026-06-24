@@ -150,18 +150,17 @@
                 </a>
             @endcan
 
-            {{-- Modul placeholder — disabled, tidak butuh wire:current --}}
-            @foreach ([
-                ['Promosi / PMB',  'M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535'],
-            ] as [$nama, $path])
-                <span class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-400 border-l-2 border-transparent cursor-not-allowed"
-                      title="Modul belum tersedia">
+            {{-- Promosi / PMB — modul aktif (versi ringkas: kegiatan promosi) --}}
+            @can('promosi.lihat')
+                <a href="{{ route('promosi.index') }}" wire:navigate
+                   wire:current="!bg-primary-50 !text-primary-700 !border-primary-700"
+                   class="flex items-center gap-3 px-4 py-2 text-sm font-medium border-l-2 border-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="{{ $path }}"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535"/>
                     </svg>
-                    {{ $nama }}
-                </span>
-            @endforeach
+                    Promosi / PMB
+                </a>
+            @endcan
 
             {{-- Laporan — modul aktif, terlihat bagi yang berizin laporan.lihat --}}
             @can('laporan.lihat')

@@ -65,6 +65,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('tracer')->name('tracer.')->group(function () {
         Volt::route('/', 'tracer.index')->name('index');
     });
+
+    // Modul Promosi/PMB — CRUD pendukung (versi ringkas: kegiatan promosi).
+    Route::prefix('promosi')->name('promosi.')->group(function () {
+        Volt::route('/', 'promosi.index')->name('index');
+    });
 });
 
 // Rute demo untuk memverifikasi middleware `peran`. Hanya dipakai pada
