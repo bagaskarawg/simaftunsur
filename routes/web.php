@@ -45,6 +45,11 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/', 'pengguna.index')->name('index');
     });
 
+    // Pengaturan Sistem — konfigurasi ringan, khusus Administrator.
+    Route::prefix('pengaturan')->name('pengaturan.')->middleware('peran:admin')->group(function () {
+        Volt::route('/', 'pengaturan.index')->name('index');
+    });
+
     // Modul Prestasi — CRUD pendukung. Otorisasi (lihat vs kelola) di komponen.
     Route::prefix('prestasi')->name('prestasi.')->group(function () {
         Volt::route('/', 'prestasi.index')->name('index');
