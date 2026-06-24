@@ -123,9 +123,10 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 
 | Status | Sub-fitur | Catatan |
 |---|---|---|
-| 📋 | Laporan rekap mahasiswa per prodi/angkatan/status | |
-| 📋 | Laporan IPK fakultas | |
-| 📋 | Ekspor PDF/Excel | |
+| ✅ | Laporan rekap mahasiswa per prodi/angkatan/status | `laporan.index` (Volt) + `LaporanService`; guard `laporan.lihat` |
+| ✅ | Laporan IPK fakultas | rata-rata IPK fakultas (KPI) & per prodi |
+| ✅ | Ekspor CSV (rekap per prodi) | `LaporanController@eksporProdi`; guard `laporan.ekspor` |
+| 📋 | Ekspor PDF | opsional; CSV sudah tersedia |
 
 ### Modul System
 

@@ -1,0 +1,159 @@
+<?php
+
+use App\Services\LaporanService;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Volt\Component;
+
+new
+#[Layout('layouts.app')]
+#[Title('Laporan Kemahasiswaan')]
+class extends Component {
+    public function mount(): void
+    {
+        abort_unless(auth()->user()?->can('laporan.lihat'), 403);
+    }
+
+    #[Computed]
+    public function ringkasan(): array
+    {
+        return app(LaporanService::class)->ringkasan();
+    }
+
+    #[Computed]
+    public function rekapProdi()
+    {
+        return app(LaporanService::class)->rekapProdi();
+    }
+
+    #[Computed]
+    public function rekapAngkatan()
+    {
+        return app(LaporanService::class)->rekapAngkatan();
+    }
+
+    #[Computed]
+    public function rekapStatus()
+    {
+        return app(LaporanService::class)->rekapStatus();
+    }
+}; ?>
+
+@php
+    $labelStatus = [
+        'aktif'     => 'Aktif',
+        'cuti'      => 'Cuti',
+        'non_aktif' => 'Non-aktif',
+        'lulus'     => 'Lulus',
+        'do'        => 'DO',
+    ];
+@endphp
+
+<div>
+    {{-- Header --}}
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+            <h1 class="text-display text-slate-900">Laporan Kemahasiswaan</h1>
+            <p class="mt-1 text-sm text-slate-500">Rekapitulasi data mahasiswa FT UNSUR per program studi, angkatan, dan status.</p>
+        </div>
+        @can('laporan.ekspor')
+            <x-button variant="secondary" :href="route('laporan.ekspor.prodi')">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+                </svg>
+                Ekspor CSV (per prodi)
+            </x-button>
+        @endcan
+    </div>
+
+    {{-- KPI ringkas --}}
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <x-kpi-card label="Total Mahasiswa" :value="number_format($this->ringkasan['total_mahasiswa'])" hint="seluruh status" />
+        <x-kpi-card label="Mahasiswa Aktif" :value="number_format($this->ringkasan['mahasiswa_aktif'])" hint="status aktif" />
+        <x-kpi-card label="Rata-rata IPK" :value="$this->ringkasan['rata_ipk'] !== null ? number_format($this->ringkasan['rata_ipk'], 2) : '—'" hint="seluruh catatan IPK" />
+        <x-kpi-card label="Total Prestasi" :value="number_format($this->ringkasan['total_prestasi'])" hint="akademik & non-akademik" />
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {{-- Rekap per prodi --}}
+        <x-card title="Rekap per Program Studi" class="lg:col-span-2">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-xs text-slate-500 border-b border-slate-200">
+                            <th class="py-2 pr-3 font-medium">Kode</th>
+                            <th class="py-2 pr-3 font-medium">Program Studi</th>
+                            <th class="py-2 pr-3 font-medium text-right">Jumlah</th>
+                            <th class="py-2 pr-3 font-medium text-right">Aktif</th>
+                            <th class="py-2 pr-3 font-medium text-right">Rata-rata IPK</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($this->rekapProdi as $r)
+                            <tr class="border-b border-slate-50 last:border-0">
+                                <td class="py-2 pr-3 font-mono text-xs text-slate-600">{{ $r['kode'] }}</td>
+                                <td class="py-2 pr-3 text-slate-900">{{ $r['nama'] }}</td>
+                                <td class="py-2 pr-3 text-right tabular-nums">{{ number_format($r['jumlah']) }}</td>
+                                <td class="py-2 pr-3 text-right tabular-nums">{{ number_format($r['aktif']) }}</td>
+                                <td class="py-2 pr-3 text-right tabular-nums font-medium">{{ $r['rata_ipk'] !== null ? number_format($r['rata_ipk'], 2) : '—' }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="5" class="py-8 text-center text-sm text-slate-500">Belum ada data.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </x-card>
+
+        {{-- Rekap per angkatan --}}
+        <x-card title="Rekap per Angkatan">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-xs text-slate-500 border-b border-slate-200">
+                            <th class="py-2 pr-3 font-medium">Angkatan</th>
+                            <th class="py-2 pr-3 font-medium text-right">Jumlah</th>
+                            <th class="py-2 pr-3 font-medium text-right">Aktif</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($this->rekapAngkatan as $r)
+                            <tr class="border-b border-slate-50 last:border-0">
+                                <td class="py-2 pr-3 tabular-nums">{{ $r['angkatan'] }}</td>
+                                <td class="py-2 pr-3 text-right tabular-nums">{{ number_format($r['jumlah']) }}</td>
+                                <td class="py-2 pr-3 text-right tabular-nums">{{ number_format($r['aktif']) }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="3" class="py-8 text-center text-sm text-slate-500">Belum ada data.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </x-card>
+
+        {{-- Rekap per status --}}
+        <x-card title="Rekap per Status">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-xs text-slate-500 border-b border-slate-200">
+                            <th class="py-2 pr-3 font-medium">Status</th>
+                            <th class="py-2 pr-3 font-medium text-right">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($this->rekapStatus as $r)
+                            <tr class="border-b border-slate-50 last:border-0">
+                                <td class="py-2 pr-3 text-slate-900">{{ $labelStatus[$r['status']] ?? ucfirst($r['status']) }}</td>
+                                <td class="py-2 pr-3 text-right tabular-nums">{{ number_format($r['jumlah']) }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="2" class="py-8 text-center text-sm text-slate-500">Belum ada data.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </x-card>
+    </div>
+</div>

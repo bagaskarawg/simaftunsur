@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\TemplateIpkController;
 use App\Http\Controllers\TemplateMahasiswaController;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,12 @@ Route::middleware(['auth'])->group(function () {
     // Modul Prestasi — CRUD pendukung. Otorisasi (lihat vs kelola) di komponen.
     Route::prefix('prestasi')->name('prestasi.')->group(function () {
         Volt::route('/', 'prestasi.index')->name('index');
+    });
+
+    // Modul Laporan — rekap kemahasiswaan (read-only) + ekspor CSV.
+    Route::prefix('laporan')->name('laporan.')->group(function () {
+        Volt::route('/', 'laporan.index')->name('index');
+        Route::get('/ekspor/prodi', [LaporanController::class, 'eksporProdi'])->name('ekspor.prodi');
     });
 });
 
