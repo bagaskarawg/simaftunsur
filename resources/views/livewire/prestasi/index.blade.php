@@ -2,19 +2,21 @@
 
 use App\Models\Mahasiswa;
 use App\Models\Prestasi;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Volt\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 new
 #[Layout('layouts.app')]
 #[Title('Prestasi Mahasiswa')]
 class extends Component {
-    use WithPagination;
+    use WithFileUploads, WithPagination;
 
     #[Url(as: 'q', except: '')]
     public string $kataKunci = '';
@@ -38,6 +40,10 @@ class extends Component {
     public string $penyelenggara = '';
     public string $tanggal = '';
     public string $url_bukti = '';
+
+    /** Berkas bukti baru (unggahan) & path berkas lama saat mode ubah. */
+    public $berkas = null;
+    public ?string $berkasLama = null;
 
     public function mount(): void
     {
@@ -82,7 +88,7 @@ class extends Component {
     {
         abort_unless(auth()->user()?->can('prestasi.kelola'), 403);
 
-        $this->reset(['mahasiswa_id', 'judul', 'peringkat', 'penyelenggara', 'tanggal', 'url_bukti', 'idEdit']);
+        $this->reset(['mahasiswa_id', 'judul', 'peringkat', 'penyelenggara', 'tanggal', 'url_bukti', 'idEdit', 'berkas', 'berkasLama']);
         $this->jenis = 'akademik';
         $this->tingkat = 'lokal';
         $this->resetValidation();
@@ -103,6 +109,8 @@ class extends Component {
         $this->penyelenggara = (string) $prestasi->penyelenggara;
         $this->tanggal = optional($prestasi->tanggal)->format('Y-m-d') ?? '';
         $this->url_bukti = (string) $prestasi->url_bukti;
+        $this->berkas = null;
+        $this->berkasLama = $prestasi->berkas_bukti;
         $this->resetValidation();
         $this->modeForm = 'edit';
     }
@@ -125,6 +133,7 @@ class extends Component {
             'penyelenggara' => ['nullable', 'string', 'max:255'],
             'tanggal'       => ['nullable', 'date'],
             'url_bukti'     => ['nullable', 'url', 'max:255'],
+            'berkas'        => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
         ]);
 
         $atribut = [
@@ -137,6 +146,14 @@ class extends Component {
             'tanggal'       => $data['tanggal'] ?: null,
             'url_bukti'     => $data['url_bukti'] ?: null,
         ];
+
+        // Simpan berkas baru bila diunggah; ganti berkas lama bila ada.
+        if ($this->berkas) {
+            if ($this->berkasLama) {
+                Storage::disk('public')->delete($this->berkasLama);
+            }
+            $atribut['berkas_bukti'] = $this->berkas->store('bukti-prestasi', 'public');
+        }
 
         if ($this->modeForm === 'edit' && $this->idEdit) {
             Prestasi::whereKey($this->idEdit)->firstOrFail()->update($atribut);
@@ -154,7 +171,11 @@ class extends Component {
     {
         abort_unless(auth()->user()?->can('prestasi.kelola'), 403);
 
-        Prestasi::findOrFail($id)->delete();
+        $prestasi = Prestasi::findOrFail($id);
+        if ($prestasi->berkas_bukti) {
+            Storage::disk('public')->delete($prestasi->berkas_bukti);
+        }
+        $prestasi->delete();
         session()->flash('sukses', 'Prestasi berhasil dihapus.');
     }
 }; ?>
@@ -249,6 +270,13 @@ class extends Component {
                                         <p class="text-[11px] text-slate-500">
                                             {{ $p->peringkat }}@if ($p->peringkat && $p->penyelenggara) · @endif{{ $p->penyelenggara }}
                                         </p>
+                                    @endif
+                                    @if ($p->berkas_bukti || $p->url_bukti)
+                                        <a href="{{ $p->berkas_bukti ? \Storage::disk('public')->url($p->berkas_bukti) : $p->url_bukti }}"
+                                           target="_blank" class="inline-flex items-center gap-1 text-[11px] text-primary-700 hover:underline mt-0.5">
+                                            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+                                            Bukti
+                                        </a>
                                     @endif
                                 </td>
                                 <td class="py-2 pr-3">
@@ -353,6 +381,21 @@ class extends Component {
                     <input wire:model="url_bukti" id="p-url" type="url" placeholder="https://…"
                            class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                     @error('url_bukti') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label for="p-berkas" class="block text-sm font-medium text-slate-700 mb-1.5">Unggah berkas bukti <span class="text-slate-400 font-normal">(PDF/JPG/PNG, maks. 2MB, opsional)</span></label>
+                    <input wire:model="berkas" id="p-berkas" type="file" accept=".pdf,.jpg,.jpeg,.png"
+                           class="block w-full text-sm text-slate-700 file:mr-3 file:rounded file:border-0 file:bg-primary-50 file:px-3 file:py-2 file:text-sm file:font-medium file:text-primary-700 hover:file:bg-primary-100 cursor-pointer" />
+                    <div wire:loading wire:target="berkas" class="mt-1 text-xs text-slate-500">Mengunggah…</div>
+                    @error('berkas') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    @if ($berkasLama)
+                        <p class="mt-1 text-xs text-slate-500">
+                            Berkas saat ini:
+                            <a href="{{ \Storage::disk('public')->url($berkasLama) }}" target="_blank" class="text-primary-700 hover:underline">lihat</a>
+                            — unggah baru untuk mengganti.
+                        </p>
+                    @endif
                 </div>
 
                 <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">

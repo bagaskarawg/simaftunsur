@@ -26,6 +26,7 @@ class Prestasi extends Model
         'penyelenggara',
         'tanggal',
         'url_bukti',
+        'berkas_bukti',
     ];
 
     protected function casts(): array

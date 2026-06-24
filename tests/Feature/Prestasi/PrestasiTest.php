@@ -5,6 +5,8 @@ use App\Models\Pengguna;
 use App\Models\Prestasi;
 use App\Models\ProgramStudi;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Volt\Volt;
 
 uses(RefreshDatabase::class);
@@ -51,6 +53,24 @@ it('menambahkan prestasi lewat form modal', function () {
     expect($prestasi)->not->toBeNull()
         ->and($prestasi->mahasiswa_id)->toBe($this->mahasiswa->id)
         ->and($prestasi->tingkat)->toBe('nasional');
+});
+
+it('mengunggah berkas bukti saat menambah prestasi', function () {
+    Storage::fake('public');
+    $this->actingAs($this->staf);
+
+    Volt::test('prestasi.index')
+        ->call('bukaTambah')
+        ->set('mahasiswa_id', $this->mahasiswa->id)
+        ->set('judul', 'Juara dengan bukti')
+        ->set('tingkat', 'nasional')
+        ->set('berkas', UploadedFile::fake()->create('sertifikat.pdf', 100, 'application/pdf'))
+        ->call('simpan')
+        ->assertHasNoErrors();
+
+    $prestasi = Prestasi::first();
+    expect($prestasi->berkas_bukti)->not->toBeNull();
+    Storage::disk('public')->assertExists($prestasi->berkas_bukti);
 });
 
 it('memvalidasi field wajib saat menambah prestasi', function () {
