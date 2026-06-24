@@ -1,0 +1,11 @@
+# Lingkungan virtual Python
+.venv/
+venv/
+env/
+
+# Cache & artefak
+__pycache__/
+*.pyc
+*.pkl
+.pytest_cache/
+.ruff_cache/

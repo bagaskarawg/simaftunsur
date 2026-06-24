@@ -1,0 +1,9 @@
+# Dependensi service klasterisasi K-Means SIMAFTUNSUR.
+# Versi dipatok minimum agar reprodusibel; untuk TA disarankan Python 3.12
+# (scikit-learn paling stabil & punya wheel lengkap di 3.11/3.12).
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+numpy>=1.26
+pandas>=2.2
+scikit-learn>=1.4
