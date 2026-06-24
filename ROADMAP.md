@@ -83,7 +83,7 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 | ✅ | Middleware `peran` + Gate dinamis | terdaftar di `bootstrap/app.php` |
 | ✅ | CRUD pengguna (admin only) | `pengguna.index` (Volt): list+filter, tambah/ubah via modal, hapus (cegah hapus diri); route `peran:admin` |
 | ✅ | Halaman profil pengguna (ubah data & kata sandi sendiri) | `profil.index` (Volt) + link footer sidebar; verifikasi kata sandi lama |
-| 📋 | Reset kata sandi (lupa sandi) | placeholder Fortify |
+| ✅ | Reset kata sandi (lupa sandi) | Fortify resetPasswords + view forgot/reset + link di login |
 
 ### Modul FT UNSUR (Import data eksternal)
 
@@ -214,7 +214,7 @@ Hal kecil yang sengaja tidak diperbaiki sekarang, supaya tidak menghambat alur u
 | ✅ | ~~Rute demo `/demo-peran`~~ dihapus | uji middleware `peran` kini lewat rute `pengguna` (admin) |
 | ✅ | ~~Route `mahasiswa.index`/`.detail` belum menegakkan `mahasiswa.lihat`~~ | guard ditambahkan di `mount()`; `mahasiswa.lihat` diberikan ke staf & wd3 |
 | ✅ | ~~Izin `ipk.kelola` tak terpakai~~ | dihapus dari `config/peran.php` (pengelolaan IPK memakai `mahasiswa.kelola`) |
-| 📋 | Reset kata sandi (lupa sandi) via Fortify | placeholder |
+| ✅ | Reset kata sandi (lupa sandi) via Fortify | fitur resetPasswords + aksi kustom kolom `kata_sandi`; view forgot/reset; link di login |
 | 📋 | Vite dev server setup Codespaces (host/cors/HMR) | sudah ada di `vite.config.js` — verifikasi saat di laptop Windows |
 | 📋 | CI: dukungan PHP 8.5 | menunggu maatwebsite/excel + phpspreadsheet kompatibel 8.5 |
 

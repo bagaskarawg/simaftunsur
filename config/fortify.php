@@ -165,7 +165,7 @@ return [
     // Aktifkan kembali bila diperlukan: registration, resetPasswords,
     // emailVerification, twoFactorAuthentication, passkeys.
     'features' => [
-        //
+        Features::resetPasswords(),
     ],
 
 ];

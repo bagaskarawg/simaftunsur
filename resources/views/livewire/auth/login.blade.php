@@ -47,6 +47,9 @@
         <div>
             <div class="flex items-center justify-between mb-1.5">
                 <label for="password" class="block text-sm font-medium text-slate-700">Kata Sandi</label>
+                @if (\Laravel\Fortify\Features::enabled(\Laravel\Fortify\Features::resetPasswords()))
+                    <a href="{{ route('password.request') }}" class="text-xs text-primary-700 hover:text-primary-900 hover:underline">Lupa kata sandi?</a>
+                @endif
             </div>
             <div class="relative" x-data="{ tampil: false }">
                 <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
