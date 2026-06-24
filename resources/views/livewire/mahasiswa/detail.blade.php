@@ -327,17 +327,13 @@ class extends Component {
                 @endif
             </x-card>
 
-            {{-- ==== Panel tambah IPK (manual / impor) ==== --}}
+            {{-- ==== Modal tambah IPK (manual / impor) ==== --}}
             @if ($modePanel !== 'tutup')
-                <x-card>
-                    <x-slot:title>
-                        <span class="text-base font-semibold text-slate-900">
-                            {{ $modePanel === 'manual' ? 'Tambah IPK Semester' : 'Impor Riwayat IPK dari File' }}
-                        </span>
-                    </x-slot:title>
+                <x-modal closeAction="tutupPanel" maxWidth="2xl"
+                         :title="$modePanel === 'manual' ? 'Tambah IPK Semester' : 'Impor Riwayat IPK dari File'">
 
                     {{-- Tab switcher --}}
-                    <div class="flex gap-1 mb-4 border-b border-slate-200 -mx-6 -mt-6 px-6 pt-4">
+                    <div class="flex gap-1 mb-5 -mt-1 border-b border-slate-200">
                         <button type="button" wire:click="bukaPanel('manual')"
                                 class="px-3 py-2 text-sm font-medium border-b-2 transition-colors cursor-pointer
                                        {{ $modePanel === 'manual' ? 'border-primary-700 text-primary-700' : 'border-transparent text-slate-500 hover:text-slate-700' }}">
@@ -347,10 +343,6 @@ class extends Component {
                                 class="px-3 py-2 text-sm font-medium border-b-2 transition-colors cursor-pointer
                                        {{ $modePanel === 'impor' ? 'border-primary-700 text-primary-700' : 'border-transparent text-slate-500 hover:text-slate-700' }}">
                             Impor file (banyak semester)
-                        </button>
-                        <button type="button" wire:click="tutupPanel"
-                                class="ml-auto px-3 py-2 text-xs text-slate-400 hover:text-slate-700 cursor-pointer">
-                            Tutup
                         </button>
                     </div>
 
@@ -478,7 +470,7 @@ class extends Component {
                             </div>
                         </form>
                     @endif
-                </x-card>
+                </x-modal>
             @endif
         </div>
     </div>
