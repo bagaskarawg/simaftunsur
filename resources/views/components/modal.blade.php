@@ -39,14 +39,13 @@
     ][$maxWidth] ?? 'max-w-2xl';
 @endphp
 
-<div class="fixed inset-0 z-40 overflow-y-auto" role="dialog" aria-modal="true"
-     @if ($closeAction) x-data x-on:keydown.escape.window="$wire.{{ $closeAction }}()" @endif>
+<div class="fixed inset-0 z-40 overflow-y-auto" role="dialog" aria-modal="true">
 
-    {{-- Latar gelap (klik untuk menutup) --}}
+    {{-- Latar gelap. SENGAJA tidak menutup saat diklik / Esc — pengguna harus
+         menekan tombol X atau Batal secara eksplisit. --}}
     <div x-data="{ tampil: false }" x-init="requestAnimationFrame(() => tampil = true)"
          x-show="tampil" x-transition.opacity.duration.200ms
          class="fixed inset-0 bg-slate-900/50"
-         @if ($closeAction) wire:click="{{ $closeAction }}" @endif
          aria-hidden="true"></div>
 
     {{-- Panel --}}

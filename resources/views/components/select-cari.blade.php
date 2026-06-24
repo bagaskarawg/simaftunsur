@@ -16,9 +16,6 @@
         - placeholder      : teks saat belum ada pilihan
         - cari-placeholder : placeholder kotak pencarian
         - kosong           : teks saat hasil pencarian kosong
-
-    Pemfilteran dilakukan di sisi klien (cocok hingga ratusan opsi). Nilai
-    terikat dua arah ke properti Livewire lewat @entangle(wire:model).
 --}}
 @props([
     'options'         => [],
@@ -46,6 +43,7 @@
             const o = this.opsi.find(x => String(x.value) === String(this.nilai));
             return o ? o.label : '';
         },
+        get adaNilai() { return this.nilai !== null && this.nilai !== '' && this.nilai !== undefined; },
         pilih(o) { this.nilai = o.value; this.open = false; this.cari = ''; },
         bersihkan() { this.nilai = null; this.cari = ''; },
         buka() { this.open = true; this.$nextTick(() => this.$refs.cari?.focus()); },
@@ -54,26 +52,25 @@
     @keydown.escape="open = false"
     {{ $attributes->whereDoesntStartWith('wire:model')->merge(['class' => 'relative']) }}
 >
-    {{-- Tombol penampil pilihan --}}
+    {{-- Tombol penampil (chevron di dalam; ruang kanan untuk tombol X) --}}
     <button type="button" @click="open ? (open = false) : buka()"
-            class="flex w-full items-center justify-between gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
-        <span class="truncate text-left">
-            <span x-show="labelTerpilih" x-text="labelTerpilih" class="text-slate-900"></span>
-            <span x-show="!labelTerpilih" class="text-slate-400">{{ $placeholder }}</span>
+            class="flex w-full items-center justify-between gap-2 rounded-md border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-left focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+        <span class="truncate">
+            <span x-show="adaNilai" x-text="labelTerpilih" class="text-slate-900"></span>
+            <span x-show="!adaNilai" class="text-slate-400">{{ $placeholder }}</span>
         </span>
-        <span class="flex shrink-0 items-center gap-1">
-            <button type="button" x-show="nilai !== null && nilai !== ''" x-cloak
-                    @click.stop="bersihkan()" aria-label="Hapus pilihan"
-                    class="text-slate-400 hover:text-slate-600">
-                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-            <svg class="h-4 w-4 text-slate-400 transition-transform" :class="open ? 'rotate-180' : ''"
-                 fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
-            </svg>
-        </span>
+        <svg class="h-4 w-4 shrink-0 text-slate-400 transition-transform" :class="open ? 'rotate-180' : ''"
+             fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+        </svg>
+    </button>
+
+    {{-- Tombol bersihkan (X) — elemen TERPISAH (bukan nested di <button>) --}}
+    <button type="button" x-show="adaNilai" x-cloak @click.stop="bersihkan()" aria-label="Hapus pilihan"
+            class="absolute inset-y-0 right-7 flex items-center text-slate-400 hover:text-slate-600">
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
     </button>
 
     {{-- Panel pencarian + daftar opsi --}}
