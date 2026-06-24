@@ -132,7 +132,7 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 |---|---|---|
 | ✅ | Pengaturan periode akademik & identitas fakultas | `pengaturan.index` (Volt, key-value `Pengaturan`); route `peran:admin`; menu sidebar aktif |
 | ✅ | Log aktivitas pengguna | `LogAktivitas` otomatis via model events (dibuat/diubah/dihapus) + login/logout; viewer admin `log-aktivitas.index` |
-| 📋 | Backup/restore DB | belum dibuat |
+| ✅ | Backup data (ekspor JSON) | `BackupController` — unduh seluruh data bisnis (JSON) dari Pengaturan; admin-only |
 
 ### Modul yang DIKECUALIKAN
 

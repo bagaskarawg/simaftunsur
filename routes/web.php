@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\TemplateIpkController;
 use App\Http\Controllers\TemplateMahasiswaController;
@@ -54,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
     // Pengaturan Sistem — konfigurasi ringan, khusus Administrator.
     Route::prefix('pengaturan')->name('pengaturan.')->middleware('peran:admin')->group(function () {
         Volt::route('/', 'pengaturan.index')->name('index');
+        Route::get('/backup', [BackupController::class, 'unduh'])->name('backup');
     });
 
     // Log Aktivitas — jejak audit, khusus Administrator.

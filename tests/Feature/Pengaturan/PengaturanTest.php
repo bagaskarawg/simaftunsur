@@ -44,6 +44,18 @@ it('memvalidasi format tahun akademik', function () {
         ->assertHasErrors(['tahun_akademik']);
 });
 
+it('admin dapat mengunduh backup data JSON', function () {
+    $respons = $this->actingAs($this->admin)->get(route('pengaturan.backup'));
+
+    $respons->assertOk();
+    expect($respons->headers->get('content-type'))->toContain('application/json');
+});
+
+it('non-admin tidak dapat mengunduh backup', function () {
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'wd3']))
+        ->get(route('pengaturan.backup'))->assertForbidden();
+});
+
 it('helper ambil mengembalikan default bila kunci belum ada', function () {
     expect(Pengaturan::ambil('belum_ada', 'bawaan'))->toBe('bawaan');
 
