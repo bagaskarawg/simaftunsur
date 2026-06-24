@@ -1,6 +1,8 @@
 <?php
 
 use App\Imports\IpkMassalImport;
+use App\Services\KlasterisasiService;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Volt\Component;
@@ -20,6 +22,13 @@ class extends Component {
     public function mount(): void
     {
         abort_unless(auth()->user()?->can('mahasiswa.kelola'), 403);
+    }
+
+    /** Kesiapan data klasterisasi — agar progres volume terlihat saat impor. */
+    #[Computed]
+    public function kesiapan(): array
+    {
+        return app(KlasterisasiService::class)->kesiapan();
     }
 
     /**
@@ -42,6 +51,9 @@ class extends Component {
         ];
 
         $this->reset(['file']);
+
+        // Recompute kartu kesiapan agar progres volume terbarui.
+        unset($this->kesiapan);
 
         if (! $import->hasil->adaKegagalan()) {
             session()->flash(
@@ -78,6 +90,9 @@ class extends Component {
             {{ session('sukses') }}
         </div>
     @endif
+
+    {{-- Validasi volume: progres menuju ambang klasterisasi --}}
+    <x-kesiapan-klaster :data="$this->kesiapan" class="mb-6" />
 
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div class="lg:col-span-2">

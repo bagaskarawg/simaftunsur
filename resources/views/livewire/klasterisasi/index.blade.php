@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\KlasterisasiEksekusi;
-use App\Models\Mahasiswa;
 use App\Services\KlasterisasiService;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
@@ -52,14 +51,11 @@ class extends Component {
             ->groupBy('cluster');
     }
 
-    /** Jumlah mahasiswa yang layak diklaster (aktif & ≥3 catatan IPK). */
+    /** Ringkasan kesiapan data — validasi volume terhadap ambang ideal. */
     #[Computed]
-    public function jumlahLayak(): int
+    public function kesiapan(): array
     {
-        return Mahasiswa::query()
-            ->where('status', 'aktif')
-            ->has('nilaiIpkSemester', '>=', KlasterisasiService::MIN_CATATAN_IPK)
-            ->count();
+        return app(KlasterisasiService::class)->kesiapan();
     }
 
     /** Jalankan klasterisasi via service Python lalu simpan hasilnya. */
@@ -116,19 +112,16 @@ class extends Component {
 @endphp
 
     {{-- Header --}}
-    <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
-            <h1 class="text-display text-slate-900">Klasterisasi Profil Mahasiswa</h1>
-            <p class="mt-1 text-sm text-slate-500">
-                Pengelompokan mahasiswa dengan algoritma <span class="font-medium text-slate-700">K-Means</span>
-                berdasarkan riwayat IPK. Evaluasi memakai Silhouette, Davies-Bouldin, dan Elbow.
-            </p>
-        </div>
-        <div class="text-right">
-            <p class="text-2xl font-bold text-slate-900">{{ $this->jumlahLayak }}</p>
-            <p class="text-xs text-slate-500">mahasiswa layak diklaster<br>(aktif &amp; ≥3 catatan IPK)</p>
-        </div>
+    <div class="mb-6">
+        <h1 class="text-display text-slate-900">Klasterisasi Profil Mahasiswa</h1>
+        <p class="mt-1 text-sm text-slate-500">
+            Pengelompokan mahasiswa dengan algoritma <span class="font-medium text-slate-700">K-Means</span>
+            berdasarkan riwayat IPK. Evaluasi memakai Silhouette, Davies-Bouldin, dan Elbow.
+        </p>
     </div>
+
+    {{-- Validasi volume / kesiapan data --}}
+    <x-kesiapan-klaster :data="$this->kesiapan" class="mb-6" />
 
     {{-- Banner pesan --}}
     @if ($pesan)

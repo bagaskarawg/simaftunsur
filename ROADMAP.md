@@ -154,7 +154,8 @@ Kontribusi orisinil TA & **inti yang dievaluasi di BAB IV**. Modul fokus (Mahasi
 |---|---|---|
 | ✅ | Atribut fitur klaster tersedia di Model | `Mahasiswa::ipkRataRata/ipkTerakhir/tren/konsistensi()` |
 | ✅ | Izin RBAC klasterisasi sudah didefinisikan | `klasterisasi.lihat`, `klasterisasi.jalankan` di `config/peran.php` |
-| 📋 | Jalur impor IPK riil + validasi volume (≥100 mhs, ≥3 semester) | prioritaskan saat data WD III tiba |
+| ✅ | Validasi volume / kesiapan data (≥100 mhs aktif, ≥3 catatan IPK) | `KlasterisasiService::kesiapan()` + komponen `x-kesiapan-klaster` di halaman Klasterisasi & Impor IPK |
+| 📋 | Impor data mahasiswa riil massal (bukan hanya IPK) | jalur IPK massal sudah ada; perlu jalur tambah mahasiswa saat data WD III tiba |
 | ✅ | Pipeline Python K-Means (scikit-learn) modular | `ml/pipeline/` — preprocess, feature_engineering, train, evaluate, interpret, orchestrator; teruji via `ml/uji_pipeline.py` |
 | ✅ | Service REST API (FastAPI) `/sehat` + `/klasterisasi` | `ml/api.py`, `ml/schemas.py`; uvicorn port 8001 |
 | ✅ | Evaluasi cluster: Silhouette + Davies-Bouldin + Elbow (WCSS) | di `ml/pipeline/evaluate.py` + `train.py`; tabel per-k untuk grafik |

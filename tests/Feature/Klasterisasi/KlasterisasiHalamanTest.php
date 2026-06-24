@@ -80,5 +80,7 @@ it('menampilkan empty state saat belum ada eksekusi', function () {
 
     Volt::test('klasterisasi.index')
         ->assertOk()
-        ->assertSee('Belum ada hasil klasterisasi');
+        ->assertSee('Belum ada hasil klasterisasi')
+        ->assertSee('Kesiapan Data Klasterisasi')   // validasi volume selalu tampil
+        ->assertSee('Belum memadai');               // <100 mahasiswa layak
 });

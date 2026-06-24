@@ -133,3 +133,22 @@ it('melempar galat ramah saat service menolak (HTTP 422)', function () {
 
     app(KlasterisasiService::class)->jalankan();
 })->throws(RuntimeException::class, 'Service menolak permintaan: Data terlalu sedikit.');
+
+it('menghitung kesiapan data terhadap ambang volume', function () {
+    mahasiswaDenganIpk($this->prodi, 3);          // layak
+    mahasiswaDenganIpk($this->prodi, 4);          // layak
+    mahasiswaDenganIpk($this->prodi, 1);          // aktif tapi <3 catatan
+    $cuti = mahasiswaDenganIpk($this->prodi, 5);  // cukup IPK tapi tidak aktif
+    $cuti->update(['status' => 'cuti']);
+
+    $kesiapan = app(KlasterisasiService::class)->kesiapan();
+
+    expect($kesiapan['total'])->toBe(4)
+        ->and($kesiapan['aktif'])->toBe(3)
+        ->and($kesiapan['layak'])->toBe(2)
+        ->and($kesiapan['aktif_kurang_ipk'])->toBe(1)
+        ->and($kesiapan['ambang'])->toBe(100)
+        ->and($kesiapan['kurang'])->toBe(98)
+        ->and($kesiapan['siap'])->toBeFalse()
+        ->and($kesiapan['cukup_untuk_jalan'])->toBeFalse();
+});

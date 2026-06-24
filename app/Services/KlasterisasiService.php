@@ -29,6 +29,43 @@ class KlasterisasiService
     public const MIN_CATATAN_IPK = 3;
 
     /**
+     * Ambang volume ideal sesuai Batasan Masalah: minimum 100 mahasiswa aktif
+     * yang telah menempuh ≥ 3 semester. Di bawah ini klaster tetap bisa
+     * dijalankan, tetapi hasil ditandai indikatif (lihat service Python).
+     */
+    public const VOLUME_IDEAL_MIN = 100;
+
+    /**
+     * Hitung kesiapan data untuk klasterisasi — dipakai sebagai validasi
+     * volume di antarmuka (halaman klasterisasi & impor IPK).
+     *
+     * @return array{total:int, aktif:int, layak:int, aktif_kurang_ipk:int, ambang:int, min_catatan:int, kurang:int, persen:int, siap:bool, cukup_untuk_jalan:bool}
+     */
+    public function kesiapan(): array
+    {
+        $total = Mahasiswa::count();
+        $aktif = Mahasiswa::where('status', 'aktif')->count();
+        $layak = Mahasiswa::where('status', 'aktif')
+            ->has('nilaiIpkSemester', '>=', self::MIN_CATATAN_IPK)
+            ->count();
+
+        $persen = (int) min(100, round($layak / self::VOLUME_IDEAL_MIN * 100));
+
+        return [
+            'total'             => $total,
+            'aktif'             => $aktif,
+            'layak'             => $layak,
+            'aktif_kurang_ipk'  => max(0, $aktif - $layak),
+            'ambang'            => self::VOLUME_IDEAL_MIN,
+            'min_catatan'       => self::MIN_CATATAN_IPK,
+            'kurang'            => max(0, self::VOLUME_IDEAL_MIN - $layak),
+            'persen'            => $persen,
+            'siap'              => $layak >= self::VOLUME_IDEAL_MIN,
+            'cukup_untuk_jalan' => $layak >= 3,
+        ];
+    }
+
+    /**
      * Cek kesehatan service Python sebelum mengirim data.
      */
     public function sehat(): bool
