@@ -2,11 +2,19 @@
 
 namespace App\Providers;
 
+use App\Models\KegiatanPromosi;
+use App\Models\LogAktivitas;
+use App\Models\Mahasiswa;
 use App\Models\Pengguna;
+use App\Models\Prestasi;
+use App\Models\TracerStudy;
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -28,6 +36,25 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->daftarkanGateIzin();
+        $this->daftarkanLogAktivitas();
+    }
+
+    /**
+     * Daftarkan pencatatan log aktivitas otomatis atas entitas bisnis utama
+     * (lewat model events) serta event autentikasi masuk/keluar.
+     */
+    protected function daftarkanLogAktivitas(): void
+    {
+        $modelBisnis = [Mahasiswa::class, Prestasi::class, TracerStudy::class, KegiatanPromosi::class, Pengguna::class];
+
+        foreach ($modelBisnis as $kelas) {
+            $kelas::created(fn ($model) => LogAktivitas::catat($model, 'dibuat'));
+            $kelas::updated(fn ($model) => LogAktivitas::catat($model, 'diubah'));
+            $kelas::deleted(fn ($model) => LogAktivitas::catat($model, 'dihapus'));
+        }
+
+        Event::listen(Login::class, fn (Login $e) => LogAktivitas::catatAuth($e->user, 'masuk'));
+        Event::listen(Logout::class, fn (Logout $e) => LogAktivitas::catatAuth($e->user, 'keluar'));
     }
 
     /**

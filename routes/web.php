@@ -56,6 +56,11 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/', 'pengaturan.index')->name('index');
     });
 
+    // Log Aktivitas — jejak audit, khusus Administrator.
+    Route::prefix('log-aktivitas')->name('log-aktivitas.')->middleware('peran:admin')->group(function () {
+        Volt::route('/', 'log-aktivitas.index')->name('index');
+    });
+
     // Modul Prestasi — CRUD pendukung. Otorisasi (lihat vs kelola) di komponen.
     Route::prefix('prestasi')->name('prestasi.')->group(function () {
         Volt::route('/', 'prestasi.index')->name('index');
