@@ -5,6 +5,7 @@ use App\Models\NilaiIpkSemester;
 use App\Models\Pengguna;
 use App\Models\Prestasi;
 use App\Models\ProgramStudi;
+use App\Models\TracerStudy;
 use App\Services\LaporanService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
@@ -58,7 +59,27 @@ it('hanya dapat dilihat oleh yang berizin laporan.lihat', function () {
 
     // dekan punya laporan.lihat.
     $this->actingAs(Pengguna::factory()->create(['peran' => 'dekan']));
-    Volt::test('laporan.index')->assertOk()->assertSee('Rekap per Program Studi');
+    Volt::test('laporan.index')->assertOk()
+        ->assertSee('Rekap per Program Studi')
+        ->assertSee('Status Pekerjaan Alumni (Tracer)')
+        ->assertSee('Prestasi per Tingkat');
+});
+
+it('merekap tracer & prestasi per kategori (selalu 4 kategori)', function () {
+    $mhs = Mahasiswa::factory()->untukProdi($this->tif)->create();
+    TracerStudy::factory()->create(['mahasiswa_id' => $mhs->id, 'status_pekerjaan' => 'bekerja']);
+    Prestasi::factory()->create(['mahasiswa_id' => $mhs->id, 'tingkat' => 'nasional']);
+
+    $laporan = app(LaporanService::class);
+
+    $tracer = $laporan->rekapTracer()->keyBy('status');
+    expect($tracer)->toHaveCount(4)
+        ->and($tracer['bekerja']['jumlah'])->toBeGreaterThanOrEqual(1)
+        ->and($tracer['belum_bekerja']['jumlah'])->toBe(0);
+
+    $tingkat = $laporan->rekapPrestasiTingkat()->keyBy('tingkat');
+    expect($tingkat)->toHaveCount(4)
+        ->and($tingkat['nasional']['jumlah'])->toBeGreaterThanOrEqual(1);
 });
 
 it('membatasi ekspor CSV hanya untuk yang berizin laporan.ekspor', function () {

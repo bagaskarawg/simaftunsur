@@ -38,6 +38,18 @@ class extends Component {
     {
         return app(LaporanService::class)->rekapStatus();
     }
+
+    #[Computed]
+    public function rekapTracer()
+    {
+        return app(LaporanService::class)->rekapTracer();
+    }
+
+    #[Computed]
+    public function rekapPrestasiTingkat()
+    {
+        return app(LaporanService::class)->rekapPrestasiTingkat();
+    }
 }; ?>
 
 @php
@@ -73,6 +85,27 @@ class extends Component {
         <x-kpi-card label="Mahasiswa Aktif" :value="number_format($this->ringkasan['mahasiswa_aktif'])" hint="status aktif" />
         <x-kpi-card label="Rata-rata IPK" :value="$this->ringkasan['rata_ipk'] !== null ? number_format($this->ringkasan['rata_ipk'], 2) : '—'" hint="seluruh catatan IPK" />
         <x-kpi-card label="Total Prestasi" :value="number_format($this->ringkasan['total_prestasi'])" hint="akademik & non-akademik" />
+    </section>
+
+    {{-- Grafik ringkas --}}
+    @php
+        $warnaStatus  = ['aktif' => '#16a34a', 'cuti' => '#d97706', 'non_aktif' => '#64748b', 'lulus' => '#2563eb', 'do' => '#dc2626'];
+        $warnaTracer  = ['bekerja' => '#16a34a', 'wirausaha' => '#2563eb', 'lanjut_studi' => '#7c3aed', 'belum_bekerja' => '#64748b'];
+        $warnaTingkat = ['lokal' => '#64748b', 'regional' => '#d97706', 'nasional' => '#16a34a', 'internasional' => '#dc2626'];
+    @endphp
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <x-card title="Mahasiswa per Program Studi">
+            <x-bar-chart :data="$this->rekapProdi->map(fn ($r) => ['label' => $r['kode'].' — '.$r['nama'], 'nilai' => $r['jumlah']])->all()" />
+        </x-card>
+        <x-card title="Sebaran Status Mahasiswa">
+            <x-bar-chart :data="$this->rekapStatus->map(fn ($r) => ['label' => $labelStatus[$r['status']] ?? ucfirst($r['status']), 'nilai' => $r['jumlah'], 'warna' => $warnaStatus[$r['status']] ?? '#2563eb'])->all()" />
+        </x-card>
+        <x-card title="Status Pekerjaan Alumni (Tracer)">
+            <x-bar-chart :data="$this->rekapTracer->map(fn ($r) => ['label' => $r['label'], 'nilai' => $r['jumlah'], 'warna' => $warnaTracer[$r['status']] ?? '#2563eb'])->all()" />
+        </x-card>
+        <x-card title="Prestasi per Tingkat">
+            <x-bar-chart :data="$this->rekapPrestasiTingkat->map(fn ($r) => ['label' => $r['label'], 'nilai' => $r['jumlah'], 'warna' => $warnaTingkat[$r['tingkat']] ?? '#2563eb'])->all()" />
+        </x-card>
     </section>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">

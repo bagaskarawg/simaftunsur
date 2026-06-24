@@ -115,7 +115,7 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 |---|---|---|
 | ✅ | CRUD tracer alumni (status kerja, instansi, relevansi, masa tunggu, gaji) | `tracer.index` (Volt): list+filter, modal tambah/ubah (pakai x-select-cari), hapus; izin `tracer.lihat/kelola` |
 | ✅ | Status pekerjaan alumni (selaras SIMKATMAWA) | enum bekerja/wirausaha/lanjut_studi/belum_bekerja + badge |
-| 📋 | Laporan tracer agregat | rekap per status/relevansi dapat ditambahkan ke Modul Laporan |
+| ✅ | Laporan tracer agregat + grafik | bar chart status pekerjaan alumni, status mahasiswa, prestasi per tingkat, mahasiswa per prodi di Modul Laporan |
 
 ### Modul Laporan
 
@@ -165,7 +165,7 @@ Kontribusi orisinil TA & **inti yang dievaluasi di BAB IV**. Modul fokus (Mahasi
 | ✅ | Tabel ringkasan + karakteristik centroid per klaster | kartu profil + daftar anggota per klaster |
 | ✅ | Rekomendasi strategi pembinaan per cluster (output SPK untuk WD III) | heuristik per label klaster |
 | ✅ | Aktivasi link sidebar "Klasterisasi" | guard `klasterisasi.lihat` |
-| 📋 | (opsional) Visual lanjutan: radar/parallel coordinates per cluster | bila perlu, butuh lib chart JS |
+| ✅ | Visual radar perbandingan profil antar-klaster | `x-radar-klaster` (SVG, tanpa npm) di dashboard klasterisasi |
 | 📋 | Penyempurnaan UI/UX seluruh modul | empty states, loading states, error pages, toast Flux |
 | 📋 | Halaman profil pengguna lengkap | ubah data, kata sandi |
 | ✅ | Dashboard pimpinan: KPI live + ringkasan klaster terkini | beranda menampilkan k, Silhouette/DBI, distribusi anggota klaster (bagi yang berizin) |

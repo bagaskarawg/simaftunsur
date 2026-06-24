@@ -6,6 +6,7 @@ use App\Models\Mahasiswa;
 use App\Models\NilaiIpkSemester;
 use App\Models\Prestasi;
 use App\Models\ProgramStudi;
+use App\Models\TracerStudy;
 use Illuminate\Support\Collection;
 
 /**
@@ -97,5 +98,61 @@ class LaporanService
                 'status' => (string) $baris->status,
                 'jumlah' => (int) $baris->jumlah,
             ]);
+    }
+
+    /**
+     * Rekap status pekerjaan alumni dari tracer study (selalu 4 kategori).
+     *
+     * @return Collection<int, array{status:string, label:string, jumlah:int}>
+     */
+    public function rekapTracer(): Collection
+    {
+        $peta = [
+            'bekerja'       => 'Bekerja',
+            'wirausaha'     => 'Wirausaha',
+            'lanjut_studi'  => 'Lanjut Studi',
+            'belum_bekerja' => 'Belum Bekerja',
+        ];
+
+        $hitung = TracerStudy::query()
+            ->selectRaw('status_pekerjaan, COUNT(*) as jumlah')
+            ->groupBy('status_pekerjaan')
+            ->pluck('jumlah', 'status_pekerjaan');
+
+        return collect($peta)
+            ->map(fn ($label, $kunci) => [
+                'status' => $kunci,
+                'label'  => $label,
+                'jumlah' => (int) ($hitung[$kunci] ?? 0),
+            ])
+            ->values();
+    }
+
+    /**
+     * Rekap prestasi per tingkat (selalu 4 kategori).
+     *
+     * @return Collection<int, array{tingkat:string, label:string, jumlah:int}>
+     */
+    public function rekapPrestasiTingkat(): Collection
+    {
+        $peta = [
+            'lokal'         => 'Lokal',
+            'regional'      => 'Regional',
+            'nasional'      => 'Nasional',
+            'internasional' => 'Internasional',
+        ];
+
+        $hitung = Prestasi::query()
+            ->selectRaw('tingkat, COUNT(*) as jumlah')
+            ->groupBy('tingkat')
+            ->pluck('jumlah', 'tingkat');
+
+        return collect($peta)
+            ->map(fn ($label, $kunci) => [
+                'tingkat' => $kunci,
+                'label'   => $label,
+                'jumlah'  => (int) ($hitung[$kunci] ?? 0),
+            ])
+            ->values();
     }
 }
