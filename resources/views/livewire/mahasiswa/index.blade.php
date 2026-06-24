@@ -28,6 +28,18 @@ class extends Component {
     #[Url(as: 'status', except: '')]
     public string $filterStatus = '';
 
+    #[Url(as: 'jk', except: '')]
+    public string $filterJk = '';
+
+    #[Url(as: 'ipkmin', except: '')]
+    public string $ipkMin = '';
+
+    #[Url(as: 'ipkmaks', except: '')]
+    public string $ipkMaks = '';
+
+    /** ID mahasiswa terpilih untuk aksi massal. */
+    public array $terpilih = [];
+
     public function mount(): void
     {
         abort_unless(auth()->user()?->can('mahasiswa.lihat'), 403);
@@ -35,21 +47,31 @@ class extends Component {
 
     public function updating($properti): void
     {
-        // Saat filter berubah, balik ke halaman 1.
-        if (in_array($properti, ['kataKunci', 'filterProdi', 'filterAngkatan', 'filterStatus'], true)) {
+        if (in_array($properti, ['kataKunci', 'filterProdi', 'filterAngkatan', 'filterStatus', 'filterJk', 'ipkMin', 'ipkMaks'], true)) {
             $this->resetPage();
+            $this->terpilih = [];
         }
     }
 
     public function bersihkanFilter(): void
     {
-        $this->reset(['kataKunci', 'filterProdi', 'filterAngkatan', 'filterStatus']);
+        $this->reset(['kataKunci', 'filterProdi', 'filterAngkatan', 'filterStatus', 'filterJk', 'ipkMin', 'ipkMaks', 'terpilih']);
         $this->resetPage();
     }
 
-    /**
-     * Daftar prodi untuk dropdown filter.
-     */
+    /** Hapus seluruh mahasiswa yang terpilih (beserta IPK-nya, cascade). */
+    public function hapusTerpilih(): void
+    {
+        abort_unless(auth()->user()?->can('mahasiswa.kelola'), 403);
+
+        $jumlah = Mahasiswa::whereIn('id', $this->terpilih)->count();
+        Mahasiswa::whereIn('id', $this->terpilih)->delete();
+
+        $this->terpilih = [];
+        $this->resetPage();
+        session()->flash('sukses', "{$jumlah} mahasiswa berhasil dihapus.");
+    }
+
     #[Computed]
     public function daftarProdi()
     {
@@ -57,8 +79,6 @@ class extends Component {
     }
 
     /**
-     * Daftar angkatan unik untuk dropdown filter.
-     *
      * @return array<int, int>
      */
     #[Computed]
@@ -73,11 +93,21 @@ class extends Component {
             ->all();
     }
 
-    /**
-     * Query mahasiswa ter-filter & terpaginate.
-     */
     public function mahasiswa(): LengthAwarePaginator
     {
+        // Filter rentang IPK lewat subquery agregat (GROUP BY + HAVING) yang
+        // portable di MySQL & SQLite.
+        $idDenganRentangIpk = function (?float $min, ?float $maks) {
+            // $min/$maks sudah di-cast float (aman dari injeksi), diinterpolasi
+            // langsung karena binding pada havingRaw tidak andal di sini.
+            return \App\Models\NilaiIpkSemester::query()
+                ->select('mahasiswa_id')
+                ->groupBy('mahasiswa_id')
+                ->when($min !== null, fn ($s) => $s->havingRaw('avg(ipk) >= '.$min))
+                ->when($maks !== null, fn ($s) => $s->havingRaw('avg(ipk) <= '.$maks))
+                ->pluck('mahasiswa_id');
+        };
+
         return Mahasiswa::query()
             ->with(['programStudi', 'nilaiIpkSemester'])
             ->when($this->kataKunci !== '', function ($q) {
@@ -88,6 +118,14 @@ class extends Component {
             ->when($this->filterProdi !== '', fn ($q) => $q->where('program_studi_id', $this->filterProdi))
             ->when($this->filterAngkatan !== '', fn ($q) => $q->where('angkatan', $this->filterAngkatan))
             ->when($this->filterStatus !== '', fn ($q) => $q->where('status', $this->filterStatus))
+            ->when($this->filterJk !== '', fn ($q) => $q->where('jenis_kelamin', $this->filterJk))
+            ->when(is_numeric($this->ipkMin) || is_numeric($this->ipkMaks), fn ($q) => $q->whereIn(
+                'id',
+                $idDenganRentangIpk(
+                    is_numeric($this->ipkMin) ? (float) $this->ipkMin : null,
+                    is_numeric($this->ipkMaks) ? (float) $this->ipkMaks : null,
+                ),
+            ))
             ->orderBy('npm')
             ->paginate(15);
     }
@@ -102,19 +140,21 @@ class extends Component {
 
 <div>
 
-    {{-- Header halaman: judul saja. Tombol aksi pindah ke toolbar tabel. --}}
+    {{-- Header --}}
     <div class="mb-6">
         <h1 class="text-display text-slate-900">Data Mahasiswa</h1>
         <p class="mt-1 text-sm text-slate-500">
-            Daftar mahasiswa aktif FT UNSUR. Filter berdasarkan prodi, angkatan, atau status.
+            Daftar mahasiswa FT UNSUR. Filter berdasarkan prodi, angkatan, status, jenis kelamin, atau rentang IPK.
         </p>
     </div>
 
-    {{-- Tabel terintegrasi dengan toolbar (search + filter + aksi) di dalam komponen --}}
+    @if (session('sukses'))
+        <div class="mb-4 rounded-md bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">{{ session('sukses') }}</div>
+    @endif
+
     <x-data-table>
 
         <x-slot:toolbar>
-            {{-- Baris 1: pencarian (kiri, lebar fleksibel) + tombol aksi (kanan, lebar konten) --}}
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div class="relative w-full sm:max-w-xs">
                     <label for="cari" class="sr-only">Cari NPM atau nama</label>
@@ -147,44 +187,72 @@ class extends Component {
                 </div>
             </div>
 
-            {{-- Baris 2: tiga dropdown filter, masing-masing 1/3 lebar di desktop --}}
+            {{-- Filter: prodi, angkatan, status --}}
             <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div>
-                    <label for="prodi" class="sr-only">Program Studi</label>
-                    <select wire:model.live="filterProdi" id="prodi"
-                            class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
-                        <option value="">Semua Prodi</option>
-                        @foreach ($this->daftarProdi as $prodi)
-                            <option value="{{ $prodi->id }}">{{ $prodi->kode }} — {{ $prodi->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label for="angkatan" class="sr-only">Angkatan</label>
-                    <select wire:model.live="filterAngkatan" id="angkatan"
-                            class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
-                        <option value="">Semua Angkatan</option>
-                        @foreach ($this->daftarAngkatan as $tahun)
-                            <option value="{{ $tahun }}">Angkatan {{ $tahun }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label for="status" class="sr-only">Status</label>
-                    <select wire:model.live="filterStatus" id="status"
-                            class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
-                        <option value="">Semua Status</option>
-                        <option value="aktif">Aktif</option>
-                        <option value="cuti">Cuti</option>
-                        <option value="non_aktif">Non-aktif</option>
-                        <option value="lulus">Lulus</option>
-                        <option value="do">DO</option>
-                    </select>
-                </div>
+                <select wire:model.live="filterProdi"
+                        class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                    <option value="">Semua Prodi</option>
+                    @foreach ($this->daftarProdi as $prodi)
+                        <option value="{{ $prodi->id }}">{{ $prodi->kode }} — {{ $prodi->nama }}</option>
+                    @endforeach
+                </select>
+                <select wire:model.live="filterAngkatan"
+                        class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                    <option value="">Semua Angkatan</option>
+                    @foreach ($this->daftarAngkatan as $tahun)
+                        <option value="{{ $tahun }}">Angkatan {{ $tahun }}</option>
+                    @endforeach
+                </select>
+                <select wire:model.live="filterStatus"
+                        class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                    <option value="">Semua Status</option>
+                    <option value="aktif">Aktif</option>
+                    <option value="cuti">Cuti</option>
+                    <option value="non_aktif">Non-aktif</option>
+                    <option value="lulus">Lulus</option>
+                    <option value="do">DO</option>
+                </select>
             </div>
+
+            {{-- Filter lanjut: jenis kelamin + rentang IPK --}}
+            <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <select wire:model.live="filterJk"
+                        class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                    <option value="">Semua Jenis Kelamin</option>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+                <input wire:model.live.debounce.400ms="ipkMin" type="number" step="0.01" min="0" max="4" placeholder="IPK rata min (mis. 3.00)"
+                       class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm tabular-nums focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
+                <input wire:model.live.debounce.400ms="ipkMaks" type="number" step="0.01" min="0" max="4" placeholder="IPK rata maks (mis. 3.50)"
+                       class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm tabular-nums focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
+            </div>
+
+            {{-- Bilah aksi massal --}}
+            @can('mahasiswa.kelola')
+                @if (count($terpilih) > 0)
+                    <div class="mt-3 flex items-center justify-between rounded-md border border-primary-200 bg-primary-50 px-3 py-2">
+                        <span class="text-xs font-medium text-primary-800">{{ count($terpilih) }} mahasiswa terpilih</span>
+                        <button type="button"
+                                x-data
+                                x-on:click="if (confirm('Hapus {{ count($terpilih) }} mahasiswa terpilih? Data IPK terkait ikut terhapus.')) $wire.hapusTerpilih()"
+                                class="inline-flex items-center gap-1.5 rounded-md bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700 cursor-pointer">
+                            Hapus Terpilih
+                        </button>
+                    </div>
+                @endif
+            @endcan
         </x-slot:toolbar>
 
         <x-slot:head>
+            @can('mahasiswa.kelola')
+                <th class="w-8">
+                    <input type="checkbox" aria-label="Pilih semua di halaman ini"
+                           x-on:change="$wire.set('terpilih', $event.target.checked ? @js($mahasiswa->pluck('id')->map(fn ($v) => (string) $v)) : [])"
+                           @checked(count($terpilih) === $mahasiswa->count() && $mahasiswa->count() > 0)
+                           class="rounded border-slate-300 text-primary-600 focus:ring-primary-500/30" />
+                </th>
+            @endcan
             <th>NPM</th>
             <th>Nama</th>
             <th>Prodi</th>
@@ -196,17 +264,20 @@ class extends Component {
 
         @forelse ($mahasiswa as $m)
             <tr wire:key="mhs-{{ $m->id }}" class="hover:bg-slate-50 transition-colors">
+                @can('mahasiswa.kelola')
+                    <x-data-table.cell>
+                        <input type="checkbox" wire:model.live="terpilih" value="{{ $m->id }}"
+                               aria-label="Pilih {{ $m->nama }}"
+                               class="rounded border-slate-300 text-primary-600 focus:ring-primary-500/30" />
+                    </x-data-table.cell>
+                @endcan
                 <x-data-table.cell mono>
                     <a href="{{ route('mahasiswa.detail', $m) }}" wire:navigate
-                       class="text-primary-700 hover:text-primary-900 hover:underline">
-                        {{ $m->npm }}
-                    </a>
+                       class="text-primary-700 hover:text-primary-900 hover:underline">{{ $m->npm }}</a>
                 </x-data-table.cell>
                 <x-data-table.cell>
                     <a href="{{ route('mahasiswa.detail', $m) }}" wire:navigate
-                       class="font-medium text-slate-900 hover:text-primary-700">
-                        {{ $m->nama }}
-                    </a>
+                       class="font-medium text-slate-900 hover:text-primary-700">{{ $m->nama }}</a>
                     <div class="text-xs text-slate-500">{{ $m->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}</div>
                 </x-data-table.cell>
                 <x-data-table.cell>
@@ -225,9 +296,7 @@ class extends Component {
                         ];
                         [$label, $kelasStatus] = $petaStatus[$m->status] ?? ['—', 'bg-slate-100 text-slate-600'];
                     @endphp
-                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset {{ $kelasStatus }}">
-                        {{ $label }}
-                    </span>
+                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset {{ $kelasStatus }}">{{ $label }}</span>
                 </x-data-table.cell>
                 <x-data-table.cell align="right" tabular>
                     @php $rata = $m->ipkRataRata(); @endphp
@@ -255,4 +324,3 @@ class extends Component {
         </x-slot:footer>
     </x-data-table>
 </div>
-
