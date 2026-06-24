@@ -11,10 +11,22 @@ beforeEach(function () {
     $this->seed();
 });
 
-it('mengisi 4 prodi, 30 mahasiswa, dan minimal 120 catatan IPK', function () {
+it('mengisi 4 prodi, 30 mahasiswa, dan 3–6 catatan IPK per mahasiswa', function () {
     expect(ProgramStudi::count())->toBe(4);
     expect(Mahasiswa::count())->toBe(30);
-    expect(NilaiIpkSemester::count())->toBeGreaterThanOrEqual(120);
+
+    // Seeder memberi tiap mahasiswa min(semester_aktif, 4..6) catatan, dengan
+    // semester_aktif 3..7 → setiap mahasiswa punya 3–6 catatan IPK.
+    Mahasiswa::withCount('nilaiIpkSemester')->get()->each(function ($mahasiswa) {
+        expect($mahasiswa->nilai_ipk_semester_count)
+            ->toBeGreaterThanOrEqual(3)
+            ->toBeLessThanOrEqual(6);
+    });
+
+    // Konsekuensinya total catatan berada pada rentang 30×3 .. 30×6.
+    expect(NilaiIpkSemester::count())
+        ->toBeGreaterThanOrEqual(90)
+        ->toBeLessThanOrEqual(180);
 });
 
 it('memastikan tiap prodi terisi minimal 5 mahasiswa', function () {
