@@ -43,6 +43,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('pengguna')->name('pengguna.')->middleware('peran:admin')->group(function () {
         Volt::route('/', 'pengguna.index')->name('index');
     });
+
+    // Modul Prestasi — CRUD pendukung. Otorisasi (lihat vs kelola) di komponen.
+    Route::prefix('prestasi')->name('prestasi.')->group(function () {
+        Volt::route('/', 'prestasi.index')->name('index');
+    });
 });
 
 // Rute demo untuk memverifikasi middleware `peran`. Hanya dipakai pada

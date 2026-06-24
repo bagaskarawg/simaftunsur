@@ -107,9 +107,9 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 
 | Status | Sub-fitur | Catatan |
 |---|---|---|
-| 📋 | CRUD prestasi mahasiswa (akademik/non-akademik) | modul lama ~10% placeholder, perlu spec ulang |
-| 📋 | Upload bukti sertifikat | |
-| 📋 | Tingkat (lokal/regional/nasional/internasional) | |
+| ✅ | CRUD prestasi mahasiswa (akademik/non-akademik) | `prestasi.index` (Volt): list+filter, tambah/ubah via modal, hapus; izin `prestasi.lihat/kelola` |
+| ✅ | Tingkat (lokal/regional/nasional/internasional) | enum + badge berwarna |
+| 📋 | Upload file bukti sertifikat | saat ini berupa `url_bukti` (tautan); unggah file dapat ditambahkan nanti |
 
 ### Modul Tracer Study
 

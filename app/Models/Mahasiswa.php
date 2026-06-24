@@ -61,6 +61,16 @@ class Mahasiswa extends Model
     }
 
     /**
+     * Daftar prestasi mahasiswa (modul pendukung), terbaru lebih dulu.
+     *
+     * @return HasMany<Prestasi, $this>
+     */
+    public function prestasi(): HasMany
+    {
+        return $this->hasMany(Prestasi::class)->latest('tanggal');
+    }
+
+    /**
      * Rata-rata IPK seluruh semester yang sudah tercatat.
      * Mengembalikan 0.0 jika belum ada catatan.
      */
