@@ -55,6 +55,11 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/', 'laporan.index')->name('index');
         Route::get('/ekspor/prodi', [LaporanController::class, 'eksporProdi'])->name('ekspor.prodi');
     });
+
+    // Modul Tracer Study — CRUD pendukung. Otorisasi (lihat vs kelola) di komponen.
+    Route::prefix('tracer')->name('tracer.')->group(function () {
+        Volt::route('/', 'tracer.index')->name('index');
+    });
 });
 
 // Rute demo untuk memverifikasi middleware `peran`. Hanya dipakai pada

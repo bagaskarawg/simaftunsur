@@ -115,9 +115,9 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 
 | Status | Sub-fitur | Catatan |
 |---|---|---|
-| 📋 | Form survey alumni | modul lama ~5% placeholder |
-| 📋 | Laporan tracer aggregat | |
-| 📋 | Status pekerjaan alumni (selaras dgn SIMKATMAWA) | |
+| ✅ | CRUD tracer alumni (status kerja, instansi, relevansi, masa tunggu, gaji) | `tracer.index` (Volt): list+filter, modal tambah/ubah (pakai x-select-cari), hapus; izin `tracer.lihat/kelola` |
+| ✅ | Status pekerjaan alumni (selaras SIMKATMAWA) | enum bekerja/wirausaha/lanjut_studi/belum_bekerja + badge |
+| 📋 | Laporan tracer agregat | rekap per status/relevansi dapat ditambahkan ke Modul Laporan |
 
 ### Modul Laporan
 

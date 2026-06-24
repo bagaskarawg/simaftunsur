@@ -30,6 +30,7 @@ return [
             'klasterisasi.lihat',
             'laporan.lihat',
             'prestasi.lihat',
+            'tracer.lihat',
         ],
 
         'wd3' => [
@@ -40,12 +41,15 @@ return [
             'laporan.ekspor',
             'prestasi.lihat',
             'prestasi.kelola',
+            'tracer.lihat',
+            'tracer.kelola',
         ],
 
         'kaprodi' => [
             'mahasiswa.lihat',
             'laporan.lihat',
             'prestasi.lihat',
+            'tracer.lihat',
         ],
 
         'staf' => [
@@ -53,6 +57,8 @@ return [
             'ipk.kelola',
             'prestasi.lihat',
             'prestasi.kelola',
+            'tracer.lihat',
+            'tracer.kelola',
         ],
 
         'dosen' => [
