@@ -216,7 +216,7 @@ Hal kecil yang sengaja tidak diperbaiki sekarang, supaya tidak menghambat alur u
 | ✅ | ~~Izin `ipk.kelola` tak terpakai~~ | dihapus dari `config/peran.php` (pengelolaan IPK memakai `mahasiswa.kelola`) |
 | ✅ | Reset kata sandi (lupa sandi) via Fortify | fitur resetPasswords + aksi kustom kolom `kata_sandi`; view forgot/reset; link di login |
 | 📋 | Vite dev server setup Codespaces (host/cors/HMR) | sudah ada di `vite.config.js` — verifikasi saat di laptop Windows |
-| 📋 | CI: dukungan PHP 8.5 | menunggu maatwebsite/excel + phpspreadsheet kompatibel 8.5 |
+| ⏭️ | CI: dukungan PHP 8.5 | **ditahan** — `maatwebsite/excel 3.1.x` mengunci `phpspreadsheet ^1.30` (tak dukung 8.5). Perlu ganti total lib Excel (refactor 4 import class); tidak sepadan. CI hijau di 8.3/8.4. |
 
 ---
 
