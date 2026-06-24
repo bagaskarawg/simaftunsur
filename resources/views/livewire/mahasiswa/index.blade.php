@@ -28,6 +28,11 @@ class extends Component {
     #[Url(as: 'status', except: '')]
     public string $filterStatus = '';
 
+    public function mount(): void
+    {
+        abort_unless(auth()->user()?->can('mahasiswa.lihat'), 403);
+    }
+
     public function updating($properti): void
     {
         // Saat filter berubah, balik ke halaman 1.

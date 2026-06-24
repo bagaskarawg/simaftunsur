@@ -70,7 +70,7 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 | ✅ | Impor massal CSV/XLSX banyak mahasiswa (match by NPM) | `/mahasiswa/ipk/impor` |
 | ✅ | Template CSV download (single & massal) | `TemplateIpkController` |
 | ✅ | Upsert by (mahasiswa, semester) + laporan ditambah/ditimpa/gagal | `app/Imports/` |
-| 📋 | Edit/hapus baris IPK individual | post-migrasi |
+| ✅ | Edit/hapus baris IPK individual | tombol Ubah/Hapus di tabel IPK detail; modal mode ubah (cek bentrok semester) |
 | 📋 | Riwayat perubahan IPK (audit log) | future |
 
 ### Modul Pengguna & RBAC
@@ -82,8 +82,8 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 | ✅ | RBAC peta peran→izin (6 peran: admin, dekan, wd3, kaprodi, staf, dosen) | `config/peran.php` |
 | ✅ | Middleware `peran` + Gate dinamis | terdaftar di `bootstrap/app.php` |
 | ✅ | CRUD pengguna (admin only) | `pengguna.index` (Volt): list+filter, tambah/ubah via modal, hapus (cegah hapus diri); route `peran:admin` |
-| 📋 | Halaman profil pengguna (ubah kata sandi sendiri) | placeholder Fortify |
-| 📋 | Reset kata sandi | placeholder Fortify |
+| ✅ | Halaman profil pengguna (ubah data & kata sandi sendiri) | `profil.index` (Volt) + link footer sidebar; verifikasi kata sandi lama |
+| 📋 | Reset kata sandi (lupa sandi) | placeholder Fortify |
 
 ### Modul FT UNSUR (Import data eksternal)
 
@@ -209,12 +209,13 @@ Hal kecil yang sengaja tidak diperbaiki sekarang, supaya tidak menghambat alur u
 
 | Status | Item | Catatan |
 |---|---|---|
-| 📋 | 3 test AuthenticationTest gagal (CSRF 419) — bug starter kit Fortify | bukan kode kita |
-| 📋 | Rute demo `/demo-peran` masih ada | hapus saat modul Pengguna mulai dibangun |
-| 📋 | Komentar `// TODO Random Forest` di kolom `mahasiswa.status_akhir` belum diisi | aktif saat Fase 2+ |
-| 📋 | Vite dev server butuh setup Codespaces (host/cors/HMR) | sudah ada di `vite.config.js` — verifikasi saat di laptop Windows |
-| 📋 | Route `mahasiswa.index`/`.detail` hanya bermiddleware `auth`, belum menegakkan `mahasiswa.lihat` | semua peran login bisa baca; tambah gate bila ingin sesuai matriks (lihat `docs/analisis-codebase.md` §3b) |
-| 📋 | Izin `ipk.kelola` terdefinisi tapi tak pernah dicek (pakai `mahasiswa.kelola`) | satukan saat bangun modul IPK lanjutan |
+| ✅ | ~~3 test AuthenticationTest gagal (CSRF 419)~~ | usang — suite 70/70 hijau |
+| ✅ | ~~Rute demo `/demo-peran`~~ dihapus | uji middleware `peran` kini lewat rute `pengguna` (admin) |
+| ✅ | ~~Route `mahasiswa.index`/`.detail` belum menegakkan `mahasiswa.lihat`~~ | guard ditambahkan di `mount()`; `mahasiswa.lihat` diberikan ke staf & wd3 |
+| ✅ | ~~Izin `ipk.kelola` tak terpakai~~ | dihapus dari `config/peran.php` (pengelolaan IPK memakai `mahasiswa.kelola`) |
+| 📋 | Reset kata sandi (lupa sandi) via Fortify | placeholder |
+| 📋 | Vite dev server setup Codespaces (host/cors/HMR) | sudah ada di `vite.config.js` — verifikasi saat di laptop Windows |
+| 📋 | CI: dukungan PHP 8.5 | menunggu maatwebsite/excel + phpspreadsheet kompatibel 8.5 |
 
 ---
 

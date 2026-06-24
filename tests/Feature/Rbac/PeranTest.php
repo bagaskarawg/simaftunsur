@@ -2,7 +2,6 @@
 
 use App\Models\Pengguna;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
 
@@ -18,7 +17,7 @@ it('membatasi izin staf sesuai konfigurasi', function () {
     $staf = Pengguna::factory()->create(['peran' => 'staf']);
 
     expect($staf->punyaIzin('mahasiswa.kelola'))->toBeTrue();
-    expect($staf->punyaIzin('ipk.kelola'))->toBeTrue();
+    expect($staf->punyaIzin('prestasi.kelola'))->toBeTrue();
     expect($staf->punyaIzin('klasterisasi.jalankan'))->toBeFalse();
     expect($staf->punyaIzin('laporan.ekspor'))->toBeFalse();
 });
@@ -32,24 +31,19 @@ it('mengaktifkan Gate Laravel untuk staf dan menolak dosen', function () {
     expect($dosen->can('mahasiswa.lihat'))->toBeTrue();
 });
 
-it('memberi 403 pada staf saat mengakses rute beralias peran admin/wd3', function () {
-    $staf = Pengguna::factory()->create([
-        'peran'      => 'staf',
-        'kata_sandi' => Hash::make('rahasia123'),
-    ]);
+it('middleware peran menolak non-admin pada rute admin (pengguna)', function () {
+    $this->withoutVite();
 
-    $respons = $this->actingAs($staf)->get('/demo-peran');
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']))
+        ->get(route('pengguna.index'))->assertForbidden();
 
-    $respons->assertForbidden();
+    $this->actingAs(Pengguna::factory()->wd3()->create())
+        ->get(route('pengguna.index'))->assertForbidden();
 });
 
-it('mengizinkan WD III mengakses rute beralias peran admin/wd3', function () {
-    $wd3 = Pengguna::factory()->wd3()->create([
-        'kata_sandi' => Hash::make('rahasia123'),
-    ]);
+it('middleware peran mengizinkan admin pada rute admin (pengguna)', function () {
+    $this->withoutVite();
 
-    $respons = $this->actingAs($wd3)->get('/demo-peran');
-
-    $respons->assertOk();
-    $respons->assertJson(['pesan' => 'OK', 'peran' => 'wd3']);
+    $this->actingAs(Pengguna::factory()->admin()->create())
+        ->get(route('pengguna.index'))->assertOk();
 });

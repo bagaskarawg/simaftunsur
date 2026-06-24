@@ -29,6 +29,9 @@ class extends Component {
     public ?int $sks_diambil = null;
     public ?int $sks_lulus = null;
 
+    /** ID catatan IPK yang sedang diubah (null = mode tambah). */
+    public ?int $ipkEditId = null;
+
     // Field impor
     public $file = null;
 
@@ -37,6 +40,8 @@ class extends Component {
 
     public function mount(Mahasiswa $mahasiswa): void
     {
+        abort_unless(auth()->user()?->can('mahasiswa.lihat'), 403);
+
         $this->mahasiswa = $mahasiswa->load('programStudi', 'nilaiIpkSemester');
     }
 
@@ -52,16 +57,52 @@ class extends Component {
     {
         abort_unless(auth()->user()?->can('mahasiswa.kelola'), 403);
 
-        $this->reset(['semester', 'tahun_akademik', 'ipk', 'sks_diambil', 'sks_lulus', 'file', 'ringkasanImpor']);
+        $this->reset(['semester', 'tahun_akademik', 'ipk', 'sks_diambil', 'sks_lulus', 'file', 'ringkasanImpor', 'ipkEditId']);
         $this->ganjil_genap = 'ganjil';
         $this->modePanel = $mode;
         $this->resetValidation();
     }
 
+    /**
+     * Buka modal manual dalam mode UBAH untuk satu catatan IPK.
+     */
+    public function editIpk(int $id): void
+    {
+        abort_unless(auth()->user()?->can('mahasiswa.kelola'), 403);
+
+        $catatan = $this->mahasiswa->nilaiIpkSemester()->findOrFail($id);
+
+        $this->ipkEditId    = $catatan->id;
+        $this->semester     = $catatan->semester;
+        $this->tahun_akademik = $catatan->tahun_akademik;
+        $this->ganjil_genap = $catatan->semester_ganjil_genap;
+        $this->ipk          = (float) $catatan->ipk;
+        $this->sks_diambil  = $catatan->sks_diambil;
+        $this->sks_lulus    = $catatan->sks_lulus;
+
+        $this->resetValidation();
+        $this->modePanel = 'manual';
+    }
+
+    /**
+     * Hapus satu catatan IPK.
+     */
+    public function hapusIpk(int $id): void
+    {
+        abort_unless(auth()->user()?->can('mahasiswa.kelola'), 403);
+
+        $catatan = $this->mahasiswa->nilaiIpkSemester()->findOrFail($id);
+        $semester = $catatan->semester;
+        $catatan->delete();
+
+        session()->flash('sukses', "IPK semester {$semester} berhasil dihapus.");
+        $this->muatUlangIpk();
+    }
+
     public function tutupPanel(): void
     {
         $this->modePanel = 'tutup';
-        $this->reset(['file']);
+        $this->reset(['file', 'ipkEditId']);
     }
 
     /**
@@ -84,27 +125,51 @@ class extends Component {
             'sks_lulus.lte'        => 'SKS lulus tidak boleh melebihi SKS diambil.',
         ]);
 
-        $eksisting = NilaiIpkSemester::where('mahasiswa_id', $this->mahasiswa->id)
-            ->where('semester', $data['semester'])
-            ->first();
+        $nilaiBaru = [
+            'tahun_akademik'        => $data['tahun_akademik'],
+            'semester_ganjil_genap' => $data['ganjil_genap'],
+            'ipk'                   => $data['ipk'],
+            'sks_diambil'           => $data['sks_diambil'],
+            'sks_lulus'             => $data['sks_lulus'],
+        ];
 
-        NilaiIpkSemester::updateOrCreate(
-            ['mahasiswa_id' => $this->mahasiswa->id, 'semester' => $data['semester']],
-            [
-                'tahun_akademik'        => $data['tahun_akademik'],
-                'semester_ganjil_genap' => $data['ganjil_genap'],
-                'ipk'                   => $data['ipk'],
-                'sks_diambil'           => $data['sks_diambil'],
-                'sks_lulus'             => $data['sks_lulus'],
-            ],
-        );
+        if ($this->ipkEditId) {
+            // Mode UBAH: pastikan semester tujuan tidak bentrok dengan catatan lain.
+            $bentrok = NilaiIpkSemester::where('mahasiswa_id', $this->mahasiswa->id)
+                ->where('semester', $data['semester'])
+                ->where('id', '!=', $this->ipkEditId)
+                ->exists();
 
-        session()->flash(
-            'sukses',
-            $eksisting
-                ? "IPK semester {$data['semester']} berhasil diperbarui."
-                : "IPK semester {$data['semester']} berhasil ditambahkan.",
-        );
+            if ($bentrok) {
+                $this->addError('semester', "Semester {$data['semester']} sudah memiliki catatan lain.");
+
+                return;
+            }
+
+            $this->mahasiswa->nilaiIpkSemester()
+                ->whereKey($this->ipkEditId)
+                ->firstOrFail()
+                ->update(['semester' => $data['semester']] + $nilaiBaru);
+
+            session()->flash('sukses', "IPK semester {$data['semester']} berhasil diperbarui.");
+        } else {
+            // Mode TAMBAH: upsert berdasarkan (mahasiswa, semester).
+            $eksisting = NilaiIpkSemester::where('mahasiswa_id', $this->mahasiswa->id)
+                ->where('semester', $data['semester'])
+                ->first();
+
+            NilaiIpkSemester::updateOrCreate(
+                ['mahasiswa_id' => $this->mahasiswa->id, 'semester' => $data['semester']],
+                $nilaiBaru,
+            );
+
+            session()->flash(
+                'sukses',
+                $eksisting
+                    ? "IPK semester {$data['semester']} berhasil diperbarui."
+                    : "IPK semester {$data['semester']} berhasil ditambahkan.",
+            );
+        }
 
         $this->muatUlangIpk();
         $this->tutupPanel();
@@ -309,6 +374,9 @@ class extends Component {
                             <th class="text-right">SKS Diambil</th>
                             <th class="text-right">SKS Lulus</th>
                             <th class="text-right">IPK</th>
+                            @can('mahasiswa.kelola')
+                                <th class="text-right">Aksi</th>
+                            @endcan
                         </x-slot:head>
 
                         @foreach ($mahasiswa->nilaiIpkSemester as $n)
@@ -321,6 +389,18 @@ class extends Component {
                                 <x-data-table.cell compact align="right" tabular>
                                     <span class="font-medium text-slate-900">{{ number_format($n->ipk, 2) }}</span>
                                 </x-data-table.cell>
+                                @can('mahasiswa.kelola')
+                                    <x-data-table.cell compact align="right">
+                                        <div class="flex items-center justify-end gap-1.5">
+                                            <button type="button" wire:click="editIpk({{ $n->id }})"
+                                                    class="px-2 py-0.5 text-xs font-medium text-primary-700 hover:bg-primary-50 rounded cursor-pointer">Ubah</button>
+                                            <button type="button"
+                                                    x-data
+                                                    x-on:click="if (confirm('Hapus IPK semester {{ $n->semester }}?')) $wire.hapusIpk({{ $n->id }})"
+                                                    class="px-2 py-0.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded cursor-pointer">Hapus</button>
+                                        </div>
+                                    </x-data-table.cell>
+                                @endcan
                             </tr>
                         @endforeach
                     </x-data-table>
@@ -330,7 +410,7 @@ class extends Component {
             {{-- ==== Modal tambah IPK (manual / impor) ==== --}}
             @if ($modePanel !== 'tutup')
                 <x-modal closeAction="tutupPanel" maxWidth="2xl"
-                         :title="$modePanel === 'manual' ? 'Tambah IPK Semester' : 'Impor Riwayat IPK dari File'">
+                         :title="$modePanel === 'manual' ? ($ipkEditId ? 'Ubah IPK Semester' : 'Tambah IPK Semester') : 'Impor Riwayat IPK dari File'">
 
                     {{-- Tab switcher --}}
                     <div class="flex gap-1 mb-5 -mt-1 border-b border-slate-200">

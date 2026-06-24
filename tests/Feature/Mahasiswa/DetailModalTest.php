@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Mahasiswa;
+use App\Models\NilaiIpkSemester;
 use App\Models\Pengguna;
 use App\Models\ProgramStudi;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -42,4 +43,38 @@ it('menutup modal mengembalikan modePanel ke tutup', function () {
         ->call('tutupPanel')
         ->assertSet('modePanel', 'tutup')
         ->assertDontSeeHtml('aria-modal="true"');
+});
+
+it('mengubah catatan IPK lewat modal (mode ubah)', function () {
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+
+    $ipk = NilaiIpkSemester::factory()->create([
+        'mahasiswa_id' => $this->mahasiswa->id, 'semester' => 1,
+        'semester_ganjil_genap' => 'ganjil', 'ipk' => 3.00,
+    ]);
+
+    Volt::test('mahasiswa.detail', ['mahasiswa' => $this->mahasiswa])
+        ->call('editIpk', $ipk->id)
+        ->assertSet('ipkEditId', $ipk->id)
+        ->assertSet('semester', 1)
+        ->set('ipk', 3.75)
+        ->call('simpanManual')
+        ->assertHasNoErrors()
+        ->assertSet('modePanel', 'tutup');
+
+    expect((float) $ipk->refresh()->ipk)->toBe(3.75);
+});
+
+it('menghapus catatan IPK', function () {
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+
+    $ipk = NilaiIpkSemester::factory()->create([
+        'mahasiswa_id' => $this->mahasiswa->id, 'semester' => 2,
+        'semester_ganjil_genap' => 'genap',
+    ]);
+
+    Volt::test('mahasiswa.detail', ['mahasiswa' => $this->mahasiswa])
+        ->call('hapusIpk', $ipk->id);
+
+    expect(NilaiIpkSemester::whereKey($ipk->id)->exists())->toBeFalse();
 });

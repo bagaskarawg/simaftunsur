@@ -35,6 +35,7 @@ return [
         ],
 
         'wd3' => [
+            'mahasiswa.lihat',
             'mahasiswa.kelola',
             'klasterisasi.lihat',
             'klasterisasi.jalankan',
@@ -57,8 +58,8 @@ return [
         ],
 
         'staf' => [
+            'mahasiswa.lihat',
             'mahasiswa.kelola',
-            'ipk.kelola',
             'prestasi.lihat',
             'prestasi.kelola',
             'tracer.lihat',

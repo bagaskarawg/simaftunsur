@@ -15,6 +15,9 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::view('beranda', 'beranda')->name('beranda');
 
+    // Profil akun sendiri (semua pengguna terautentikasi).
+    Volt::route('profil', 'profil.index')->name('profil');
+
     // Modul Data Mahasiswa — dapat diakses oleh seluruh peran yang
     // setidaknya berizin `mahasiswa.lihat`. Otorisasi finer-grained
     // (kelola vs lihat) dilakukan di dalam Volt component lewat Gate.
@@ -71,12 +74,3 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/', 'promosi.index')->name('index');
     });
 });
-
-// Rute demo untuk memverifikasi middleware `peran`. Hanya dipakai pada
-// fase scaffolding RBAC; akan dihapus saat modul nyata mulai dibangun.
-Route::middleware(['auth', 'peran:admin,wd3'])->get('/demo-peran', function () {
-    return response()->json([
-        'pesan' => 'OK',
-        'peran' => auth()->user()->peran,
-    ]);
-})->name('demo.peran');
