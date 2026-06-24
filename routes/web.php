@@ -38,6 +38,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('klasterisasi')->name('klasterisasi.')->group(function () {
         Volt::route('/', 'klasterisasi.index')->name('index');
     });
+
+    // Modul Pengguna — manajemen akun & peran, khusus Administrator.
+    Route::prefix('pengguna')->name('pengguna.')->middleware('peran:admin')->group(function () {
+        Volt::route('/', 'pengguna.index')->name('index');
+    });
 });
 
 // Rute demo untuk memverifikasi middleware `peran`. Hanya dipakai pada

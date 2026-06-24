@@ -81,7 +81,7 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 | ✅ | Logout | sidebar footer |
 | ✅ | RBAC peta peran→izin (6 peran: admin, dekan, wd3, kaprodi, staf, dosen) | `config/peran.php` |
 | ✅ | Middleware `peran` + Gate dinamis | terdaftar di `bootstrap/app.php` |
-| 📋 | CRUD pengguna (admin only) | belum dibuat — modul lama `pengguna/` |
+| ✅ | CRUD pengguna (admin only) | `pengguna.index` (Volt): list+filter, tambah/ubah via modal, hapus (cegah hapus diri); route `peran:admin` |
 | 📋 | Halaman profil pengguna (ubah kata sandi sendiri) | placeholder Fortify |
 | 📋 | Reset kata sandi | placeholder Fortify |
 
