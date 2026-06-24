@@ -3,6 +3,7 @@
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\TemplateIpkController;
 use App\Http\Controllers\TemplateMahasiswaController;
+use App\Http\Controllers\TemplatePenggunaController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -46,6 +47,8 @@ Route::middleware(['auth'])->group(function () {
     // Modul Pengguna — manajemen akun & peran, khusus Administrator.
     Route::prefix('pengguna')->name('pengguna.')->middleware('peran:admin')->group(function () {
         Volt::route('/', 'pengguna.index')->name('index');
+        Volt::route('/impor', 'pengguna.impor')->name('impor');
+        Route::get('/template', [TemplatePenggunaController::class, 'unduh'])->name('template');
     });
 
     // Pengaturan Sistem — konfigurasi ringan, khusus Administrator.

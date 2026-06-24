@@ -90,7 +90,7 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 | Status | Sub-fitur | Catatan |
 |---|---|---|
 | 📋 | Import data MABA dari Excel | modul lama `ftunsur/` |
-| 📋 | Import data SDM (dosen/staf) | modul lama `ftunsur/` |
+| ✅ | Import data SDM (dosen/staf) massal | `PenggunaMassalImport` + `pengguna.impor` + template; upsert by NIP, admin-only |
 | ⏭️ | Sync ke PDDIKTI/Feeder | out-of-scope TA |
 
 ### Modul Promosi / PMB

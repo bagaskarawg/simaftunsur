@@ -167,12 +167,20 @@ class extends Component {
             <h1 class="text-display text-slate-900">Manajemen Pengguna</h1>
             <p class="mt-1 text-sm text-slate-500">Kelola akun & peran pengguna SIMAFTUNSUR.</p>
         </div>
-        <x-button wire:click="bukaTambah">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-            </svg>
-            Tambah Pengguna
-        </x-button>
+        <div class="flex items-center gap-2">
+            <x-button variant="secondary" :href="route('pengguna.impor')" wire:navigate>
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+                </svg>
+                Impor
+            </x-button>
+            <x-button wire:click="bukaTambah">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                </svg>
+                Tambah Pengguna
+            </x-button>
+        </div>
     </div>
 
     @if (session('sukses'))
