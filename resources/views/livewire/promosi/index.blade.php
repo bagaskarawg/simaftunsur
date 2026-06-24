@@ -141,14 +141,22 @@ class extends Component {
             <h1 class="text-display text-slate-900">Kegiatan Promosi / PMB</h1>
             <p class="mt-1 text-sm text-slate-500">Catatan kegiatan promosi ke sekolah target beserta hasilnya.</p>
         </div>
-        @can('promosi.kelola')
-            <x-button wire:click="bukaTambah">
+        <div class="flex items-center gap-2">
+            <x-button variant="secondary" :href="route('promosi.sekolah')" wire:navigate>
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/>
                 </svg>
-                Tambah Kegiatan
+                Master Sekolah
             </x-button>
-        @endcan
+            @can('promosi.kelola')
+                <x-button wire:click="bukaTambah">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                    </svg>
+                    Tambah Kegiatan
+                </x-button>
+            @endcan
+        </div>
     </div>
 
     @if (session('sukses'))

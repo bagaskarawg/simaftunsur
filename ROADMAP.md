@@ -98,7 +98,8 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 | Status | Sub-fitur | Catatan |
 |---|---|---|
 | ✅ | CRUD Kegiatan Promosi (versi ringkas) | `promosi.index` (Volt): kegiatan, sekolah target, kota, tanggal, petugas, jumlah peminat, catatan; modal; izin `promosi.lihat/kelola` |
-| 📋 | Perluasan: Master Petugas/Sekolah, Jadwal kunjungan, Kwitansi & disposisi | opsional; saat ini disatukan dalam entitas Kegiatan Promosi |
+| ✅ | Master Sekolah target | `promosi.sekolah` (Volt CRUD) — daftar sekolah sasaran |
+| 📋 | Perluasan lanjut: Master Petugas, Jadwal kunjungan, Kwitansi & disposisi | opsional |
 | ✅ | **Keputusan final:** PMB/Promosi = **CRUD pendukung saja**, BUKAN fokus penelitian, BUKAN Random Forest | sudah dikonfirmasi (CLAUDE.md §6) — tidak ada lagi ambiguitas |
 
 ### Modul Prestasi

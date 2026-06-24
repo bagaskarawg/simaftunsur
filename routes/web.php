@@ -80,8 +80,9 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/', 'tracer.index')->name('index');
     });
 
-    // Modul Promosi/PMB — CRUD pendukung (versi ringkas: kegiatan promosi).
+    // Modul Promosi/PMB — kegiatan promosi + master sekolah target.
     Route::prefix('promosi')->name('promosi.')->group(function () {
         Volt::route('/', 'promosi.index')->name('index');
+        Volt::route('/sekolah', 'promosi.sekolah')->name('sekolah');
     });
 });
