@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\KegiatanPromosi;
 use App\Models\Mahasiswa;
 use App\Models\NilaiIpkSemester;
 use App\Models\Pengguna;
+use App\Models\Prestasi;
 use App\Models\ProgramStudi;
+use App\Models\TracerStudy;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,6 +25,11 @@ class DatabaseSeeder extends Seeder
         $this->seedPengguna();
         $prodi = $this->seedProgramStudi();
         $this->seedMahasiswaDanIpk($prodi);
+
+        // Data contoh modul pendukung (SIMULASI untuk demo, bukan data riil).
+        $this->seedPrestasi();
+        $this->seedTracer($prodi);
+        $this->seedPromosi();
     }
 
     /**
@@ -122,5 +130,54 @@ class DatabaseSeeder extends Seeder
                 'semester_ganjil_genap' => $semester % 2 === 1 ? 'ganjil' : 'genap',
             ]);
         }
+    }
+
+    /**
+     * Data contoh prestasi (1-2 per ~15 mahasiswa terpilih).
+     * SIMULASI untuk keperluan demo — bukan data riil.
+     */
+    protected function seedPrestasi(): void
+    {
+        $terpilih = Mahasiswa::query()->inRandomOrder()->take(15)->get();
+
+        foreach ($terpilih as $mahasiswa) {
+            Prestasi::factory()
+                ->count(fake()->numberBetween(1, 2))
+                ->create(['mahasiswa_id' => $mahasiswa->id]);
+        }
+    }
+
+    /**
+     * Data contoh tracer study. Membuat 8 mahasiswa "alumni" (status lulus)
+     * agar tidak mengganggu kohort klasterisasi (yang memakai mahasiswa aktif),
+     * lalu mengisi tracer untuk masing-masing. SIMULASI untuk demo.
+     *
+     * @param  array<string, ProgramStudi>  $prodi
+     */
+    protected function seedTracer(array $prodi): void
+    {
+        $daftarProdi = array_values($prodi);
+
+        for ($i = 0; $i < 8; $i++) {
+            $alumni = Mahasiswa::factory()
+                ->untukProdi($daftarProdi[$i % count($daftarProdi)])
+                ->create([
+                    'status'         => 'lulus',
+                    'semester_aktif' => 8,
+                ]);
+
+            TracerStudy::factory()->create([
+                'mahasiswa_id' => $alumni->id,
+                'tahun_lulus'  => (int) $alumni->angkatan + 4,
+            ]);
+        }
+    }
+
+    /**
+     * Data contoh kegiatan promosi/PMB. SIMULASI untuk demo.
+     */
+    protected function seedPromosi(): void
+    {
+        KegiatanPromosi::factory()->count(10)->create();
     }
 }
