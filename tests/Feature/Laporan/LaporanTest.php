@@ -93,3 +93,18 @@ it('membatasi ekspor CSV hanya untuk yang berizin laporan.ekspor', function () {
     $this->actingAs(Pengguna::factory()->create(['peran' => 'dekan']));
     $this->get(route('laporan.ekspor.prodi'))->assertForbidden();
 });
+
+it('mengekspor laporan PDF bagi yang berizin ekspor', function () {
+    $this->actingAs(Pengguna::factory()->wd3()->create());
+
+    $respons = $this->get(route('laporan.ekspor.pdf'));
+
+    $respons->assertOk();
+    expect($respons->headers->get('content-type'))->toContain('application/pdf');
+});
+
+it('menolak ekspor PDF bagi yang tak berizin ekspor', function () {
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'dekan']));
+
+    $this->get(route('laporan.ekspor.pdf'))->assertForbidden();
+});

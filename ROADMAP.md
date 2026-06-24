@@ -124,7 +124,7 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 | ✅ | Laporan rekap mahasiswa per prodi/angkatan/status | `laporan.index` (Volt) + `LaporanService`; guard `laporan.lihat` |
 | ✅ | Laporan IPK fakultas | rata-rata IPK fakultas (KPI) & per prodi |
 | ✅ | Ekspor CSV (rekap per prodi) | `LaporanController@eksporProdi`; guard `laporan.ekspor` |
-| 📋 | Ekspor PDF | opsional; CSV sudah tersedia |
+| ✅ | Ekspor PDF | `LaporanController@eksporPdf` (barryvdh/laravel-dompdf); guard `laporan.ekspor` |
 
 ### Modul System
 

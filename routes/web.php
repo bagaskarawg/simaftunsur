@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('laporan')->name('laporan.')->group(function () {
         Volt::route('/', 'laporan.index')->name('index');
         Route::get('/ekspor/prodi', [LaporanController::class, 'eksporProdi'])->name('ekspor.prodi');
+        Route::get('/ekspor/pdf', [LaporanController::class, 'eksporPdf'])->name('ekspor.pdf');
     });
 
     // Modul Tracer Study — CRUD pendukung. Otorisasi (lihat vs kelola) di komponen.
