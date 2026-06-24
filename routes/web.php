@@ -28,6 +28,12 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/{mahasiswa}',      'mahasiswa.detail')->name('detail');
         Volt::route('/{mahasiswa}/ubah', 'mahasiswa.ubah')->name('ubah');
     });
+
+    // Modul Klasterisasi K-Means — dashboard hasil + tombol jalankan.
+    // Otorisasi finer-grained (lihat vs jalankan) ditangani di dalam komponen.
+    Route::prefix('klasterisasi')->name('klasterisasi.')->group(function () {
+        Volt::route('/', 'klasterisasi.index')->name('index');
+    });
 });
 
 // Rute demo untuk memverifikasi middleware `peran`. Hanya dipakai pada
