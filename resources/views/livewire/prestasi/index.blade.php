@@ -286,14 +286,13 @@ class extends Component {
                  :title="$modeForm === 'edit' ? 'Ubah Prestasi' : 'Tambah Prestasi'">
             <form wire:submit="simpan" class="space-y-4">
                 <div>
-                    <label for="p-mhs" class="block text-sm font-medium text-slate-700 mb-1.5">Mahasiswa</label>
-                    <select wire:model="mahasiswa_id" id="p-mhs"
-                            class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
-                        <option value="">— pilih mahasiswa —</option>
-                        @foreach ($this->opsiMahasiswa as $m)
-                            <option value="{{ $m->id }}">{{ $m->npm }} — {{ $m->nama }}</option>
-                        @endforeach
-                    </select>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">Mahasiswa</label>
+                    <x-select-cari
+                        wire:model="mahasiswa_id"
+                        :options="$this->opsiMahasiswa->map(fn ($m) => ['value' => $m->id, 'label' => $m->npm.' — '.$m->nama])->values()->all()"
+                        placeholder="— pilih mahasiswa —"
+                        cari-placeholder="Cari NPM atau nama…"
+                    />
                     @error('mahasiswa_id') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
