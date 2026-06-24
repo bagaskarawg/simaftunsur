@@ -16,6 +16,7 @@ class NilaiIpkSemesterFactory extends Factory
     public function definition(): array
     {
         $semester = fake()->numberBetween(1, 8);
+        $sksDiambil = fake()->numberBetween(18, 24);
 
         return [
             'mahasiswa_id'           => Mahasiswa::factory(),
@@ -23,8 +24,9 @@ class NilaiIpkSemesterFactory extends Factory
             'tahun_akademik'         => '2025/2026',
             'semester_ganjil_genap'  => $semester % 2 === 1 ? 'ganjil' : 'genap',
             'ipk'                    => $this->ipkDistribusiNormal(3.0, 0.4),
-            'sks_diambil'            => fake()->numberBetween(18, 24),
-            'sks_lulus'              => fake()->numberBetween(15, 24),
+            'sks_diambil'            => $sksDiambil,
+            // SKS lulus tidak boleh melebihi SKS diambil.
+            'sks_lulus'              => fake()->numberBetween(max(0, $sksDiambil - 6), $sksDiambil),
         ];
     }
 

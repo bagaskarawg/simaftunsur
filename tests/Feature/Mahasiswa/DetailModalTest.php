@@ -51,6 +51,7 @@ it('mengubah catatan IPK lewat modal (mode ubah)', function () {
     $ipk = NilaiIpkSemester::factory()->create([
         'mahasiswa_id' => $this->mahasiswa->id, 'semester' => 1,
         'semester_ganjil_genap' => 'ganjil', 'ipk' => 3.00,
+        'sks_diambil' => 20, 'sks_lulus' => 20,
     ]);
 
     Volt::test('mahasiswa.detail', ['mahasiswa' => $this->mahasiswa])

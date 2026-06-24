@@ -168,7 +168,7 @@ Kontribusi orisinil TA & **inti yang dievaluasi di BAB IV**. Modul fokus (Mahasi
 | 📋 | (opsional) Visual lanjutan: radar/parallel coordinates per cluster | bila perlu, butuh lib chart JS |
 | 📋 | Penyempurnaan UI/UX seluruh modul | empty states, loading states, error pages, toast Flux |
 | 📋 | Halaman profil pengguna lengkap | ubah data, kata sandi |
-| 📋 | Dashboard pimpinan: KPI live + chart cluster | beranda diperluas |
+| ✅ | Dashboard pimpinan: KPI live + ringkasan klaster terkini | beranda menampilkan k, Silhouette/DBI, distribusi anggota klaster (bagi yang berizin) |
 
 ---
 
