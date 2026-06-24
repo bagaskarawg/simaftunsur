@@ -43,7 +43,8 @@ function eksekusiContoh(ProgramStudi $prodi): KlasterisasiEksekusi
             ['k' => 3, 'inertia' => 7.0, 'silhouette' => 0.40, 'davies_bouldin' => 0.95],
         ],
         'profil_klaster'     => [
-            ['cluster' => 0, 'jumlah' => 1, 'centroid' => ['ipk_rata_rata' => 3.5], 'label_deskriptif' => 'Berprestasi'],
+            ['cluster' => 0, 'jumlah' => 1, 'centroid' => ['ipk_rata_rata' => 3.5, 'tren' => 0.05, 'konsistensi' => 0.1, 'semester_aktif' => 5], 'label_deskriptif' => 'Berprestasi'],
+            ['cluster' => 1, 'jumlah' => 1, 'centroid' => ['ipk_rata_rata' => 2.6, 'tren' => -0.03, 'konsistensi' => 0.3, 'semester_aktif' => 5], 'label_deskriptif' => 'Perlu Pembinaan'],
         ],
         'peringatan'         => ['Volume data di bawah ambang minimum.'],
     ]);
@@ -72,7 +73,9 @@ it('merender dashboard lengkap dengan hasil eksekusi', function () {
         ->assertSee('Sebaran Klaster')
         ->assertSee('Berprestasi')
         ->assertSee('Rekomendasi')
-        ->assertSee('Catatan validitas');
+        ->assertSee('Catatan validitas')
+        ->assertSee('Perbandingan Profil Antar-Klaster') // kartu radar
+        ->assertSee('IPK Rata');                          // label sumbu radar
 });
 
 it('menampilkan empty state saat belum ada eksekusi', function () {

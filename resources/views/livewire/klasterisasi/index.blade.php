@@ -330,6 +330,13 @@ class extends Component {
             </x-card>
         </section>
 
+        {{-- Radar perbandingan profil antar-klaster --}}
+        <section class="mb-6">
+            <x-card title="Perbandingan Profil Antar-Klaster">
+                <x-radar-klaster :profil="$e->profil_klaster" />
+            </x-card>
+        </section>
+
         {{-- Profil & rekomendasi per klaster --}}
         <section class="mb-6">
             <h3 class="text-sm font-semibold text-slate-900 mb-3">Profil &amp; Rekomendasi Pembinaan per Klaster</h3>
