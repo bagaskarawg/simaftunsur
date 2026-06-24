@@ -4,7 +4,11 @@
 >
 > **Strategi:** Migrasi-dulu, sempurnakan-belakangan. Lihat [strategi migrasi](.claude/memory/project_strategi_migrasi.md).
 >
-> **Terakhir diperbarui:** 2026-05-23
+> **Re-prioritas (2026-06-24):** Modul fokus (Mahasiswa + IPK) sudah paritas → **Fase 2 (K-Means) boleh mulai paralel**, tidak perlu menunggu seluruh CRUD pendukung selesai. Alasannya tenggat akademik: **Seminar awal Juli** (butuh BAB I–III final + demo klasterisasi), **Sidang awal Agustus**.
+>
+> **Status naskah:** ✅ Proposal **ber-ACC** (Lembar Usulan, Koordinator TA, 2 Juni 2026). **BAB I–III sudah didraf.** Metodologi final: **Waterfall (utama) + CRISP-DM (komplementer)** — *bukan* SDLC/Agile (lihat CLAUDE.md §3).
+>
+> **Terakhir diperbarui:** 2026-06-24
 
 ---
 
@@ -97,7 +101,7 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 | 📋 | Master Sekolah (target promosi) | |
 | 📋 | Jadwal kunjungan | |
 | 📋 | Kwitansi & disposisi | |
-| ⏭️ | Belum diputuskan apakah PMB tetap masuk fokus TA atau out-of-scope karena Pembimbing 2 menolak | konfirmasi ke pembimbing |
+| ✅ | **Keputusan final:** PMB/Promosi = **CRUD pendukung saja**, BUKAN fokus penelitian, BUKAN Random Forest | sudah dikonfirmasi (CLAUDE.md §6) — tidak ada lagi ambiguitas |
 
 ### Modul Prestasi
 
@@ -140,37 +144,62 @@ Port seluruh modul dari project PHP lama (`D:\simaftunsur\SIMAFTUNSUR\`) ke stac
 
 ---
 
-## Fase 2 — Klasterisasi K-Means & Penyempurnaan (📋 setelah Fase 1)
+## Fase 2 — Klasterisasi K-Means & Penyempurnaan (🚧 boleh mulai sekarang)
 
-Kontribusi orisinil TA. Hanya boleh mulai setelah modul Mahasiswa + IPK + Pengguna paritas dengan sistem lama.
+Kontribusi orisinil TA & **inti yang dievaluasi di BAB IV**. Modul fokus (Mahasiswa + IPK) sudah paritas, jadi fase ini **dimulai paralel** demi target Seminar awal Juli — tidak menunggu CRUD pendukung.
+
+**Prasyarat data:** butuh IPK riil dari WD III (min. 100 mahasiswa aktif ≥3 semester). Selama belum lengkap, pipeline dibangun & diuji dengan data seeder yang **jujur dilabeli "data simulasi"** — TANPA mengklaim kualitas klaster (lihat CLAUDE.md §2).
 
 | Status | Item | Catatan |
 |---|---|---|
-| 📋 | Pipeline Python K-Means (scikit-learn) | folder `ml/` — preprocess, feature_engineering, train, evaluate (modular untuk RF migration) |
-| 📋 | Integrasi Laravel ↔ Python (REST API atau pickle export) | keputusan teknis di Bab III proposal |
-| 📋 | Halaman konfigurasi K-Means (jumlah cluster, fitur dipakai) | `/klasterisasi/jalankan` |
-| 📋 | Evaluasi cluster: Silhouette + Davies-Bouldin + Elbow Method | wajib untuk Bab IV |
-| 📋 | Visualisasi: scatter plot (PCA 2D), radar chart per cluster | ApexCharts atau Chart.js |
-| 📋 | Tabel ringkasan cluster + karakteristik | |
-| 📋 | Rekomendasi strategi pembinaan per cluster | output SPK untuk WD III |
-| 📋 | Aktivasi link sidebar "Klasterisasi" | saat ini disabled |
+| ✅ | Atribut fitur klaster tersedia di Model | `Mahasiswa::ipkRataRata/ipkTerakhir/tren/konsistensi()` |
+| ✅ | Izin RBAC klasterisasi sudah didefinisikan | `klasterisasi.lihat`, `klasterisasi.jalankan` di `config/peran.php` |
+| 📋 | Jalur impor IPK riil + validasi volume (≥100 mhs, ≥3 semester) | prioritaskan saat data WD III tiba |
+| ✅ | Pipeline Python K-Means (scikit-learn) modular | `ml/pipeline/` — preprocess, feature_engineering, train, evaluate, interpret, orchestrator; teruji via `ml/uji_pipeline.py` |
+| ✅ | Service REST API (FastAPI) `/sehat` + `/klasterisasi` | `ml/api.py`, `ml/schemas.py`; uvicorn port 8001 |
+| ✅ | Evaluasi cluster: Silhouette + Davies-Bouldin + Elbow (WCSS) | di `ml/pipeline/evaluate.py` + `train.py`; tabel per-k untuk grafik |
+| ✅ | Integrasi sisi Laravel: `KlasterisasiService` (HTTP client) + `config/services.php` (`ml.base_url`) | teruji end-to-end + `Http::fake` test |
+| ✅ | Halaman `/klasterisasi`: form konfigurasi (k auto/manual, k_min/maks, penskalaan) + tombol Jalankan | `livewire/klasterisasi/index.blade.php`; guard `klasterisasi.jalankan` |
+| ✅ | Tabel penyimpanan hasil klaster (label + metrik + PCA per run) | migration `klasterisasi_eksekusi` + `klasterisasi_anggota`; Model + relasi |
+| ✅ | Visualisasi: scatter PCA 2D + grafik Elbow + Silhouette (SVG server-side, tanpa npm) | di halaman klasterisasi |
+| ✅ | Tabel ringkasan + karakteristik centroid per klaster | kartu profil + daftar anggota per klaster |
+| ✅ | Rekomendasi strategi pembinaan per cluster (output SPK untuk WD III) | heuristik per label klaster |
+| ✅ | Aktivasi link sidebar "Klasterisasi" | guard `klasterisasi.lihat` |
+| 📋 | (opsional) Visual lanjutan: radar/parallel coordinates per cluster | bila perlu, butuh lib chart JS |
 | 📋 | Penyempurnaan UI/UX seluruh modul | empty states, loading states, error pages, toast Flux |
 | 📋 | Halaman profil pengguna lengkap | ubah data, kata sandi |
 | 📋 | Dashboard pimpinan: KPI live + chart cluster | beranda diperluas |
 
 ---
 
-## Fase 3 — Dokumen TA & Defense Prep (📋 paralel sejak Fase 1)
+## Fase 3 — Dokumen TA & Defense Prep (🚧 paralel)
 
 | Status | Item | Catatan |
 |---|---|---|
-| 📋 | Bab I — Latar Belakang, Rumusan, Tujuan, Batasan, Manfaat | template kampus FT UNSUR |
-| 📋 | Bab II — Landasan Teori (SI Kemahasiswaan, SIMKATMAWA, K-Means, Silhouette, DBI, Elbow, penelitian terkait) | |
-| 📋 | Bab III — Metodologi (SDLC + CRISP-DM) | |
-| 📋 | Bab IV — Implementasi & Pengujian (hasil cluster + evaluasi metrik) | |
-| 📋 | Bab V — Kesimpulan & Saran (sebut RF sebagai pengembangan lanjutan) | |
+| ✅ | Proposal ber-ACC (Lembar Usulan, Koordinator TA) | 2 Juni 2026 |
+| ✅ | Bab I — Latar Belakang, Rumusan, Tujuan, Batasan, Manfaat | sudah didraf |
+| ✅ | Bab II — Landasan Teori (SI Kemahasiswaan, SIMKATMAWA, K-Means, Silhouette, DBI, Elbow, penelitian terkait) | sudah didraf; 4 sistem terverifikasi |
+| 🚧 | Bab III — Metodologi (**Waterfall + CRISP-DM**) | sudah didraf; **rekonsiliasi diagram dengan codebase nyata** ↓ |
+| 📋 | Bab IV — Implementasi & Pengujian (hasil cluster + evaluasi metrik) | target akhir Juli |
+| 📋 | Bab V — Kesimpulan & Saran (sebut RF sebagai pengembangan lanjutan) | target akhir Juli |
 | 📋 | User manual / dokumentasi penggunaan | |
-| 📋 | Slide & demo defense | |
+| 📋 | Slide & demo defense | Seminar awal Juli, Sidang awal Agustus |
+
+### Dokumen perancangan BAB III (sumber teks, bukan gambar)
+
+| Status | Item | Catatan |
+|---|---|---|
+| ✅ | ERD, Class diagram, Use case (Mermaid) dari codebase nyata | [`docs/analisis-codebase.md`](docs/analisis-codebase.md) |
+| ✅ | Set diagram BAB III + Activity diagram alur K-Means (Mermaid) | [`docs/diagram-bab3.md`](docs/diagram-bab3.md) |
+| 📋 | Rekonsiliasi diagram lama di naskah dengan output di atas | ganti diagram berbasis skema asumsi |
+| 📋 | (opsional) Sequence diagram alur impor IPK massal | bila diminta pembimbing |
+
+### Item naskah non-kode (manual, di luar codebase)
+
+| Status | Item | Catatan |
+|---|---|---|
+| 📋 | Bersihkan Mendeley: 6 pasang entri ganda + 1 entri korup (Suryaningrum 2023) | manual di Reference Manager (CLAUDE.md §7) |
+| 📋 | Ambil fisik TA Siti Mariam (NPM 5520117021) di perpustakaan FT UNSUR | sistem ke-5 Penelitian Terkait |
 
 ---
 
@@ -184,6 +213,8 @@ Hal kecil yang sengaja tidak diperbaiki sekarang, supaya tidak menghambat alur u
 | 📋 | Rute demo `/demo-peran` masih ada | hapus saat modul Pengguna mulai dibangun |
 | 📋 | Komentar `// TODO Random Forest` di kolom `mahasiswa.status_akhir` belum diisi | aktif saat Fase 2+ |
 | 📋 | Vite dev server butuh setup Codespaces (host/cors/HMR) | sudah ada di `vite.config.js` — verifikasi saat di laptop Windows |
+| 📋 | Route `mahasiswa.index`/`.detail` hanya bermiddleware `auth`, belum menegakkan `mahasiswa.lihat` | semua peran login bisa baca; tambah gate bila ingin sesuai matriks (lihat `docs/analisis-codebase.md` §3b) |
+| 📋 | Izin `ipk.kelola` terdefinisi tapi tak pernah dicek (pakai `mahasiswa.kelola`) | satukan saat bangun modul IPK lanjutan |
 
 ---
 

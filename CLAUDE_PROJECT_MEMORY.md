@@ -1,387 +1,182 @@
 # MEMORY LENGKAP — Tugas Akhir SIMAFTUNSUR
 
-> **Cara pakai:** Salin seluruh isi file ini ke dalam Claude Projects (bagian "Project knowledge" atau "Custom instructions"). Dengan ini, sesi Claude baru (termasuk dari HP) langsung paham konteks penuh tanpa perlu menjelaskan ulang.
+> **Cara pakai:** Salin seluruh isi file ini ke Claude Projects (Project knowledge / Custom instructions). Dengan ini sesi Claude baru langsung paham konteks penuh tanpa penjelasan ulang.
 >
-> **Terakhir diperbarui:** 2026-05-22
-
+> **Terakhir diperbarui:** 2026-06-24 (diselaraskan dengan naskah proposal ber-ACC `RANCANG_BANGUN...K-MEANS`)
+>
+> **Catatan rekonsiliasi:** Versi sebelumnya memuat judul varian lama ("Pengembangan SPK...") dan metodologi "SDLC/Agile". Keduanya **sudah usang** dan diganti dengan kondisi naskah final di bawah. Klaim "arah saat ini PMB + Random Forest" adalah **arah lama yang dibatalkan** — lihat §5.
+ 
 ---
 
 ## 1. IDENTITAS PROYEK
 
-- **Nama sistem:** SIMAFTUNSUR (Sistem Informasi Kemahasiswaan Fakultas Teknik Universitas Suryakancana)
-- **Lokasi studi kasus:** Fakultas Teknik, Universitas Suryakancana (UNSUR), Cianjur
-- **Konteks:** Sistem ini adalah objek/wadah untuk Tugas Akhir (Skripsi) S1
-- **Periode pengajuan proposal:** Mei 2026
-- **Bahasa kerja:** Indonesia (baku, sesuai EYD/PUEBI dan tata tulis laporan ilmiah)
-
-### PENTING — Domain Sistem
-
-SIMAFTUNSUR adalah **Sistem Informasi KEMAHASISWAAN (student affairs)**, **BUKAN** Sistem Informasi Akademik (SIAKAD).
-
-- **Cakupan (kemahasiswaan):** Beasiswa, KKN, Prestasi, Tracer Study alumni, Promosi/PMB, data pokok mahasiswa & status (aktif/cuti/lulus/DO/pindah)
-- **BUKAN cakupan (SIAKAD):** KRS, KHS, nilai per matkul, jadwal kuliah, perwalian akademik, transkrip
-
-Implikasi: judul TA harus pakai istilah "kemahasiswaan", landasan teori merujuk **SIMKATMAWA** (regulasi Diktiristek), bukan SIAKAD/PDDIKTI Feeder.
-
+- **Nama sistem:** SIMAFTUNSUR (Sistem Informasi Kemahasiswaan Fakultas Teknik Universitas Suryakancana).
+- **Studi kasus:** Fakultas Teknik, Universitas Suryakancana (UNSUR), Cianjur.
+- **Mahasiswa:** Bagaskara Wisnu Gunawan — NPM 5520119124 — Teknik Informatika.
+- **Periode:** Mei–Juli 2026. Seminar awal Juli, Sidang awal Agustus.
+- **Bahasa kerja:** Indonesia baku (EYD/PUEBI, tata tulis ilmiah).
+### Domain: KEMAHASISWAAN, BUKAN SIAKAD
+- **Cakupan (kemahasiswaan):** data pokok & status mahasiswa, IPK per semester, prestasi, kegiatan, tracer study alumni, beasiswa, KKN, promosi/PMB.
+- **BUKAN cakupan (SIAKAD):** KRS, KHS, nilai per matkul, jadwal kuliah, transkrip.
+- **Implikasi:** landasan teori merujuk **SIMKATMAWA** (Diktiristek/Kemendikbudristek), bukan PDDIKTI Feeder.
 ---
 
-## 2. KONDISI TEKNIS SISTEM SAAT INI
+## 2. KONDISI TEKNIS SISTEM
 
-- **Stack lama:** Custom PHP 8.x tanpa framework, MySQL 8.x, AdminLTE 3, Bootstrap, jQuery, session native PHP, bcrypt
-- **Stack target (rebuild):** Laravel (rencana Laravel 13 + Livewire 4)
-- **Lokasi kode:** `D:\simaftunsur\SIMAFTUNSUR\`
-- **File SQL dump:** `D:\simaftunsur\simaftunsur (1).sql`
-- **Autentikasi:** dua tabel — `users` (SDM/Dosen) & `user_mahasiswa` (mahasiswa, role_id=99)
-- **RBAC:** tabel `roles`, `menus`, `submenus`, `role_submenu`; ada tool auto-sync `tools/sync_modules_to_db.php`
-
-### Struktur Folder
-
-```
-SIMAFTUNSUR/
-├── config/config.php          # konfigurasi DB + BASE_URL (kredensial hosting masih hardcoded!)
-├── dashboard/                 # dashboard RBAC dinamis
-├── layout/                    # header, sidebar, topbar, footer
-├── modules/                   # 10 modul, 79 file PHP
-│   ├── beasiswa/   (15 file, ~90% jadi)
-│   ├── mahasiswa/  (14 file, ~80% jadi)
-│   ├── kkn/        (11 file, ~90% PLACEHOLDER)
-│   ├── prestasi/   (9 file, ~90% PLACEHOLDER)
-│   ├── promosi/    (12 file, ~85% jadi)
-│   ├── tracer/     (2 file, PLACEHOLDER)
-│   ├── laporan/    (7 file, ~60% placeholder)
-│   ├── pengguna/   (3 file, roles.php placeholder)
-│   ├── ftunsur/    (2 file: import MABA + SDM, jadi)
-│   └── system/     (5 file, mayoritas placeholder)
-├── tools/sync_modules_to_db.php
-├── auth.php, login.php, logout.php, index.php
-└── docs/                      # dokumentasi + file memory ini
-```
-
-### Status Modul (Real vs Placeholder)
-
-| Modul | Status | Catatan |
+- **Stack lama (blueprint, bukan basis pengembangan):** PHP 8 native tanpa framework, MySQL 8, AdminLTE 3, Bootstrap, jQuery. Lokasi `D:\simaftunsur\SIMAFTUNSUR\`; dump `D:\simaftunsur\simaftunsur (1).sql`.
+- **Stack target (rebuild):** **Laravel 13 + Livewire 4 + Tailwind + MySQL 8**; **Python + scikit-learn** untuk K-Means; integrasi **REST API / service**.
+### Status modul lama (referensi)
+| Modul | Status lama | Rencana di rebuild |
 |---|---|---|
-| Mahasiswa | ~80% jadi | CRUD, profil, rekap angkatan/prodi sudah ada |
-| Beasiswa | ~90% jadi | Modul terlengkap (kategori, pengajuan, penerima, monitoring IPK) |
-| Promosi/PMB | ~85% jadi | Petugas, jadwal kunjungan, sekolah, kwitansi, disposisi |
-| FT UNSUR | Jadi | Import MABA, SDM |
-| Pengguna | ~60% | users & hak_akses jadi; roles.php placeholder |
-| KKN | ~10% | Mayoritas placeholder |
-| Prestasi | ~10% | Mayoritas placeholder |
-| Tracer | ~5% | survey.php & laporan.php hampir kosong |
-| Laporan | ~20% | Sebagian besar placeholder |
-| System | ~30% | Mayoritas placeholder skeleton |
+| Mahasiswa | ~80% | **FOKUS** + fitur klasterisasi K-Means |
+| Beasiswa | ~90% | CRUD pendukung (diambil mahasiswa lain) |
+| Promosi/PMB | ~85% | CRUD pendukung (BUKAN fokus, BUKAN RF) |
+| KKN | ~10% | CRUD pendukung (diambil mahasiswa lain) |
+| Prestasi | ~10% | CRUD pendukung |
+| Tracer | ~5% | CRUD pendukung |
+| Pengguna/RBAC | ~60% | Bangun ulang (Spatie Permission) |
+| Laporan | ~20% | CRUD/dasar |
+| System | ~30% | Minimal |
 
-### Kondisi Data (KRITIS untuk ML)
-
-Data historis di SQL dump **sangat minim**:
-
-| Tabel | Jumlah Baris |
-|---|---|
-| `bea_calon` (calon beasiswa) | 0 |
-| `bea_penerima` | 0 |
-| `bea_nilai` | 0 |
-| `mhs_mahasiswa` | 9 (dummy) |
-| `mhs_penerima_bantuan` | 2 |
-| `ft_maba` (mahasiswa baru) | ~178 (data asli, tapi belum berlabel) |
-
-**Kesimpulan:** Data internal untuk training ML praktis nol. Ini constraint utama dalam memilih metode.
-
+### Kondisi data (kritis untuk ML)
+- Data historis di dump **sangat minim** (mhs_mahasiswa ~9 dummy, ft_maba ~178 tanpa label, tabel beasiswa 0).
+- **Data label status akhir tidak tersedia** → metode *supervised* tidak feasible saat ini → **K-Means (unsupervised)**.
 ---
 
-## 3. KETENTUAN PEMBIMBING TA (PERIODE MEI 2026) — WAJIB DIPATUHI
+## 3. KETENTUAN PEMBIMBING — WAJIB DIPATUHI
 
-### Konfigurasi Pembimbing
-
-- **Pembimbing 1:** Ketat soal metode; menetapkan daftar metode terlarang (lihat di bawah). Otoritas akhir untuk pemilihan algoritma.
-- **Pembimbing 2 (Wakil Dekan III / WD III):** Mengurus beasiswa & kemahasiswaan secara umum. Fokus pada **decision making + kemahasiswaan luas**. TIDAK setuju fokus PMB. Mengusulkan AHP/TOPSIS dan Fuzzy Logic — tapi semua TERLARANG oleh Pembimbing 1. Berkomitmen menyediakan **data IPK per semester** (boleh hard copy).
-- **Strategi negosiasi:** Patuhi Pembimbing 1 untuk metode, akomodasi Pembimbing 2 untuk arah & cakupan. Konsep "SPK" tetap dipertahankan tapi mesin pendukungnya pakai algoritma yang diizinkan (K-Means).
-
+- **Pembimbing 1 — Tarmin Abdulghani, S.T., M.T.:** otoritas akhir metode; menetapkan daftar larangan. (Juga Dosen Wali per Lembar Usulan.)
+- **Pembimbing 2 / WD III:** minta fokus *decision making* kemahasiswaan; **penyedia data IPK per semester**; pengguna dashboard.
+- **Koordinator TA — Agus Suheri, S.T., M.Kom (NIDN 0003127201):** penerbit ACC (Lembar Usulan, 2 Juni 2026).
 ### Metode DILARANG TOTAL (auto-reject)
+WP, SAW, AHP, TOPSIS · Fuzzy Logic (semua varian) & Fuzzy AHP · Forward/Backward Chaining · Profile Matching · KNN · Naive Bayes · Regresi Linier / Logistic Regression.
 
-- MCDM klasik: **WP, SAW, AHP, TOPSIS**
-- Sistem Pakar: **Forward Chaining, Backward Chaining**
-- **Fuzzy Logic** (semua varian: Tsukamoto, Mamdani, Sugeno)
-- **KNN** (K-Nearest Neighbors)
-- **Naive Bayes**
-- **Regresi Linier**
+### Aturan judul (3 unsur wajib)
+Produk IT · Permasalahan · Sistem Cerdas. (Lokasi & bahasa pemrograman cukup di BAB I/III.)
 
-### Topik DIBATASI (siapa daftar duluan dia dapat)
-
-- Topik **Sistem Pakar**
-- Topik **Chatbot**
-- Topik **Sistem Informasi (SI)** umum
-
-### Permasalahan/Tempat DILARANG
-
-- **Stock Gym**
-- **Sekolah** (sebagai tempat penelitian) — karena dianggap bisa selesai tanpa sistem cerdas / cukup SQL
-
-### Topik SUDAH DIAMBIL mahasiswa lain (tidak boleh dipakai)
-
-- **Beasiswa** (sudah diambil — konsultasi 2026-05-21)
-- **KKN** (sudah diambil)
-
-### Aturan Judul (3 unsur WAJIB muncul)
-
-1. **Produk IT**
-2. **Permasalahan**
-3. **Sistem Cerdas** yang digunakan
-
-(Lokasi penelitian & bahasa pemrograman tidak wajib di judul, cukup di Bab I/III)
-
-### Aturan Tambahan
-
-- Jangan pakai kata "Rancang Bangun" (sudah jenuh) — pakai "Pengembangan", "Penerapan", "Implementasi", dll.
-- Untuk **Sistem Prediksi**: harus jelas/spesifik APA yang diprediksi.
-- Bahasa Indonesia baku, sesuai tata tulis laporan ilmiah.
-- Ikuti template & pedoman penulisan TA kampus.
-- Proposal ditolak → ganti judul; direvisi → perbaiki.
-- Daftar pengumpulan proposal harus + kirim GForm (jangan asal daftar).
-- Topik SI dibatasi → daftar cepat.
-
+### Aturan tambahan
+- Sitasi **wajib ≥ 2015**.
+- Bahasa Indonesia baku; ikuti pedoman penulisan TA FT UNSUR.
+- Jujur soal trade-off; jangan *overclaim*.
 ---
 
-## 4. METODE YANG MASIH AMAN (Boleh Dipakai)
+## 4. METODE INTI & POSISI RANDOM FOREST
 
-| Metode | Tipe | Kegunaan untuk SIMAFTUNSUR |
-|---|---|---|
-| **Random Forest** | Klasifikasi/Prediksi ensemble | Klasifikasi/prediksi, butuh ~200+ baris berlabel |
-| **Decision Tree C4.5** | Klasifikasi | Explainable, toleran data kecil (~100 baris) |
-| **Gradient Boosting / XGBoost** | Klasifikasi/Prediksi ensemble | Akurasi tinggi, butuh ~300-500 baris, agak fussy tuning |
-| **Content-Based Filtering** (TF-IDF + Cosine Similarity) | Rekomendasi | TIDAK butuh data berlabel — paling aman untuk data minim |
-| **Case-Based Reasoning (CBR)** | Rekomendasi berbasis kasus | Butuh arsip kasus |
-| **K-Means / DBSCAN** | Clustering | Segmentasi profil, tidak perlu label |
-| **Apriori / FP-Growth** | Association rule | Pencarian pola |
-| **Genetic Algorithm** | Optimasi | Optimasi penempatan/rute (mis. KKN, rute kunjungan PMB) |
-| **SVM** | Klasifikasi | Klasifikasi biner |
-
+- **K-Means Clustering = metode inti terkunci.** Unsupervised, efisien, klaster mudah diinterpretasi.
+- **Random Forest = HANYA saran BAB V** (pengembangan lanjutan). Butuh data alumni berlabel (status akhir Lulus Tepat Waktu/Terlambat/DO), minimum ~150 baris (ideal 250–300). **Jangan dijadikan metode TA ini.**
+- Struktur kode dibuat modular (preprocess/feature engineering reusable), **tetapi tanpa mengimplementasikan RF sekarang**.
 ---
 
-## 5. ARAH PENELITIAN SAAT INI (Keputusan Final per 2026-05-22)
+## 5. ARAH PENELITIAN FINAL (Ber-ACC)
 
-### JUDUL FINAL (Sudah Dikunci, Tinggal Konsultasi Persetujuan)
-
-**Judul Utama:**
-> **"Pengembangan Sistem Pendukung Keputusan Kemahasiswaan dengan Segmentasi Profil Mahasiswa Menggunakan Algoritma K-Means Clustering"**
-
-**Varian alternatif jika pembimbing minta revisi:**
-- "Pengembangan Sistem Pendukung Keputusan Kemahasiswaan dengan Pengelompokan Mahasiswa Berdasarkan Profil Akademik Menggunakan Algoritma K-Means Clustering"
-- "Pengembangan Sistem Pendukung Keputusan Strategi Pembinaan Mahasiswa dengan Pengelompokan Profil Akademik Menggunakan Algoritma K-Means Clustering"
+### Judul final (terkunci)
+> **"Rancang Bangun Sistem Informasi Kemahasiswaan untuk Klasterisasi Profil Mahasiswa Menggunakan Algoritma K-Means"**
 
 | Unsur | Isi |
 |---|---|
-| Produk IT | Sistem Pendukung Keputusan Kemahasiswaan (modul terintegrasi di SIMAFTUNSUR) |
-| Permasalahan | WD III memerlukan segmentasi profil mahasiswa untuk merumuskan strategi pembinaan yang tepat sasaran, namun saat ini dilakukan manual/berbasis asumsi tanpa basis data sistematis |
-| Sistem Cerdas | **K-Means Clustering** (unsupervised, tidak butuh data berlabel) |
-| Output sistem | Cluster mahasiswa + karakteristik tiap cluster + rekomendasi strategi pembinaan + dashboard SPK untuk pimpinan |
-| Data | IPK per semester (akan disediakan WD III) + status mahasiswa + semester + prodi + data kemahasiswaan |
-| Evaluasi | Silhouette Score, Davies-Bouldin Index, Elbow Method (BUKAN Accuracy/Precision karena unsupervised) |
+| Produk IT | SI Kemahasiswaan SIMAFTUNSUR berbasis web (Laravel + MySQL) |
+| Permasalahan | Data kemahasiswaan tersebar & *profiling* manual berbasis asumsi; pimpinan butuh basis data objektif untuk strategi pembinaan tepat sasaran |
+| Sistem Cerdas | K-Means Clustering |
+| Atribut klaster | IPK per semester, status studi, semester berjalan, program studi, data kemahasiswaan terkait |
+| Output | Klaster mahasiswa + karakteristik tiap klaster + dashboard SPK untuk pimpinan (khususnya WD III) |
+| Evaluasi | Silhouette Coefficient, Davies-Bouldin Index, Elbow Method (internal; BUKAN Accuracy) |
 
-### KONTEKS PENGAMBILAN KEPUTUSAN (PENTING — Jangan Diubah)
+### Rumusan masalah (ringkas)
+Bagaimana merancang & membangun SI Kemahasiswaan FT UNSUR yang mengintegrasikan data secara terpusat sekaligus menerapkan klasterisasi profil mahasiswa dengan K-Means sebagai dasar pengambilan keputusan strategi pembinaan.
 
-Keputusan K-Means diambil setelah analisis matang dengan trade-off berikut:
+### Pilihan yang SUDAH DIBATALKAN (jangan disarankan lagi)
+- ~~PMB + Random Forest~~ — ditolak Pembimbing 2 (bukan fokus *decision making* kemahasiswaan).
+- ~~AHP/TOPSIS Hybrid~~, ~~Fuzzy Logic~~, ~~Hybrid ML + DSS AHP~~ — metode terlarang Pembimbing 1.
+- ~~"AHP digenerate AI"~~ — pelanggaran integritas akademik.
+---
 
-1. **Awalnya** user menyusun judul PMB + Random Forest (data internal lengkap, jarang diambil)
-2. **Pembimbing 2 (WD III)** tidak setuju fokus PMB; ingin pembahasan **decision making + kemahasiswaan luas** (sesuai jabatannya)
-3. **Pembimbing 2** memberikan dokumen usulan dengan 7 alternatif, namun **mayoritas memakai metode terlarang Pembimbing 1** (AHP-TOPSIS, Fuzzy Logic, Naive Bayes)
-4. **WD III berkomitmen** menyediakan data IPK per semester (akan dimasukkan ke menu "Data Mahasiswa"), boleh dalam bentuk hard copy
-5. **Data label/status akhir** untuk supervised learning **TIDAK TERSEDIA** — perlu data alumni historis yang berat untuk dikumpulkan
-6. **Solusi:** Pakai K-Means (unsupervised, tidak butuh label) → memuaskan Pembimbing 2 (ada di opsi #6 dokumennya) + aman dari larangan Pembimbing 1 + realistis dengan data tersedia
+## 6. METODOLOGI (Sesuai Naskah)
 
-### Rencana Pengembangan Lanjutan (Untuk Bab V Saran TA)
+### Waterfall (utama) — Pressman & Maxim (2020)
+Sekuensial, 5 tahap: Analisis Kebutuhan → Perancangan Sistem → Implementasi → Pengujian → Pemeliharaan. Dipilih karena kebutuhan relatif jelas & stabil pada konteks TA.
 
-**Random Forest untuk klasifikasi risiko mahasiswa** akan menjadi penelitian lanjutan pasca-TA. Memerlukan:
-- Data alumni historis (angkatan 2015-2019) dengan label status akhir (Lulus Tepat Waktu / Terlambat / DO)
-- Minimum 150 baris (marjinal), ideal 250-300 baris
-- Implementasi teknis ~50-60% reusable dari kode K-Means (modular: preprocessing & feature engineering bisa dipakai ulang)
-- Beban berat ada di pengumpulan data label + perubahan metodologi (Bab III) + evaluasi (metrik beda total)
+- **Perancangan:** ERD, UML (use case, activity, class), UI, rancangan *pipeline* K-Means.
+- **Pengujian:** **Black Box Testing** (fungsional) + metrik klaster.
+### CRISP-DM (komplementer — khusus komponen klasterisasi)
+Enam fase (Business/Data Understanding, Data Preparation, Modeling, Evaluation, Deployment) **diintegrasikan ke dalam Waterfall**, hanya untuk komponen *data mining*. **Bukan** metodologi utama.
 
-### Aturan Penting untuk Implementasi Kode
+### Tahapan penerapan K-Means (dari naskah)
+Pengumpulan data → pra-pemrosesan (missing value, outlier, encoding, StandardScaler/MinMax) → penentuan k (Elbow + Silhouette) → pelatihan (scikit-learn, KMeans++) → evaluasi (Silhouette, DBI) → interpretasi & visualisasi (karakteristik centroid, scatter PCA, parallel coordinates) → integrasi ke Laravel via REST API.
+ 
+---
 
-**Struktur kode harus modular** agar migrasi ke RF di masa depan mudah:
+## 7. SCOPE: FOKUS vs CAKUPAN
 
-```python
-def preprocess(data): ...           # reusable untuk RF
-def feature_engineering(df): ...    # reusable untuk RF  
-def train_kmeans(X): ...            # ganti jadi train_random_forest(X, y) saat migrasi
-def evaluate(model, X): ...         # ganti metrik saat migrasi
-```
+- **Fokus penelitian (judul + evaluasi BAB IV):** Modul Data Mahasiswa + K-Means + dashboard.
+- **Cakupan sistem (dibangun, non-fokus, tanpa sistem cerdas):** Beasiswa, KKN, **Promosi/PMB**, Prestasi, Tracer, Pengguna/RBAC, Laporan, System — **semuanya CRUD**.
+- Modul pendukung TIDAK diberi label sistem cerdas & TIDAK dievaluasi performanya. Boleh jadi saran pengembangan di BAB V.
+---
 
-Database harus menyiapkan kolom untuk label (status akhir mahasiswa) walau belum digunakan sekarang.
+## 8. KONDISI & STRATEGI DATA
 
-### Pilihan-Pilihan yang SUDAH DIBATALKAN (Jangan Disarankan Lagi)
+- **IPK per semester:** akan disediakan WD III (boleh hard copy → input manual).
+- **Label status akhir:** tidak tersedia → kunci pemilihan K-Means.
+- **Volume:** minimum **100 mahasiswa aktif ≥ 3 semester** (per Batasan Masalah); ideal 200–300.
+- **Peringatan:** seeding data acak (faker) lalu klaim kualitas = bahaya akademik; penguji bisa menolak.
+---
 
-- ~~PMB + Random Forest~~ — ditolak Pembimbing 2 (bukan fokus decision making kemahasiswaan)
-- ~~AHP/TOPSIS Hybrid~~ — dilarang Pembimbing 1 (metode terlarang)
-- ~~Fuzzy Logic~~ — dilarang Pembimbing 1
-- ~~Hybrid ML + DSS dengan AHP~~ — kombinasi metode terlarang
-- ~~"AHP digenerate ChatGPT"~~ — pelanggaran integritas akademik, AHP butuh expert judgment manusia, BUKAN AI
+## 9. PENELITIAN TERKAIT (BAB II)
+
+Empat sistem **terverifikasi** untuk tabel perbandingan:
+1. **Siskama** — SI Penguatan Kapasitas Mahasiswa & Alumni (FT UNG, Laravel).
+2. **PRABA** — SI Manajemen Prestasi & Beasiswa (Undiksha).
+3. **SIKEMAS** — SI Kemahasiswaan (Politeknik Harapan Bersama).
+4. **Smart Adma** — SI Administrasi Kemahasiswaan & Alumni.
+   Sistem ke-5: **TA Siti Mariam (NPM 5520117021)** — tidak ada online, **harus diambil fisik** di perpustakaan FT UNSUR untuk melengkapi tabel.
 
 ---
 
-## 6. KONSEP CAKUPAN SISTEM vs FOKUS PENELITIAN
+## 10. DAFTAR PUSTAKA TERPAKAI (semua ≥ 2015)
 
-Prinsip penting: **lingkup pengembangan boleh lebih luas dari lingkup penelitian**.
+> Sufiks "a/b" di bawah adalah **duplikasi Mendeley** yang harus dibersihkan manual (lihat §12).
 
-- **Fokus penelitian (masuk judul + dievaluasi ilmiah):** HANYA satu modul + sistem cerdasnya (saat ini: **SPK Kemahasiswaan / Modul Data Mahasiswa + K-Means Clustering**)
-- **Cakupan sistem (dibangun + dipakai produksi):** SELURUH modul SIMAFTUNSUR (Mahasiswa+smart, Beasiswa-CRUD, KKN-CRUD, Prestasi, Tracer, Promosi, Pengguna, Laporan)
-- **Modul pendukung** diposisikan sebagai "modul pengelolaan data" — TIDAK diberi label sistem cerdas, TIDAK dievaluasi.
-
-### Aturan posisi modul lain
-
-- ❌ Jangan cantumkan modul lain di JUDUL TA
-- ❌ Jangan klaim sistem cerdas untuk modul pendukung
-- ❌ Jangan evaluasi performa smart system modul pendukung
-- ✅ Modul lain boleh jadi "saran pengembangan lanjutan" di Bab V
-
-### Catatan kolaborasi (perlu klarifikasi ke pembimbing)
-
-Karena beasiswa & KKN diambil mahasiswa lain — perlu dipastikan: apakah mereka mengembangkan SIMAFTUNSUR yang SAMA atau aplikasi TERPISAH?
-- Jika SAMA → jangan bangun ulang modul beasiswa/KKN, itu pekerjaan mereka; fokus SPK Kemahasiswaan + integrasi
-- Jika TERPISAH → boleh include modul beasiswa/KKN sebagai CRUD biasa di SIMAFTUNSUR Anda
-
-### Catatan tentang Modul Promosi PMB (pivot history)
-
-Modul PMB awalnya jadi fokus penelitian (dengan Random Forest), tapi **DIBATALKAN** karena Pembimbing 2 (WD III) menolak fokus PMB dan minta fokus decision making kemahasiswaan. Modul PMB tetap dibangun sebagai bagian sistem (CRUD biasa) tapi BUKAN fokus penelitian dan TIDAK pakai sistem cerdas.
-
+- Anggraeni & Irviani (2017) — *Pengantar Sistem Informasi*, Andi. Key `anggraeni2017pengantar`.
+- Han, Kamber & Pei (2022) — *Data Mining: Concepts and Techniques* (4th).
+- Pressman & Maxim (2020) — *Software Engineering* (9th) — sumber Waterfall.
+- Primartha (2021) — *Algoritma Machine Learning*, Informatika.
+- Sholeh, Ghufron & Fatkhiyah (2022) — DBI/Elbow/Silhouette, *STRING*.
+- Ishak, Dali & Pakaya (2024) — Clustering Prestasi Lulusan K-Means, *Jambura JEEE*.
+- Pratama, Puspitasari & Tolle (2022) — Clustering Prestasi Akademik, *JPTIIK*.
+- Hardianti & Agushinta R. (2020) — Pola Masa Studi K-Means, *JTIIK*.
+- Hasan, Wahyudi & Hendra (2024) — Silhouette & DBI, *JITET*.
+- Suryaningrum dkk. (2023) — Optimasi k K-Means, *BAREKENG* *(entri korup, perbaiki)*.
+- McKinney (2022) — *Python for Data Analysis* (3rd).
+- Laudon & Laudon (2020) — *Management Information Systems* (16th).
+- Direktorat Jenderal Pendidikan Tinggi (2023) — Pedoman **SIMKATMAWA**.
 ---
 
-## 7. STRATEGI DATA UNTUK ML
+## 11. RISIKO & TRADE-OFF YANG DISEPAKATI
 
-### Update per 2026-05-22
-
-Status data terbaru:
-- **IPK per semester:** ✅ WILL BE AVAILABLE — WD III berkomitmen menyediakan (boleh hard copy → input manual)
-- **Data label/status akhir:** ❌ TIDAK TERSEDIA (kalau perlu, harus dari arsip alumni — beban berat)
-- **Karena label tidak ada** → metode supervised (Random Forest, Decision Tree, dll.) tidak feasible saat ini
-- **Solusi yang dipilih:** K-Means Clustering (unsupervised, tidak butuh label)
-
-### Target Volume Data
-
-- **Minimum yang masih bisa diterima:** 100-150 mahasiswa (cluster bisa kurang stabil)
-- **Ideal:** 200-300 mahasiswa dengan IPK per semester lengkap
-- **Periode mahasiswa:** sebaiknya mahasiswa **aktif semester 3+** (sudah ada riwayat IPK 2-3 semester untuk membentuk profil)
-
-### Opsi Strategi Data (untuk metode yang butuh training, jika di masa depan migrasi ke supervised)
-
-1. **Minta data historis nyata** ke Wakil Dekan III / BAAK (paling ideal, bahkan 200-500 baris cukup)
-2. **Dataset publik** (lihat bagian 8) + adaptasi domain + disclaimer di Bab III
-3. **Data sintetik berbasis distribusi referensi** (risiko tinggi, harus dilaporkan eksplisit di metodologi, JANGAN untuk pamer akurasi)
-4. **Tetap dengan metode unsupervised** seperti K-Means (paling aman untuk kondisi data sekarang)
-
-**Peringatan:** Seeding data acak via faker untuk training ML lalu klaim akurasi tinggi = bahaya akademik, penguji bisa menolak.
-
----
-
-## 8. DATASET PUBLIK YANG SUDAH DIVERIFIKASI
-
-### Untuk topik student/dropout/scholarship (umum)
-
-- **UCI: Predict Students' Dropout and Academic Success** (Realinho et al., 2021) — 4.424 baris, 36 fitur, 3 kelas (Dropout/Enrolled/Graduate), CC BY 4.0, DOI 10.24432/C5MC89. URL: archive.ics.uci.edu/dataset/697
-- **UCI: Higher Education Students Performance Evaluation** (2019) — 145 baris, 31 fitur, ada kolom "Scholarship type". DOI 10.24432/C51G82. URL: archive.ics.uci.edu/dataset/856
-- **Kaggle mirror:** kaggle.com/datasets/thedevastator/higher-education-predictors-of-student-retention
-- **data.go.id KIP Kuliah 2023** — agregat (bukan per mahasiswa), untuk validasi distribusi / argumen Bab I
-
-### Untuk topik PMB / school recruitment
-
-Belum ada dataset publik Indonesia yang langsung cocok — kemungkinan harus pakai data internal FT UNSUR (`ft_sekolah` + `ft_maba` + histori kunjungan) atau bangun dataset sendiri dari arsip promosi. Ini perlu dieksplorasi lebih lanjut.
-
----
-
-## 9. REFERENSI KUNCI (untuk Bab II & Daftar Pustaka)
-
-### Sistem Informasi Kemahasiswaan
-- Siskama — SI Penguatan Kapasitas Mahasiswa & Alumni (FT UNG, Laravel), Digital Transformation Technology
-- PRABA — Prototipe SI Manajemen Prestasi & Beasiswa Undiksha, JST
-- SIKEMAS — SI Kemahasiswaan Politeknik Harapan Bersama, Smart Comp
-- Smart Adma — SI Administrasi Kemahasiswaan & Alumni (Extreme Programming)
-
-### Regulasi (WAJIB disitir untuk justifikasi)
-- **SIMKATMAWA** (Sistem Informasi Manajemen Tata Kelola & Kinerja Kemahasiswaan) — Diktiristek/Kemendiktisaintek
-- **SKPI** (Surat Keterangan Pendamping Ijazah) — standar nasional, untuk topik prestasi
-
-### Machine Learning (klasifikasi/prediksi student)
-- Realinho et al. (2021) — Predict Students' Dropout and Academic Success
-- Paper XGBoost/Random Forest untuk prediksi kelulusan/dropout mahasiswa Indonesia (JRAMI Unindra, BAREKENG Unpatti, Jurnal STRATEGI Maranatha)
-
-### K-Means Clustering untuk Segmentasi Mahasiswa (PRIORITAS BARU)
-- MacQueen, J. (1967) — sumber asli algoritma K-Means
-- Paper segmentasi mahasiswa pakai K-Means di jurnal Indonesia (cari di JATISI, SINTA, JURIKOM, SISFOTENIKA)
-- Davies-Bouldin (1979) & Silhouette (Rousseeuw, 1987) — metrik evaluasi cluster
-- Elbow Method untuk menentukan k optimal
-
-### Sistem Pendukung Keputusan (SPK)
-- Turban, Sharda, Delen — *Decision Support and Business Intelligence Systems* (textbook standar)
-- Catatan: SPK TIDAK wajib pakai AHP/TOPSIS — bisa pakai ML-based DSS (K-Means, Random Forest, dll.) — landasan teori ini perlu ditegaskan di Bab II
-
-### Content-Based Filtering Akademik
-- Rekomendasi topik skripsi / dosen pembimbing / mata kuliah pakai CBF (UGM, UB repositories)
-
----
-
-## 10. RISIKO & TRADE-OFF YANG SUDAH DIBAHAS
-
-| Metode/Strategi | Risiko |
+| Pilihan | Risiko / Catatan |
 |---|---|
-| XGBoost dengan data kecil | Overfitting; klaim "lebih akurat dari RF" hanya berlaku di data besar |
-| Dataset publik luar negeri (Portugal/Cyprus) | Population mismatch, feature mismatch, penguji tanya validitas untuk FT UNSUR |
-| Data sintetik | "Garbage in garbage out", metric tidak bermakna, risiko ditolak |
-| Random Forest | Aman, stabil di data kecil — pilihan default yang baik |
-| Content-Based Filtering | Paling aman untuk data minim (tidak butuh label) |
+| Data sintetik untuk training | "Garbage in, garbage out"; metrik tak bermakna; risiko ditolak penguji |
+| Dataset publik luar negeri | *Population/feature mismatch*; validitas untuk FT UNSUR dipertanyakan |
+| Random Forest sekarang | Tidak ada label → tidak feasible; tunda ke BAB V |
+| K-Means (dipilih) | Aman, realistis untuk data minim & tanpa label |
 
-**Prinsip yang disepakati:** Untuk TA dengan pembimbing ketat + data minim → **kehati-hatian > novelty**. Pilih metode yang JALAN dengan data yang ada. Penguji lebih menghargai sistem yang benar-benar bekerja daripada akurasi tinggi di data simulasi.
-
+**Prinsip:** pembimbing ketat + data minim → **kehati-hatian > novelty**. Pilih metode yang benar-benar jalan. Penguji lebih menghargai sistem yang bekerja daripada akurasi tinggi di data simulasi.
+ 
 ---
 
-## 11. KLARIFIKASI KONSEPTUAL PENTING
+## 12. STATUS & TODO
 
-### XGBoost ≠ GraphRAG (beda total)
-- **XGBoost:** ML supervised, data tabular, output label/angka, gratis runtime
-- **GraphRAG:** RAG + knowledge graph + LLM, input dokumen + natural language, output teks, butuh LLM (berbayar/GPU), masuk kategori chatbot (dibatasi pembimbing)
-
-### "Beasiswa apa yang cocok untuk saya + jelaskan persyaratannya"
-- Bagian "beasiswa cocok" → bisa pakai XGBoost (ranking by probabilitas) ATAU Content-Based Filtering
-- Bagian "jelaskan persyaratan" → cukup tampilkan kolom database, TIDAK butuh AI/chatbot
-- Tidak perlu GraphRAG/chatbot untuk use case ini
-
+### Selesai
+- [x] Proposal ber-ACC; BAB I–III didraf (DOCX dihasilkan).
+### Aktif
+1. [ ] Rekonsiliasi **ERD/class/use case BAB III** dengan codebase nyata → minta Claude Code keluarkan **sumber teks Mermaid/PlantUML** (bukan gambar), hanya tabel/relasi bisnis (buang tabel sistem Laravel). Aktor/use case dari `routes/web.php` + middleware.
+2. [ ] **Activity diagram** alur klasterisasi K-Means.
+3. [ ] **Bersihkan Mendeley** (manual): 6 pasang duplikat (Han 2022, Ishak 2024, Pratama 2022, Pressman 2020, Primartha 2021, Sholeh 2022) + entri korup Suryaningrum 2023.
+4. [ ] Ambil **fisik TA Siti Mariam (NPM 5520117021)** → lengkapi Penelitian Terkait.
+5. [ ] Draf **BAB IV–V** (target akhir Juli; Seminar awal Juli; Sidang awal Agustus).
+6. [ ] Setup **Laravel 13 + Livewire 4** fresh + environment Python (venv/conda).
+7. [ ] Bangun modul Data Mahasiswa (CRUD + import IPK), lalu pipeline K-Means + dashboard.
 ---
 
-## 12. LANGKAH SELANJUTNYA (TODO)
+## 13. PRINSIP UNTUK CLAUDE (Custom Instructions)
 
-### Tahap Konsultasi (segera)
-
-1. [ ] **Konsultasi Pembimbing 1:** presentasikan judul final K-Means + jelaskan kenapa pivot dari PMB+RF
-2. [ ] **Konsultasi Pembimbing 2 (WD III):** presentasikan judul final K-Means + jelaskan K-Means ada di opsi #6 dokumennya + RF jadi saran Bab V
-3. [ ] **Sampaikan ke WD III:** kebutuhan data minimum (target 200-300 mahasiswa, minimum 100-150), format IPK per semester, timeline penyerahan
-4. [ ] **Klarifikasi:** apakah mahasiswa beasiswa/KKN pakai SIMAFTUNSUR sama atau terpisah?
-
-### Tahap Penulisan Proposal
-
-5. [ ] Susun draft **Bab I** (Latar Belakang, Rumusan Masalah, Tujuan, Batasan, Manfaat) — versi K-Means
-6. [ ] Susun draft **Bab II** (Landasan Teori): SIMAFTUNSUR, SIMKATMAWA, SPK, K-Means, Silhouette/DBI/Elbow, kemahasiswaan, penelitian terkait
-7. [ ] Susun draft **Bab III** (Metodologi): pengembangan sistem + CRISP-DM/KDD untuk K-Means + skenario evaluasi
-8. [ ] Cek template proposal kampus FT UNSUR
-
-### Tahap Persiapan Implementasi
-
-9. [ ] Rancang skema tabel database untuk hasil clustering (siapkan kolom label untuk migrasi RF di masa depan)
-10. [ ] Rancang arsitektur integrasi K-Means ke Laravel (Python service via API atau export model)
-11. [ ] Mulai input data IPK saat WD III menyerahkan (manual entry kalau hard copy)
-12. [ ] Eksplorasi tools visualisasi cluster (untuk dashboard SPK)
-
----
-
-## 13. FILE PENTING DI REPO
-
-- `docs/CLAUDE_PROJECT_MEMORY.md` — file ini (memory lengkap)
-- `docs/RINGKASAN_KONSULTASI_PEMBIMBING.md` — dokumen siap-print untuk konsultasi (ada jejak konsultasi #1 + usulan PMB)
-- `docs/FEATURE_DOCUMENTATION_AND_REBUILD_PLAN.md` — dokumentasi fitur & rencana rebuild ke Laravel (detail, panjang)
-- `docs/DEPLOY.md`, `docs/RBAC.md`, `docs/STRUCTURE.md`, `docs/PATH_RULES.md` — dokumentasi teknis (sebagian masih ringkas)
-- `simaftunsur (1).sql` (di `D:\simaftunsur\`) — dump database
-
----
-
-## 14. INSTRUKSI UNTUK CLAUDE (Custom Instructions Saran)
-
-> Saya sedang menyusun proposal Tugas Akhir S1 berbasis sistem SIMAFTUNSUR (Sistem Informasi Kemahasiswaan FT Universitas Suryakancana). Bantu saya dengan mematuhi SEMUA ketentuan pembimbing di bagian 3 (terutama daftar metode terlarang: WP, SAW, AHP, TOPSIS, Forward/Backward Chaining, Fuzzy Logic, KNN, Naive Bayes, Regresi Linier — JANGAN sarankan metode ini). Topik beasiswa & KKN sudah diambil mahasiswa lain, jangan sarankan. **Arah final saat ini: SPK Kemahasiswaan + K-Means Clustering** (Random Forest sudah dipertimbangkan tapi ditunda jadi penelitian lanjutan karena data label tidak tersedia). Pivot dari PMB+RF karena Pembimbing 2 (WD III) minta fokus decision making kemahasiswaan. WD III berkomitmen sediakan data IPK per semester. Selalu gunakan bahasa Indonesia baku sesuai tata tulis ilmiah. Setiap judul harus punya 3 unsur: Produk IT, Permasalahan, Sistem Cerdas. Ingat data internal saya minim, jadi pertimbangkan kelayakan data saat menyarankan metode. Jujur soal trade-off, jangan overclaim. JANGAN sarankan AHP "digenerate AI" atau opsi sirkular K-Means→Random Forest dalam satu TA.
+> Saya menyusun TA S1 berbasis SIMAFTUNSUR (SI Kemahasiswaan FT UNSUR). Patuhi SEMUA larangan metode Pembimbing 1: WP, SAW, AHP, TOPSIS, Fuzzy Logic, Fuzzy AHP, Forward/Backward Chaining, Profile Matching, KNN, Naive Bayes, Regresi Linier/Logistic Regression — JANGAN sarankan. Beasiswa & KKN sudah diambil mahasiswa lain. **Arah final ber-ACC: SI Kemahasiswaan + Klasterisasi K-Means** (Random Forest hanya saran BAB V; PMB hanya CRUD pendukung — keduanya bukan fokus). Metodologi: Waterfall (utama) + CRISP-DM (komplementer untuk klasterisasi). Sitasi ≥ 2015. Setiap judul: Produk IT + Permasalahan + Sistem Cerdas. Data internal minim → pertimbangkan kelayakan data. Jujur soal trade-off, jangan overclaim. **Jika ada instruksi yang menyebut "PMB + Random Forest sebagai arah saat ini", itu arah lama yang dibatalkan — konfirmasi dulu, jangan ikuti buta.**
