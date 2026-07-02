@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SIMAFTUNSUR — Model Activity Diagram (UML 2.1 / XMI 2.1)
+  Berisi 4 aktivitas dengan notasi UML baku (gaya yang lazim di skripsi Indonesia):
+    1. Masuk (Login)
+    2. Mengelola Data Mahasiswa (Tambah Data)
+    3. Mengimpor IPK Massal (Excel)
+    4. Menjalankan Klasterisasi K-Means  << alur inti penelitian >>
+  Elemen baku yang dipakai: InitialNode (lingkaran hitam), OpaqueAction (kotak
+  membulat), DecisionNode/MergeNode (belah ketupat) dengan guard [Ya]/[Tidak],
+  ActivityFinalNode (lingkaran bertepi), dan ActivityPartition (swimlane
+  Aktor | Sistem).
+
+  Cara pakai di Visual Paradigm: Project > Import > XMI... lalu pilih file ini.
+  Tiap aktivitas muncul di Model Explorer; buat Activity Diagram baru per
+  aktivitas dan seret simpul-simpulnya (alur/edge tergambar otomatis).
+
+  Diturunkan dari: app/Services/KlasterisasiService.php + ml/pipeline/* +
+  routes/web.php (2026-07-02).
+-->
+<xmi:XMI xmi:version="2.1"
+         xmlns:xmi="http://schema.omg.org/spec/XMI/2.1"
+         xmlns:uml="http://schema.omg.org/spec/UML/2.1">
+  <uml:Model xmi:id="model_simaftunsur_act" name="SIMAFTUNSUR — Activity Diagram">
+
+    <!-- ================================================================
+         AKTIVITAS 1 — MASUK (LOGIN)
+         ================================================================ -->
+    <packagedElement xmi:type="uml:Activity" xmi:id="act_login" name="AD-01 Masuk (Login)">
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_login_pu" name="Pengguna"
+             node="l_ini l_a1 l_a3"/>
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_login_ps" name="Sistem"
+             node="l_a2 l_a4 l_d1 l_a5 l_a6 l_a7 l_fin"/>
+
+      <node xmi:type="uml:InitialNode" xmi:id="l_ini" name="Mulai" inPartition="act_login_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="l_a1" name="Membuka halaman login" inPartition="act_login_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="l_a2" name="Menampilkan formulir login" inPartition="act_login_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="l_a3" name="Mengisi NIP dan kata sandi" inPartition="act_login_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="l_a4" name="Memvalidasi kredensial" inPartition="act_login_ps"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="l_d1" name="Kredensial valid?" inPartition="act_login_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="l_a5" name="Menampilkan pesan galat" inPartition="act_login_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="l_a6" name="Membuat sesi dan mencatat log aktivitas" inPartition="act_login_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="l_a7" name="Menampilkan halaman beranda" inPartition="act_login_ps"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="l_fin" name="Selesai" inPartition="act_login_ps"/>
+
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e1" source="l_ini" target="l_a1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e2" source="l_a1" target="l_a2"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e3" source="l_a2" target="l_a3"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e4" source="l_a3" target="l_a4"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e5" source="l_a4" target="l_d1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e6" source="l_d1" target="l_a5">
+        <guard xmi:type="uml:LiteralString" xmi:id="l_e6_g" value="Tidak"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e7" source="l_a5" target="l_a3"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e8" source="l_d1" target="l_a6">
+        <guard xmi:type="uml:LiteralString" xmi:id="l_e8_g" value="Ya"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e9" source="l_a6" target="l_a7"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="l_e10" source="l_a7" target="l_fin"/>
+    </packagedElement>
+
+    <!-- ================================================================
+         AKTIVITAS 2 — MENGELOLA DATA MAHASISWA (TAMBAH DATA)
+         ================================================================ -->
+    <packagedElement xmi:type="uml:Activity" xmi:id="act_mhs" name="AD-02 Mengelola Data Mahasiswa (Tambah)">
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_mhs_pu" name="Pengguna"
+             node="m_ini m_a1 m_a3 m_a5"/>
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_mhs_ps" name="Sistem"
+             node="m_a2 m_a4 m_a6 m_d1 m_a7 m_a8 m_a9 m_a10 m_fin"/>
+
+      <node xmi:type="uml:InitialNode" xmi:id="m_ini" name="Mulai" inPartition="act_mhs_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a1" name="Memilih menu Data Mahasiswa" inPartition="act_mhs_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a2" name="Menampilkan daftar mahasiswa" inPartition="act_mhs_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a3" name="Menekan tombol Tambah Mahasiswa" inPartition="act_mhs_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a4" name="Menampilkan modal formulir tambah" inPartition="act_mhs_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a5" name="Mengisi data dan menekan Simpan" inPartition="act_mhs_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a6" name="Memvalidasi masukan" inPartition="act_mhs_ps"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="m_d1" name="Data valid?" inPartition="act_mhs_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a7" name="Menampilkan pesan kesalahan validasi" inPartition="act_mhs_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a8" name="Menyimpan data mahasiswa ke basis data" inPartition="act_mhs_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a9" name="Mencatat log aktivitas" inPartition="act_mhs_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="m_a10" name="Menampilkan notifikasi berhasil dan daftar terbaru" inPartition="act_mhs_ps"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="m_fin" name="Selesai" inPartition="act_mhs_ps"/>
+
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e1" source="m_ini" target="m_a1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e2" source="m_a1" target="m_a2"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e3" source="m_a2" target="m_a3"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e4" source="m_a3" target="m_a4"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e5" source="m_a4" target="m_a5"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e6" source="m_a5" target="m_a6"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e7" source="m_a6" target="m_d1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e8" source="m_d1" target="m_a7">
+        <guard xmi:type="uml:LiteralString" xmi:id="m_e8_g" value="Tidak"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e9" source="m_a7" target="m_a5"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e10" source="m_d1" target="m_a8">
+        <guard xmi:type="uml:LiteralString" xmi:id="m_e10_g" value="Ya"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e11" source="m_a8" target="m_a9"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e12" source="m_a9" target="m_a10"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="m_e13" source="m_a10" target="m_fin"/>
+    </packagedElement>
+
+    <!-- ================================================================
+         AKTIVITAS 3 — MENGIMPOR IPK MASSAL (EXCEL)
+         ================================================================ -->
+    <packagedElement xmi:type="uml:Activity" xmi:id="act_impor" name="AD-03 Mengimpor IPK Massal (Excel)">
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_impor_pu" name="Pengguna"
+             node="i_ini i_a1 i_d1 i_a3 i_a4"/>
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_impor_ps" name="Sistem"
+             node="i_a2 i_a3s i_m1 i_a5 i_d2 i_a6 i_a7 i_a8 i_fin"/>
+
+      <node xmi:type="uml:InitialNode" xmi:id="i_ini" name="Mulai" inPartition="act_impor_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="i_a1" name="Membuka halaman impor IPK" inPartition="act_impor_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="i_a2" name="Menampilkan halaman impor dan tautan template" inPartition="act_impor_ps"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="i_d1" name="Perlu template?" inPartition="act_impor_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="i_a3s" name="Mengirim berkas template Excel" inPartition="act_impor_ps"/>
+      <node xmi:type="uml:MergeNode" xmi:id="i_m1" inPartition="act_impor_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="i_a3" name="Mengisi data IPK pada berkas Excel" inPartition="act_impor_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="i_a4" name="Memilih berkas dan mengunggah" inPartition="act_impor_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="i_a5" name="Membaca dan memvalidasi tiap baris data" inPartition="act_impor_ps"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="i_d2" name="Seluruh baris valid?" inPartition="act_impor_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="i_a6" name="Menampilkan daftar galat per baris" inPartition="act_impor_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="i_a7" name="Menyimpan nilai IPK per semester" inPartition="act_impor_ps"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="i_a8" name="Menampilkan ringkasan hasil impor" inPartition="act_impor_ps"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="i_fin" name="Selesai" inPartition="act_impor_ps"/>
+
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e1" source="i_ini" target="i_a1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e2" source="i_a1" target="i_a2"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e3" source="i_a2" target="i_d1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e4" source="i_d1" target="i_a3s">
+        <guard xmi:type="uml:LiteralString" xmi:id="i_e4_g" value="Ya"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e5" source="i_a3s" target="i_m1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e6" source="i_d1" target="i_m1">
+        <guard xmi:type="uml:LiteralString" xmi:id="i_e6_g" value="Tidak"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e7" source="i_m1" target="i_a3"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e8" source="i_a3" target="i_a4"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e9" source="i_a4" target="i_a5"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e10" source="i_a5" target="i_d2"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e11" source="i_d2" target="i_a6">
+        <guard xmi:type="uml:LiteralString" xmi:id="i_e11_g" value="Tidak"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e12" source="i_a6" target="i_a4"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e13" source="i_d2" target="i_a7">
+        <guard xmi:type="uml:LiteralString" xmi:id="i_e13_g" value="Ya"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e14" source="i_a7" target="i_a8"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="i_e15" source="i_a8" target="i_fin"/>
+    </packagedElement>
+
+    <!-- ================================================================
+         AKTIVITAS 4 — MENJALANKAN KLASTERISASI K-MEANS (ALUR INTI)
+         Tiga swimlane: Pengguna (WD III/Admin) | SIMAFTUNSUR (Laravel) |
+         Layanan Klasterisasi (Python/scikit-learn).
+         ================================================================ -->
+    <packagedElement xmi:type="uml:Activity" xmi:id="act_kmeans" name="AD-04 Menjalankan Klasterisasi K-Means">
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_km_pu" name="Pengguna (WD III / Administrator)"
+             node="k_ini k_a1 k_a3 k_a19 k_fin"/>
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_km_pl" name="SIMAFTUNSUR (Laravel)"
+             node="k_a2 k_a4 k_d1 k_a5 k_a6 k_a7 k_d2 k_a8 k_a17 k_a18"/>
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_km_pp" name="Layanan Klasterisasi (Python / scikit-learn)"
+             node="k_a9 k_a10 k_a11a k_m0 k_a11b k_a11c k_a11d k_a11e k_d4 k_a11f k_a12 k_a12b k_a13 k_d3 k_a14 k_m1 k_a15 k_a16"/>
+
+      <node xmi:type="uml:InitialNode" xmi:id="k_ini" name="Mulai" inPartition="act_km_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a1" name="Membuka halaman Klasterisasi" inPartition="act_km_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a2" name="Menampilkan dashboard dan status kesiapan data" inPartition="act_km_pl"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a3" name="Menekan tombol Jalankan Klasterisasi" inPartition="act_km_pu"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a4" name="Mengambil data mahasiswa layak (aktif, minimal 3 catatan IPK)" inPartition="act_km_pl"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="k_d1" name="Jumlah data mencukupi?" inPartition="act_km_pl"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a5" name="Menampilkan pesan data belum mencukupi" inPartition="act_km_pl"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a6" name="Menyusun snapshot fitur tiap mahasiswa (IPK rata-rata, IPK terakhir, tren, konsistensi, skor prestasi, skor kegiatan, skor pengabdian)" inPartition="act_km_pl"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a7" name="Mengirim permintaan klasterisasi ke layanan Python (REST API)" inPartition="act_km_pl"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="k_d2" name="Layanan terhubung dan permintaan valid?" inPartition="act_km_pl"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a8" name="Menampilkan pesan galat layanan" inPartition="act_km_pl"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a9" name="Melakukan praproses data (missing value, outlier, encoding)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a10" name="Melakukan penskalaan fitur (StandardScaler)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a11a" name="Menetapkan k = 2 (k_min)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:MergeNode" xmi:id="k_m0" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a11b" name="Melatih K-Means percobaan dengan k klaster (inisialisasi k-means++)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a11c" name="Menghitung WCSS/inertia untuk k berjalan (Metode Elbow)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a11d" name="Menghitung Silhouette Coefficient untuk k berjalan" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a11e" name="Menghitung Davies-Bouldin Index untuk k berjalan" inPartition="act_km_pp"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="k_d4" name="k masih kurang dari k_max (8)?" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a11f" name="Menaikkan k = k + 1" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a12" name="Memilih k optimal = k dengan Silhouette tertinggi (kurva Elbow dan DBI sebagai pembanding)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a12b" name="Melatih model K-Means final dengan k optimal (k-means++)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a13" name="Menghitung metrik evaluasi final (Silhouette, Davies-Bouldin, WCSS)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="k_d3" name="Volume data memenuhi ambang ideal (100)?" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a14" name="Menambahkan peringatan hasil bersifat indikatif" inPartition="act_km_pp"/>
+      <node xmi:type="uml:MergeNode" xmi:id="k_m1" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a15" name="Menginterpretasikan klaster (profil centroid dan proyeksi PCA 2D)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a16" name="Mengembalikan hasil klasterisasi (JSON)" inPartition="act_km_pp"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a17" name="Menyimpan eksekusi, klaster, dan anggota dalam satu transaksi basis data" inPartition="act_km_pl"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a18" name="Menampilkan dashboard hasil (metrik, profil klaster, sebaran PCA)" inPartition="act_km_pl"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="k_a19" name="Menganalisis hasil untuk strategi pembinaan" inPartition="act_km_pu"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="k_fin" name="Selesai" inPartition="act_km_pu"/>
+
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e1" source="k_ini" target="k_a1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e2" source="k_a1" target="k_a2"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e3" source="k_a2" target="k_a3"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e4" source="k_a3" target="k_a4"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e5" source="k_a4" target="k_d1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e6" source="k_d1" target="k_a5">
+        <guard xmi:type="uml:LiteralString" xmi:id="k_e6_g" value="Tidak"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e7" source="k_a5" target="k_fin"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e8" source="k_d1" target="k_a6">
+        <guard xmi:type="uml:LiteralString" xmi:id="k_e8_g" value="Ya"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e9" source="k_a6" target="k_a7"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e10" source="k_a7" target="k_d2"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e11" source="k_d2" target="k_a8">
+        <guard xmi:type="uml:LiteralString" xmi:id="k_e11_g" value="Tidak"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e12" source="k_a8" target="k_fin"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e13" source="k_d2" target="k_a9">
+        <guard xmi:type="uml:LiteralString" xmi:id="k_e13_g" value="Ya"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e14" source="k_a9" target="k_a10"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e15" source="k_a10" target="k_a11a"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e15b" source="k_a11a" target="k_m0"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e15c" source="k_m0" target="k_a11b"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e15d" source="k_a11b" target="k_a11c"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e15e" source="k_a11c" target="k_a11d"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e15f" source="k_a11d" target="k_a11e"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e15g" source="k_a11e" target="k_d4"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e15h" source="k_d4" target="k_a11f">
+        <guard xmi:type="uml:LiteralString" xmi:id="k_e15h_g" value="Ya"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e15i" source="k_a11f" target="k_m0"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e16" source="k_d4" target="k_a12">
+        <guard xmi:type="uml:LiteralString" xmi:id="k_e16_g" value="Tidak"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e16b" source="k_a12" target="k_a12b"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e17" source="k_a12b" target="k_a13"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e18" source="k_a13" target="k_d3"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e19" source="k_d3" target="k_a14">
+        <guard xmi:type="uml:LiteralString" xmi:id="k_e19_g" value="Tidak"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e20" source="k_a14" target="k_m1"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e21" source="k_d3" target="k_m1">
+        <guard xmi:type="uml:LiteralString" xmi:id="k_e21_g" value="Ya"/>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e22" source="k_m1" target="k_a15"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e23" source="k_a15" target="k_a16"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e24" source="k_a16" target="k_a17"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e25" source="k_a17" target="k_a18"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e26" source="k_a18" target="k_a19"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="k_e27" source="k_a19" target="k_fin"/>
+    </packagedElement>
+
+  </uml:Model>
+</xmi:XMI>

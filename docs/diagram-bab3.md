@@ -1,5 +1,12 @@
 # Sumber Teks Diagram BAB III — SIMAFTUNSUR
 
+> ⚠️ **DIGANTIKAN (2026-07-02):** versi terbaru diagram — sudah diselaraskan dengan
+> notasi UML baku dan codebase terkini (21 tabel, klasterisasi terimplementasi) —
+> ada di **`docs/vp-import/`** (file XMI/DDL siap import ke Visual Paradigm +
+> PlantUML). Khususnya §4 di bawah (alur K-Means) digambar sebagai *flowchart*,
+> **bukan** Activity Diagram UML standar; gunakan `simaftunsur-activity.puml`
+> (AD-04) sebagai gantinya. File ini dipertahankan hanya sebagai arsip.
+
 > **Tujuan:** sumber teks (Mermaid) untuk diagram perancangan sistem pada BAB III, **diturunkan dari codebase nyata** (bukan skema asumsi). Mudah direvisi pembimbing & dirender ulang (mis. di mermaid.live, VS Code Mermaid Preview, atau diekspor PNG/SVG untuk dokumen).
 >
 > **Diselaraskan dengan:** migrations `database/migrations/`, Models `app/Models/`, `routes/web.php`, `config/peran.php`, middleware `app/Http/Middleware/Peran.php`, dan Fortify.

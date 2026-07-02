@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SIMAFTUNSUR — Model Class Diagram (UML 2.1 / XMI 2.1)
+  Cara pakai di Visual Paradigm: Project > Import > XMI... lalu pilih file ini.
+  Elemen masuk ke Model Explorer; buat Class Diagram baru dan seret kelas
+  ke kanvas (asosiasi tergambar otomatis).
+
+  Diturunkan dari: app/Models/*.php + app/Services/KlasterisasiService.php (2026-07-02).
+  Multiplicity: sisi induk 1 (atau 0..1 bila FK nullable), sisi anak 0..*.
+-->
+<xmi:XMI xmi:version="2.1"
+         xmlns:xmi="http://schema.omg.org/spec/XMI/2.1"
+         xmlns:uml="http://schema.omg.org/spec/UML/2.1">
+  <uml:Model xmi:id="model_simaftunsur_cls" name="SIMAFTUNSUR — Class Diagram">
+
+    <!-- ============ TIPE DATA PRIMITIF ============ -->
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="t_string" name="String"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="t_int" name="Integer"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="t_float" name="Float"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="t_bool" name="Boolean"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="t_date" name="Date"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="t_json" name="JSON"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="t_array" name="Array"/>
+
+    <!-- ============ KELAS: AUTENTIKASI & SISTEM ============ -->
+    <packagedElement xmi:type="uml:Class" xmi:id="c_pengguna" name="Pengguna">
+      <ownedAttribute xmi:id="c_pengguna_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_pengguna_2" name="nip" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_pengguna_3" name="nama" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_pengguna_4" name="email" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_pengguna_5" name="kata_sandi" visibility="private" type="t_string"/>
+      <ownedAttribute xmi:id="c_pengguna_6" name="peran" visibility="public" type="t_string"/>
+      <ownedOperation xmi:id="c_pengguna_o1" name="punyaIzin" visibility="public">
+        <ownedParameter xmi:id="c_pengguna_o1p" name="kode" type="t_string"/>
+        <ownedParameter xmi:id="c_pengguna_o1r" direction="return" type="t_bool"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_pengguna_o2" name="punyaPeran" visibility="public">
+        <ownedParameter xmi:id="c_pengguna_o2p" name="peran" type="t_string"/>
+        <ownedParameter xmi:id="c_pengguna_o2r" direction="return" type="t_bool"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_pengguna_o3" name="semuaIzin" visibility="public">
+        <ownedParameter xmi:id="c_pengguna_o3r" direction="return" type="t_array"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_pengguna_o4" name="labelPeran" visibility="public">
+        <ownedParameter xmi:id="c_pengguna_o4r" direction="return" type="t_string"/>
+      </ownedOperation>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_log" name="LogAktivitas">
+      <ownedAttribute xmi:id="c_log_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_log_2" name="pengguna_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_log_3" name="aksi" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_log_4" name="model" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_log_5" name="deskripsi" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_log_6" name="ip" visibility="public" type="t_string"/>
+      <ownedOperation xmi:id="c_log_o1" name="catat" visibility="public" isStatic="true"/>
+      <ownedOperation xmi:id="c_log_o2" name="catatAuth" visibility="public" isStatic="true"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_pengaturan" name="Pengaturan">
+      <ownedAttribute xmi:id="c_pengaturan_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_pengaturan_2" name="kunci" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_pengaturan_3" name="nilai" visibility="public" type="t_string"/>
+      <ownedOperation xmi:id="c_pengaturan_o1" name="ambil" visibility="public" isStatic="true"/>
+      <ownedOperation xmi:id="c_pengaturan_o2" name="simpan" visibility="public" isStatic="true"/>
+    </packagedElement>
+
+    <!-- ============ KELAS: DATA MAHASISWA (FOKUS) ============ -->
+    <packagedElement xmi:type="uml:Class" xmi:id="c_prodi" name="ProgramStudi">
+      <ownedAttribute xmi:id="c_prodi_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_prodi_2" name="kode" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_prodi_3" name="nama" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_prodi_4" name="jenjang" visibility="public" type="t_string"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_mhs" name="Mahasiswa">
+      <ownedAttribute xmi:id="c_mhs_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_mhs_2" name="npm" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_mhs_3" name="nama" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_mhs_4" name="program_studi_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_mhs_5" name="angkatan" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_mhs_6" name="semester_aktif" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_mhs_7" name="jenis_kelamin" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_mhs_8" name="status" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_mhs_9" name="status_akhir" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_mhs_10" name="email" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_mhs_11" name="nomor_telepon" visibility="public" type="t_string"/>
+      <ownedOperation xmi:id="c_mhs_o1" name="ipkRataRata" visibility="public">
+        <ownedParameter xmi:id="c_mhs_o1r" direction="return" type="t_float"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_mhs_o2" name="ipkTerakhir" visibility="public">
+        <ownedParameter xmi:id="c_mhs_o2r" direction="return" type="t_float"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_mhs_o3" name="tren" visibility="public">
+        <ownedParameter xmi:id="c_mhs_o3r" direction="return" type="t_float"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_mhs_o4" name="konsistensi" visibility="public">
+        <ownedParameter xmi:id="c_mhs_o4r" direction="return" type="t_float"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_mhs_o5" name="skorPrestasi" visibility="public">
+        <ownedParameter xmi:id="c_mhs_o5r" direction="return" type="t_int"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_mhs_o6" name="skorKegiatan" visibility="public">
+        <ownedParameter xmi:id="c_mhs_o6r" direction="return" type="t_int"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_mhs_o7" name="skorPengabdian" visibility="public">
+        <ownedParameter xmi:id="c_mhs_o7r" direction="return" type="t_int"/>
+      </ownedOperation>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_ipk" name="NilaiIpkSemester">
+      <ownedAttribute xmi:id="c_ipk_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_ipk_2" name="mahasiswa_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_ipk_3" name="semester" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_ipk_4" name="tahun_akademik" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_ipk_5" name="semester_ganjil_genap" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_ipk_6" name="ipk" visibility="public" type="t_float"/>
+      <ownedAttribute xmi:id="c_ipk_7" name="sks_diambil" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_ipk_8" name="sks_lulus" visibility="public" type="t_int"/>
+    </packagedElement>
+
+    <!-- ============ KELAS: KLASTERISASI K-MEANS (FOKUS) ============ -->
+    <packagedElement xmi:type="uml:Class" xmi:id="c_eksekusi" name="KlasterisasiEksekusi">
+      <ownedAttribute xmi:id="c_eksekusi_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_eksekusi_2" name="k_terpilih" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_eksekusi_3" name="metode_pemilihan_k" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_eksekusi_4" name="fitur_dipakai" visibility="public" type="t_json"/>
+      <ownedAttribute xmi:id="c_eksekusi_5" name="skema_penskalaan" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_eksekusi_6" name="random_state" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_eksekusi_7" name="versi_algoritma" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_eksekusi_8" name="kriteria_data" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_eksekusi_9" name="jumlah_data" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_eksekusi_10" name="silhouette" visibility="public" type="t_float"/>
+      <ownedAttribute xmi:id="c_eksekusi_11" name="davies_bouldin" visibility="public" type="t_float"/>
+      <ownedAttribute xmi:id="c_eksekusi_12" name="inertia" visibility="public" type="t_float"/>
+      <ownedAttribute xmi:id="c_eksekusi_13" name="evaluasi_k" visibility="public" type="t_json"/>
+      <ownedAttribute xmi:id="c_eksekusi_14" name="profil_klaster" visibility="public" type="t_json"/>
+      <ownedAttribute xmi:id="c_eksekusi_15" name="peringatan" visibility="public" type="t_json"/>
+      <ownedAttribute xmi:id="c_eksekusi_16" name="dijalankan_oleh" visibility="public" type="t_int"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_klaster" name="KlasterisasiKlaster">
+      <ownedAttribute xmi:id="c_klaster_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_klaster_2" name="eksekusi_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_klaster_3" name="cluster" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_klaster_4" name="label_deskriptif" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_klaster_5" name="jumlah_anggota" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_klaster_6" name="centroid" visibility="public" type="t_json"/>
+      <ownedAttribute xmi:id="c_klaster_7" name="centroid_terskala" visibility="public" type="t_json"/>
+      <ownedAttribute xmi:id="c_klaster_8" name="interpretasi" visibility="public" type="t_string"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_anggota" name="KlasterisasiAnggota">
+      <ownedAttribute xmi:id="c_anggota_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_anggota_2" name="eksekusi_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_anggota_3" name="klaster_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_anggota_4" name="mahasiswa_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_anggota_5" name="cluster" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_anggota_6" name="fitur_nilai" visibility="public" type="t_json"/>
+      <ownedAttribute xmi:id="c_anggota_7" name="fitur_terskala" visibility="public" type="t_json"/>
+      <ownedAttribute xmi:id="c_anggota_8" name="jarak_ke_centroid" visibility="public" type="t_float"/>
+      <ownedAttribute xmi:id="c_anggota_9" name="pca_x" visibility="public" type="t_float"/>
+      <ownedAttribute xmi:id="c_anggota_10" name="pca_y" visibility="public" type="t_float"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_service" name="KlasterisasiService">
+      <ownedAttribute xmi:id="c_service_1" name="MIN_CATATAN_IPK" visibility="public" isStatic="true" type="t_int"/>
+      <ownedAttribute xmi:id="c_service_2" name="VOLUME_IDEAL_MIN" visibility="public" isStatic="true" type="t_int"/>
+      <ownedOperation xmi:id="c_service_o1" name="kesiapan" visibility="public">
+        <ownedParameter xmi:id="c_service_o1r" direction="return" type="t_array"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_service_o2" name="sehat" visibility="public">
+        <ownedParameter xmi:id="c_service_o2r" direction="return" type="t_bool"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_service_o3" name="jalankan" visibility="public">
+        <ownedParameter xmi:id="c_service_o3p" name="opsi" type="t_array"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_service_o4" name="ambilMahasiswaLayak" visibility="protected"/>
+      <ownedOperation xmi:id="c_service_o5" name="snapshotFitur" visibility="protected">
+        <ownedParameter xmi:id="c_service_o5r" direction="return" type="t_array"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="c_service_o6" name="simpan" visibility="protected"/>
+    </packagedElement>
+
+    <!-- ============ KELAS: MODUL PENDUKUNG ============ -->
+    <packagedElement xmi:type="uml:Class" xmi:id="c_prestasi" name="Prestasi">
+      <ownedAttribute xmi:id="c_prestasi_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_prestasi_2" name="mahasiswa_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_prestasi_3" name="judul" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_prestasi_4" name="jenis" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_prestasi_5" name="tingkat" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_prestasi_6" name="capaian" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_prestasi_7" name="peringkat" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_prestasi_8" name="penyelenggara" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_prestasi_9" name="tanggal" visibility="public" type="t_date"/>
+      <ownedAttribute xmi:id="c_prestasi_10" name="url_bukti" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_prestasi_11" name="berkas_bukti" visibility="public" type="t_string"/>
+      <ownedOperation xmi:id="c_prestasi_o1" name="poin" visibility="public">
+        <ownedParameter xmi:id="c_prestasi_o1r" direction="return" type="t_int"/>
+      </ownedOperation>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_kegiatan" name="KegiatanKemahasiswaan">
+      <ownedAttribute xmi:id="c_kegiatan_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_kegiatan_2" name="mahasiswa_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_kegiatan_3" name="jenis" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kegiatan_4" name="peran" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kegiatan_5" name="nama_kegiatan" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kegiatan_6" name="penyelenggara" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kegiatan_7" name="periode" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kegiatan_8" name="tanggal" visibility="public" type="t_date"/>
+      <ownedOperation xmi:id="c_kegiatan_o1" name="poin" visibility="public">
+        <ownedParameter xmi:id="c_kegiatan_o1r" direction="return" type="t_int"/>
+      </ownedOperation>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_pengabdian" name="PengabdianHibah">
+      <ownedAttribute xmi:id="c_pengabdian_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_pengabdian_2" name="mahasiswa_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_pengabdian_3" name="jenis" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_pengabdian_4" name="peran" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_pengabdian_5" name="judul" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_pengabdian_6" name="sumber_dana" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_pengabdian_7" name="tahun" visibility="public" type="t_int"/>
+      <ownedOperation xmi:id="c_pengabdian_o1" name="poin" visibility="public">
+        <ownedParameter xmi:id="c_pengabdian_o1r" direction="return" type="t_int"/>
+      </ownedOperation>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_tracer" name="TracerStudy">
+      <ownedAttribute xmi:id="c_tracer_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_tracer_2" name="mahasiswa_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_tracer_3" name="tahun_lulus" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_tracer_4" name="status_pekerjaan" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_tracer_5" name="masa_tunggu_bulan" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_tracer_6" name="nama_instansi" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_tracer_7" name="relevansi" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_tracer_8" name="rentang_gaji" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_tracer_9" name="tanggal_isi" visibility="public" type="t_date"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_bkat" name="BeasiswaKategori">
+      <ownedAttribute xmi:id="c_bkat_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_bkat_2" name="kode" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_bkat_3" name="nama" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_bkat_4" name="jenis_bantuan" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_bkat_5" name="sumber_dana" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_bkat_6" name="aktif" visibility="public" type="t_bool"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_bpen" name="BeasiswaPenerima">
+      <ownedAttribute xmi:id="c_bpen_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_bpen_2" name="mahasiswa_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_bpen_3" name="beasiswa_kategori_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_bpen_4" name="tahun_akademik" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_bpen_5" name="semester" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_bpen_6" name="status" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_bpen_7" name="nominal" visibility="public" type="t_float"/>
+      <ownedAttribute xmi:id="c_bpen_8" name="no_sk" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_bpen_9" name="tanggal_sk" visibility="public" type="t_date"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_klok" name="KknLokasi">
+      <ownedAttribute xmi:id="c_klok_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_klok_2" name="nama" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_klok_3" name="kecamatan" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_klok_4" name="kabupaten" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_klok_5" name="tahun_akademik" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_klok_6" name="kuota" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_klok_7" name="mitra" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_klok_8" name="aktif" visibility="public" type="t_bool"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_kdpl" name="KknDpl">
+      <ownedAttribute xmi:id="c_kdpl_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_kdpl_2" name="nama" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kdpl_3" name="nip" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kdpl_4" name="nomor_telepon" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kdpl_5" name="bidang_keahlian" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kdpl_6" name="aktif" visibility="public" type="t_bool"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_kkel" name="KknKelompok">
+      <ownedAttribute xmi:id="c_kkel_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_kkel_2" name="nama_kelompok" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kkel_3" name="kkn_lokasi_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_kkel_4" name="kkn_dpl_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_kkel_5" name="tahun_akademik" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kkel_6" name="status" visibility="public" type="t_string"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_kpes" name="KknPeserta">
+      <ownedAttribute xmi:id="c_kpes_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_kpes_2" name="kkn_kelompok_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_kpes_3" name="mahasiswa_id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_kpes_4" name="jabatan" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kpes_5" name="status" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_kpes_6" name="nilai_akhir" visibility="public" type="t_float"/>
+      <ownedAttribute xmi:id="c_kpes_7" name="nilai_huruf" visibility="public" type="t_string"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_promosi" name="KegiatanPromosi">
+      <ownedAttribute xmi:id="c_promosi_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_promosi_2" name="nama_kegiatan" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_promosi_3" name="sekolah_target" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_promosi_4" name="kota" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_promosi_5" name="tanggal" visibility="public" type="t_date"/>
+      <ownedAttribute xmi:id="c_promosi_6" name="petugas" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_promosi_7" name="jumlah_peminat" visibility="public" type="t_int"/>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Class" xmi:id="c_sekolah" name="Sekolah">
+      <ownedAttribute xmi:id="c_sekolah_1" name="id" visibility="public" type="t_int"/>
+      <ownedAttribute xmi:id="c_sekolah_2" name="nama" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_sekolah_3" name="jenjang" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_sekolah_4" name="kota" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_sekolah_5" name="alamat" visibility="public" type="t_string"/>
+      <ownedAttribute xmi:id="c_sekolah_6" name="kontak" visibility="public" type="t_string"/>
+    </packagedElement>
+
+    <!-- ============ ASOSIASI (induk 1 / 0..1 — anak 0..*) ============ -->
+    <packagedElement xmi:type="uml:Association" xmi:id="r1" name="memiliki">
+      <memberEnd xmi:idref="r1_a"/><memberEnd xmi:idref="r1_b"/>
+      <ownedEnd xmi:id="r1_a" name="programStudi" type="c_prodi" association="r1">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r1_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r1_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r1_b" name="mahasiswa" type="c_mhs" association="r1">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r1_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r1_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r2" name="mencatat">
+      <memberEnd xmi:idref="r2_a"/><memberEnd xmi:idref="r2_b"/>
+      <ownedEnd xmi:id="r2_a" name="mahasiswa" type="c_mhs" association="r2">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r2_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r2_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r2_b" name="nilaiIpkSemester" type="c_ipk" association="r2">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r2_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r2_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r3" name="meraih">
+      <memberEnd xmi:idref="r3_a"/><memberEnd xmi:idref="r3_b"/>
+      <ownedEnd xmi:id="r3_a" name="mahasiswa" type="c_mhs" association="r3">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r3_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r3_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r3_b" name="prestasi" type="c_prestasi" association="r3">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r3_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r3_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r4" name="mengisi">
+      <memberEnd xmi:idref="r4_a"/><memberEnd xmi:idref="r4_b"/>
+      <ownedEnd xmi:id="r4_a" name="mahasiswa" type="c_mhs" association="r4">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r4_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r4_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r4_b" name="tracerStudy" type="c_tracer" association="r4">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r4_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r4_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r5" name="menerima">
+      <memberEnd xmi:idref="r5_a"/><memberEnd xmi:idref="r5_b"/>
+      <ownedEnd xmi:id="r5_a" name="mahasiswa" type="c_mhs" association="r5">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r5_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r5_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r5_b" name="beasiswaPenerima" type="c_bpen" association="r5">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r5_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r5_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r6" name="mengikuti">
+      <memberEnd xmi:idref="r6_a"/><memberEnd xmi:idref="r6_b"/>
+      <ownedEnd xmi:id="r6_a" name="mahasiswa" type="c_mhs" association="r6">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r6_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r6_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r6_b" name="kknPeserta" type="c_kpes" association="r6">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r6_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r6_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r7" name="melakukan">
+      <memberEnd xmi:idref="r7_a"/><memberEnd xmi:idref="r7_b"/>
+      <ownedEnd xmi:id="r7_a" name="mahasiswa" type="c_mhs" association="r7">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r7_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r7_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r7_b" name="kegiatanKemahasiswaan" type="c_kegiatan" association="r7">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r7_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r7_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r8" name="menjalankan">
+      <memberEnd xmi:idref="r8_a"/><memberEnd xmi:idref="r8_b"/>
+      <ownedEnd xmi:id="r8_a" name="mahasiswa" type="c_mhs" association="r8">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r8_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r8_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r8_b" name="pengabdianHibah" type="c_pengabdian" association="r8">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r8_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r8_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r9" name="dikelompokkan">
+      <memberEnd xmi:idref="r9_a"/><memberEnd xmi:idref="r9_b"/>
+      <ownedEnd xmi:id="r9_a" name="mahasiswa" type="c_mhs" association="r9">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r9_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r9_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r9_b" name="klasterisasiAnggota" type="c_anggota" association="r9">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r9_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r9_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r10" name="mengkategorikan">
+      <memberEnd xmi:idref="r10_a"/><memberEnd xmi:idref="r10_b"/>
+      <ownedEnd xmi:id="r10_a" name="kategori" type="c_bkat" association="r10">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r10_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r10_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r10_b" name="penerima" type="c_bpen" association="r10">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r10_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r10_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r11" name="menampung">
+      <memberEnd xmi:idref="r11_a"/><memberEnd xmi:idref="r11_b"/>
+      <ownedEnd xmi:id="r11_a" name="lokasi" type="c_klok" association="r11">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r11_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r11_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r11_b" name="kelompok" type="c_kkel" association="r11">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r11_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r11_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r12" name="membimbing">
+      <memberEnd xmi:idref="r12_a"/><memberEnd xmi:idref="r12_b"/>
+      <ownedEnd xmi:id="r12_a" name="dpl" type="c_kdpl" association="r12">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r12_a_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r12_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r12_b" name="kelompok" type="c_kkel" association="r12">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r12_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r12_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r13" name="beranggotakan">
+      <memberEnd xmi:idref="r13_a"/><memberEnd xmi:idref="r13_b"/>
+      <ownedEnd xmi:id="r13_a" name="kelompok" type="c_kkel" association="r13">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r13_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r13_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r13_b" name="peserta" type="c_kpes" association="r13">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r13_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r13_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r14" name="menghasilkan">
+      <memberEnd xmi:idref="r14_a"/><memberEnd xmi:idref="r14_b"/>
+      <ownedEnd xmi:id="r14_a" name="eksekusi" type="c_eksekusi" association="r14">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r14_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r14_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r14_b" name="klaster" type="c_klaster" association="r14">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r14_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r14_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r15" name="mencakup">
+      <memberEnd xmi:idref="r15_a"/><memberEnd xmi:idref="r15_b"/>
+      <ownedEnd xmi:id="r15_a" name="eksekusi" type="c_eksekusi" association="r15">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r15_a_l" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r15_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r15_b" name="anggota" type="c_anggota" association="r15">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r15_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r15_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r16" name="mengelompokkan">
+      <memberEnd xmi:idref="r16_a"/><memberEnd xmi:idref="r16_b"/>
+      <ownedEnd xmi:id="r16_a" name="klaster" type="c_klaster" association="r16">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r16_a_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r16_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r16_b" name="anggota" type="c_anggota" association="r16">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r16_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r16_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r17" name="menjalankan">
+      <memberEnd xmi:idref="r17_a"/><memberEnd xmi:idref="r17_b"/>
+      <ownedEnd xmi:id="r17_a" name="pelaksana" type="c_pengguna" association="r17">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r17_a_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r17_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r17_b" name="klasterisasiEksekusi" type="c_eksekusi" association="r17">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r17_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r17_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <packagedElement xmi:type="uml:Association" xmi:id="r18" name="tercatat">
+      <memberEnd xmi:idref="r18_a"/><memberEnd xmi:idref="r18_b"/>
+      <ownedEnd xmi:id="r18_a" name="pengguna" type="c_pengguna" association="r18">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r18_a_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r18_a_u" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="r18_b" name="logAktivitas" type="c_log" association="r18">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="r18_b_l" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="r18_b_u" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+
+    <!-- ============ DEPENDENSI KlasterisasiService ============ -->
+    <packagedElement xmi:type="uml:Usage" xmi:id="dep1" client="c_service" supplier="c_mhs"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="dep2" client="c_service" supplier="c_eksekusi"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="dep3" client="c_service" supplier="c_klaster"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="dep4" client="c_service" supplier="c_anggota"/>
+
+  </uml:Model>
+</xmi:XMI>

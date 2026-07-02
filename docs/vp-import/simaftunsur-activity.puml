@@ -1,0 +1,119 @@
+' =====================================================================
+' SIMAFTUNSUR — Activity Diagram (PlantUML, notasi UML baku)
+' Cadangan render cepat di luar Visual Paradigm:
+'   - Online: https://www.plantuml.com/plantuml (tempel per blok @startuml)
+'   - VS Code: ekstensi "PlantUML" (Alt+D untuk preview)
+' Notasi mengikuti gaya baku skripsi Indonesia: swimlane vertikal
+' (Aktor | Sistem), titik mulai, aksi kotak membulat, decision belah
+' ketupat dengan cabang (Ya)/(Tidak), titik selesai.
+' Sumber sama dengan simaftunsur-activity.xmi (2026-07-02).
+' =====================================================================
+
+@startuml AD-01-Masuk-Login
+title Activity Diagram — Masuk (Login)
+|Pengguna|
+start
+:Membuka halaman login;
+|Sistem|
+:Menampilkan formulir login;
+|Pengguna|
+repeat :Mengisi NIP dan kata sandi;
+|Sistem|
+:Memvalidasi kredensial;
+backward :Menampilkan pesan galat;
+repeat while (Kredensial valid?) is (Tidak) not (Ya)
+:Membuat sesi dan mencatat log aktivitas;
+:Menampilkan halaman beranda;
+stop
+@enduml
+
+@startuml AD-02-Kelola-Data-Mahasiswa
+title Activity Diagram — Mengelola Data Mahasiswa (Tambah)
+|Pengguna|
+start
+:Memilih menu Data Mahasiswa;
+|Sistem|
+:Menampilkan daftar mahasiswa;
+|Pengguna|
+:Menekan tombol Tambah Mahasiswa;
+|Sistem|
+:Menampilkan modal formulir tambah;
+|Pengguna|
+repeat :Mengisi data dan menekan Simpan;
+|Sistem|
+:Memvalidasi masukan;
+backward :Menampilkan pesan kesalahan validasi;
+repeat while (Data valid?) is (Tidak) not (Ya)
+:Menyimpan data mahasiswa ke basis data;
+:Mencatat log aktivitas;
+:Menampilkan notifikasi berhasil dan daftar terbaru;
+stop
+@enduml
+
+@startuml AD-03-Impor-IPK-Massal
+title Activity Diagram — Mengimpor IPK Massal (Excel)
+|Pengguna|
+start
+:Membuka halaman impor IPK;
+|Sistem|
+:Menampilkan halaman impor dan tautan template;
+|Pengguna|
+if (Perlu template?) then (Ya)
+  |Sistem|
+  :Mengirim berkas template Excel;
+  |Pengguna|
+else (Tidak)
+endif
+:Mengisi data IPK pada berkas Excel;
+repeat :Memilih berkas dan mengunggah;
+|Sistem|
+:Membaca dan memvalidasi tiap baris data;
+backward :Menampilkan daftar galat per baris;
+repeat while (Seluruh baris valid?) is (Tidak) not (Ya)
+:Menyimpan nilai IPK per semester;
+:Menampilkan ringkasan hasil impor;
+stop
+@enduml
+
+@startuml AD-04-Klasterisasi-K-Means
+title Activity Diagram — Menjalankan Klasterisasi K-Means
+|Pengguna (WD III / Administrator)|
+start
+:Membuka halaman Klasterisasi;
+|SIMAFTUNSUR (Laravel)|
+:Menampilkan dashboard dan status kesiapan data;
+|Pengguna (WD III / Administrator)|
+:Menekan tombol Jalankan Klasterisasi;
+|SIMAFTUNSUR (Laravel)|
+:Mengambil data mahasiswa layak\n(status aktif, minimal 3 catatan IPK);
+if (Jumlah data mencukupi?) then (Tidak)
+  :Menampilkan pesan data belum mencukupi;
+  stop
+else (Ya)
+endif
+:Menyusun snapshot fitur tiap mahasiswa\n(IPK rata-rata, IPK terakhir, tren, konsistensi,\nskor prestasi, skor kegiatan, skor pengabdian);
+:Mengirim permintaan klasterisasi\nke layanan Python (REST API);
+if (Layanan terhubung dan permintaan valid?) then (Tidak)
+  :Menampilkan pesan galat layanan;
+  stop
+else (Ya)
+endif
+|Layanan Klasterisasi (Python / scikit-learn)|
+:Melakukan praproses data\n(missing value, outlier, encoding);
+:Melakukan penskalaan fitur (StandardScaler);
+:Menentukan k optimal\n(Silhouette tertinggi pada rentang k=2..8;\nElbow/WCSS sebagai pembanding);
+:Melatih model K-Means (inisialisasi k-means++);
+:Menghitung metrik evaluasi internal\n(Silhouette, Davies-Bouldin, Inertia/WCSS);
+if (Volume data memenuhi ambang ideal 100?) then (Tidak)
+  :Menambahkan peringatan hasil bersifat indikatif;
+else (Ya)
+endif
+:Menginterpretasikan klaster\n(profil centroid dan proyeksi PCA 2D);
+:Mengembalikan hasil klasterisasi (JSON);
+|SIMAFTUNSUR (Laravel)|
+:Menyimpan eksekusi, klaster, dan anggota\ndalam satu transaksi basis data;
+:Menampilkan dashboard hasil\n(metrik, profil klaster, sebaran PCA);
+|Pengguna (WD III / Administrator)|
+:Menganalisis hasil untuk strategi pembinaan;
+stop
+@enduml
