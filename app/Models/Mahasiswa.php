@@ -71,6 +71,92 @@ class Mahasiswa extends Model
     }
 
     /**
+     * Riwayat pengisian tracer study sebagai alumni (modul pendukung),
+     * terbaru lebih dulu.
+     *
+     * @return HasMany<TracerStudy, $this>
+     */
+    public function tracerStudy(): HasMany
+    {
+        return $this->hasMany(TracerStudy::class)->latest('tahun_lulus');
+    }
+
+    /**
+     * Riwayat keanggotaan klaster pada setiap eksekusi K-Means yang
+     * pernah menyertakan mahasiswa ini, eksekusi terbaru lebih dulu.
+     *
+     * @return HasMany<KlasterisasiAnggota, $this>
+     */
+    public function klasterisasiAnggota(): HasMany
+    {
+        return $this->hasMany(KlasterisasiAnggota::class)->latest('eksekusi_id');
+    }
+
+    /**
+     * Riwayat penerimaan beasiswa mahasiswa (modul pendukung), terbaru dulu.
+     *
+     * @return HasMany<BeasiswaPenerima, $this>
+     */
+    public function beasiswaPenerima(): HasMany
+    {
+        return $this->hasMany(BeasiswaPenerima::class)->latest();
+    }
+
+    /**
+     * Riwayat keikutsertaan KKN mahasiswa (modul pendukung), terbaru dulu.
+     *
+     * @return HasMany<KknPeserta, $this>
+     */
+    public function kknPeserta(): HasMany
+    {
+        return $this->hasMany(KknPeserta::class)->latest();
+    }
+
+    /**
+     * Kegiatan & organisasi kemahasiswaan (sumber fitur F6), terbaru dulu.
+     *
+     * @return HasMany<KegiatanKemahasiswaan, $this>
+     */
+    public function kegiatanKemahasiswaan(): HasMany
+    {
+        return $this->hasMany(KegiatanKemahasiswaan::class)->latest('tanggal');
+    }
+
+    /**
+     * Pengabdian masyarakat & hibah/PKM (sumber fitur F7), terbaru dulu.
+     *
+     * @return HasMany<PengabdianHibah, $this>
+     */
+    public function pengabdianHibah(): HasMany
+    {
+        return $this->hasMany(PengabdianHibah::class)->latest('tahun');
+    }
+
+    /**
+     * Skor Prestasi (fitur F5) — total poin SKKM seluruh prestasi.
+     */
+    public function skorPrestasi(): int
+    {
+        return (int) $this->prestasi->sum(fn (Prestasi $p) => $p->poin());
+    }
+
+    /**
+     * Skor Kegiatan & Organisasi (fitur F6) — total poin SKKM kegiatan.
+     */
+    public function skorKegiatan(): int
+    {
+        return (int) $this->kegiatanKemahasiswaan->sum(fn (KegiatanKemahasiswaan $k) => $k->poin());
+    }
+
+    /**
+     * Skor Pengabdian & Hibah (fitur F7) — total poin SKKM pengabdian/hibah.
+     */
+    public function skorPengabdian(): int
+    {
+        return (int) $this->pengabdianHibah->sum(fn (PengabdianHibah $p) => $p->poin());
+    }
+
+    /**
      * Rata-rata IPK seluruh semester yang sudah tercatat.
      * Mengembalikan 0.0 jika belum ada catatan.
      */

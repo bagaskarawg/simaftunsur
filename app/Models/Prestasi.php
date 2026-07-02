@@ -22,6 +22,7 @@ class Prestasi extends Model
         'judul',
         'jenis',
         'tingkat',
+        'capaian',
         'peringkat',
         'penyelenggara',
         'tanggal',
@@ -59,6 +60,37 @@ class Prestasi extends Model
     /** Label tingkat yang ramah-pengguna. */
     public function labelTingkat(): string
     {
-        return ucfirst((string) $this->tingkat);
+        return match ($this->tingkat) {
+            'lokal'         => 'Universitas/Fakultas',
+            'regional'      => 'Provinsi/Regional',
+            'nasional'      => 'Nasional',
+            'internasional' => 'Internasional',
+            default         => ucfirst((string) $this->tingkat),
+        };
+    }
+
+    /** Label capaian yang ramah-pengguna. */
+    public function labelCapaian(): ?string
+    {
+        return match ($this->capaian) {
+            'juara_1' => 'Juara 1',
+            'juara_2' => 'Juara 2',
+            'juara_3' => 'Juara 3',
+            'finalis' => 'Finalis/Peserta',
+            default   => null,
+        };
+    }
+
+    /**
+     * Poin SKKM untuk prestasi ini (fitur F5), dari rubrik config/skkm.php
+     * berdasarkan (tingkat, capaian). Bernilai 0 bila capaian belum diisi.
+     */
+    public function poin(): int
+    {
+        if (! $this->tingkat || ! $this->capaian) {
+            return 0;
+        }
+
+        return (int) config("skkm.prestasi.{$this->tingkat}.{$this->capaian}", 0);
     }
 }

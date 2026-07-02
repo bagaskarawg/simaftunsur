@@ -69,6 +69,9 @@ def preprocess(data: list[dict]) -> pd.DataFrame:
         "ipk_terakhir": 0.0,
         "tren": 0.0,
         "konsistensi": 0.0,
+        "skor_prestasi": 0.0,
+        "skor_kegiatan": 0.0,
+        "skor_pengabdian": 0.0,
         "semester_aktif": 1,
     }
     for kolom, default in nilai_default.items():

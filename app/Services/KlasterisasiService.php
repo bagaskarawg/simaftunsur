@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\KlasterisasiAnggota;
 use App\Models\KlasterisasiEksekusi;
+use App\Models\KlasterisasiKlaster;
 use App\Models\Mahasiswa;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -146,7 +147,7 @@ class KlasterisasiService
         return Mahasiswa::query()
             ->where('status', 'aktif')
             ->has('nilaiIpkSemester', '>=', self::MIN_CATATAN_IPK)
-            ->with(['programStudi', 'nilaiIpkSemester'])
+            ->with(['programStudi', 'nilaiIpkSemester', 'prestasi', 'kegiatanKemahasiswaan', 'pengabdianHibah'])
             ->get();
     }
 
@@ -158,13 +159,33 @@ class KlasterisasiService
     protected function petakanFitur(Mahasiswa $mahasiswa): array
     {
         return [
-            'id'             => $mahasiswa->id,
-            'npm'            => $mahasiswa->npm,
-            'nama'           => $mahasiswa->nama,
+            'id'   => $mahasiswa->id,
+            'npm'  => $mahasiswa->npm,
+            'nama' => $mahasiswa->nama,
+            ...$this->snapshotFitur($mahasiswa),
+        ];
+    }
+
+    /**
+     * Nilai fitur mahasiswa (satuan asli) yang menjadi dasar perhitungan.
+     * Dibekukan ke `klasterisasi_anggota.fitur_nilai` agar penempatan klaster
+     * dapat ditelusuri & dipertanggungjawabkan walau data IPK berubah kemudian.
+     *
+     * @return array<string, mixed>
+     */
+    protected function snapshotFitur(Mahasiswa $mahasiswa): array
+    {
+        return [
+            // Blok akademik (F1–F4)
             'ipk_rata_rata'  => $mahasiswa->ipkRataRata(),
             'ipk_terakhir'   => $mahasiswa->ipkTerakhir() ?? 0.0,
             'tren'           => $mahasiswa->tren(),
             'konsistensi'    => $mahasiswa->konsistensi(),
+            // Blok non-akademik SKKM (F5–F7)
+            'skor_prestasi'   => $mahasiswa->skorPrestasi(),
+            'skor_kegiatan'   => $mahasiswa->skorKegiatan(),
+            'skor_pengabdian' => $mahasiswa->skorPengabdian(),
+            // Konteks (bukan bagian 7 fitur inti, disertakan untuk analisis)
             'semester_aktif' => $mahasiswa->semester_aktif,
             'program_studi'  => $mahasiswa->programStudi?->kode,
         ];
@@ -178,16 +199,20 @@ class KlasterisasiService
      */
     protected function simpan(array $hasil, Collection $mahasiswa): KlasterisasiEksekusi
     {
-        // Hanya simpan anggota yang id-nya benar-benar ada di set yang dikirim,
-        // sebagai pengaman bila service mengembalikan id tak dikenal.
-        $idValid = $mahasiswa->pluck('id')->flip();
+        // Peta mahasiswa per-id untuk snapshot fitur; hanya id di set yang
+        // dikirim yang disimpan (pengaman bila service kembalikan id asing).
+        $mahasiswaPerId = $mahasiswa->keyBy('id');
 
-        return DB::transaction(function () use ($hasil, $idValid) {
+        return DB::transaction(function () use ($hasil, $mahasiswaPerId) {
             $eksekusi = KlasterisasiEksekusi::create([
                 'k_terpilih'         => $hasil['k_terpilih'],
                 'metode_pemilihan_k' => $hasil['metode_pemilihan_k'],
                 'fitur_dipakai'      => $hasil['fitur_dipakai'],
                 'skema_penskalaan'   => $hasil['skema_penskalaan'],
+                'random_state'       => $hasil['random_state'] ?? null,
+                'versi_algoritma'    => $hasil['versi_algoritma'] ?? null,
+                'kriteria_data'      => $hasil['kriteria_data']
+                    ?? ('mahasiswa aktif dengan >='.self::MIN_CATATAN_IPK.' catatan IPK'),
                 'jumlah_data'        => $hasil['jumlah_data'],
                 'silhouette'         => $hasil['metrik']['silhouette'] ?? null,
                 'davies_bouldin'     => $hasil['metrik']['davies_bouldin'] ?? null,
@@ -198,17 +223,39 @@ class KlasterisasiService
                 'dijalankan_oleh'    => auth()->id(),
             ]);
 
+            // Simpan profil tiap klaster (ternormalisasi) & petakan cluster→id.
+            $petaKlaster = [];
+            foreach ($hasil['profil_klaster'] ?? [] as $profil) {
+                $klaster = KlasterisasiKlaster::create([
+                    'eksekusi_id'       => $eksekusi->id,
+                    'cluster'           => $profil['cluster'],
+                    'label_deskriptif'  => $profil['label_deskriptif'] ?? null,
+                    'jumlah_anggota'    => $profil['jumlah'] ?? $profil['jumlah_anggota'] ?? 0,
+                    'centroid'          => $profil['centroid'] ?? [],
+                    'centroid_terskala' => $profil['centroid_terskala'] ?? null,
+                    'interpretasi'      => $profil['interpretasi'] ?? null,
+                ]);
+                $petaKlaster[$profil['cluster']] = $klaster->id;
+            }
+
+            // Anggota + snapshot fitur. Bulk insert melewati cast, jadi kolom
+            // JSON di-encode manual.
             $baris = [];
             foreach ($hasil['hasil'] as $titik) {
-                if (! $idValid->has($titik['id'])) {
+                $mahasiswaTitik = $mahasiswaPerId->get($titik['id']);
+                if (! $mahasiswaTitik) {
                     continue;
                 }
                 $baris[] = [
-                    'eksekusi_id'  => $eksekusi->id,
-                    'mahasiswa_id' => $titik['id'],
-                    'cluster'      => $titik['cluster'],
-                    'pca_x'        => $titik['pca_x'],
-                    'pca_y'        => $titik['pca_y'],
+                    'eksekusi_id'       => $eksekusi->id,
+                    'klaster_id'        => $petaKlaster[$titik['cluster']] ?? null,
+                    'mahasiswa_id'      => $titik['id'],
+                    'cluster'           => $titik['cluster'],
+                    'fitur_nilai'       => json_encode($this->snapshotFitur($mahasiswaTitik)),
+                    'fitur_terskala'    => isset($titik['fitur_terskala']) ? json_encode($titik['fitur_terskala']) : null,
+                    'jarak_ke_centroid' => $titik['jarak_ke_centroid'] ?? null,
+                    'pca_x'             => $titik['pca_x'],
+                    'pca_y'             => $titik['pca_y'],
                 ];
             }
 

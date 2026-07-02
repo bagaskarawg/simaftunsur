@@ -18,6 +18,9 @@ class KlasterisasiEksekusi extends Model
         'metode_pemilihan_k',
         'fitur_dipakai',
         'skema_penskalaan',
+        'random_state',
+        'versi_algoritma',
+        'kriteria_data',
         'jumlah_data',
         'silhouette',
         'davies_bouldin',
@@ -36,6 +39,7 @@ class KlasterisasiEksekusi extends Model
             'profil_klaster' => 'array',
             'peringatan'     => 'array',
             'k_terpilih'     => 'integer',
+            'random_state'   => 'integer',
             'jumlah_data'    => 'integer',
             'silhouette'     => 'float',
             'davies_bouldin' => 'float',
@@ -51,6 +55,16 @@ class KlasterisasiEksekusi extends Model
     public function anggota(): HasMany
     {
         return $this->hasMany(KlasterisasiAnggota::class, 'eksekusi_id');
+    }
+
+    /**
+     * Profil tiap klaster (centroid + label) pada eksekusi ini.
+     *
+     * @return HasMany<KlasterisasiKlaster, $this>
+     */
+    public function klaster(): HasMany
+    {
+        return $this->hasMany(KlasterisasiKlaster::class, 'eksekusi_id')->orderBy('cluster');
     }
 
     /**

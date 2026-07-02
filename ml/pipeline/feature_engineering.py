@@ -17,11 +17,22 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # Fitur numerik bawaan untuk klasterisasi profil akademik mahasiswa.
 # Diturunkan dari riwayat IPK per semester (lihat Model Mahasiswa di Laravel:
 # ipkRataRata(), ipkTerakhir(), tren(), konsistensi()).
+# Tujuh fitur SKKM: blok akademik (F1–F4) + blok non-akademik (F5–F7).
+# semester_aktif TIDAK termasuk 7 fitur inti (bisa ditambahkan eksplisit lewat
+# parameter `fitur` bila ingin dipakai sebagai konteks).
 FITUR_NUMERIK_DEFAULT = [
     "ipk_rata_rata",
     "ipk_terakhir",
     "tren",
     "konsistensi",
+    "skor_prestasi",
+    "skor_kegiatan",
+    "skor_pengabdian",
+]
+
+# Fitur numerik tambahan yang valid dipakai bila diminta eksplisit via `fitur`,
+# meski bukan bagian 7 fitur inti SKKM.
+FITUR_NUMERIK_OPSIONAL = [
     "semester_aktif",
 ]
 
@@ -58,7 +69,8 @@ def feature_engineering(
     """
     fitur = list(fitur) if fitur else list(FITUR_NUMERIK_DEFAULT)
 
-    kolom_numerik = [k for k in fitur if k in FITUR_NUMERIK_DEFAULT and k in df.columns]
+    numerik_valid = set(FITUR_NUMERIK_DEFAULT) | set(FITUR_NUMERIK_OPSIONAL)
+    kolom_numerik = [k for k in fitur if k in numerik_valid and k in df.columns]
     kolom_kategorikal = [k for k in fitur if k in FITUR_KATEGORIKAL and k in df.columns]
 
     if not kolom_numerik and not kolom_kategorikal:

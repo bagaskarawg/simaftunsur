@@ -58,6 +58,21 @@ class extends Component {
         return app(KlasterisasiService::class)->kesiapan();
     }
 
+    /**
+     * Profil klaster ternormalisasi (KlasterisasiKlaster) pada eksekusi terbaru,
+     * dikunci per nomor cluster — untuk menautkan ke halaman detail klaster.
+     */
+    #[Computed]
+    public function klasterPerCluster()
+    {
+        $eksekusi = $this->eksekusi;
+        if (! $eksekusi) {
+            return collect();
+        }
+
+        return $eksekusi->klaster()->get()->keyBy('cluster');
+    }
+
     /** Jalankan klasterisasi via service Python lalu simpan hasilnya. */
     public function jalankan(KlasterisasiService $service): void
     {
@@ -138,7 +153,8 @@ class extends Component {
         <x-card class="mb-6">
             <h2 class="text-base font-semibold text-slate-900">Jalankan Klasterisasi</h2>
             <p class="mt-1 text-sm text-slate-500">
-                Fitur yang dipakai: IPK rata-rata, IPK terakhir, tren, konsistensi, dan semester aktif.
+                Tujuh fitur (SKKM): IPK rata-rata, IPK terakhir, tren, konsistensi (F1–F4),
+                serta skor prestasi, skor kegiatan/organisasi, dan skor pengabdian/hibah (F5–F7).
             </p>
 
             <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -365,6 +381,14 @@ class extends Component {
                             <p class="text-[11px] font-semibold uppercase tracking-wide text-primary-700">Rekomendasi</p>
                             <p class="mt-0.5 text-xs text-slate-600 leading-relaxed">{{ $rekomendasi($p['label_deskriptif']) }}</p>
                         </div>
+
+                        @if ($this->klasterPerCluster->has($p['cluster']))
+                            <a href="{{ route('klasterisasi.klaster', $this->klasterPerCluster[$p['cluster']]) }}" wire:navigate
+                               class="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary-700 hover:text-primary-900 hover:underline">
+                                Lihat detail & dasar penempatan
+                                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                            </a>
+                        @endif
                     </x-card>
                 @endforeach
             </div>
@@ -380,6 +404,10 @@ class extends Component {
                             <span class="h-3 w-3 rounded-full" style="background: {{ $paletKlaster[$cluster % count($paletKlaster)] }}"></span>
                             <h4 class="text-sm font-semibold text-slate-900">Klaster {{ $cluster }}</h4>
                             <span class="text-xs text-slate-500">({{ $anggota->count() }} mahasiswa)</span>
+                            @if ($this->klasterPerCluster->has($cluster))
+                                <a href="{{ route('klasterisasi.klaster', $this->klasterPerCluster[$cluster]) }}" wire:navigate
+                                   class="ml-auto text-xs font-medium text-primary-700 hover:text-primary-900 hover:underline">Detail klaster →</a>
+                            @endif
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">

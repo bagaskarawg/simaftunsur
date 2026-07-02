@@ -22,6 +22,7 @@ class PrestasiFactory extends Factory
             'judul'         => 'Juara Lomba '.fake()->randomElement(['Karya Tulis', 'Pemrograman', 'Robotik', 'Debat', 'Futsal']),
             'jenis'         => $jenis,
             'tingkat'       => fake()->randomElement(['lokal', 'regional', 'nasional', 'internasional']),
+            'capaian'       => fake()->randomElement(['juara_1', 'juara_2', 'juara_3', 'finalis']),
             'peringkat'     => fake()->randomElement(['Juara 1', 'Juara 2', 'Juara 3', 'Finalis', 'Harapan 1']),
             'penyelenggara' => fake()->randomElement(['Kemendikbudristek', 'BEM FT UNSUR', 'Universitas Suryakancana', 'Himpunan Mahasiswa']),
             'tanggal'       => fake()->dateTimeBetween('-2 years', 'now')->format('Y-m-d'),

@@ -32,6 +32,10 @@ return [
             'prestasi.lihat',
             'tracer.lihat',
             'promosi.lihat',
+            'beasiswa.lihat',
+            'kkn.lihat',
+            'kegiatan.lihat',
+            'pengabdian.lihat',
         ],
 
         'wd3' => [
@@ -47,6 +51,14 @@ return [
             'tracer.kelola',
             'promosi.lihat',
             'promosi.kelola',
+            'beasiswa.lihat',
+            'beasiswa.kelola',
+            'kkn.lihat',
+            'kkn.kelola',
+            'kegiatan.lihat',
+            'kegiatan.kelola',
+            'pengabdian.lihat',
+            'pengabdian.kelola',
         ],
 
         'kaprodi' => [
@@ -55,6 +67,10 @@ return [
             'prestasi.lihat',
             'tracer.lihat',
             'promosi.lihat',
+            'beasiswa.lihat',
+            'kkn.lihat',
+            'kegiatan.lihat',
+            'pengabdian.lihat',
         ],
 
         'staf' => [
@@ -66,11 +82,22 @@ return [
             'tracer.kelola',
             'promosi.lihat',
             'promosi.kelola',
+            'beasiswa.lihat',
+            'beasiswa.kelola',
+            'kkn.lihat',
+            'kkn.kelola',
+            'kegiatan.lihat',
+            'kegiatan.kelola',
+            'pengabdian.lihat',
+            'pengabdian.kelola',
         ],
 
         'dosen' => [
             'mahasiswa.lihat',
             'prestasi.lihat',
+            'kkn.lihat',
+            'kegiatan.lihat',
+            'pengabdian.lihat',
         ],
 
     ],

@@ -36,6 +36,7 @@ class extends Component {
     public string $judul = '';
     public string $jenis = 'akademik';
     public string $tingkat = 'lokal';
+    public string $capaian = '';
     public string $peringkat = '';
     public string $penyelenggara = '';
     public string $tanggal = '';
@@ -88,7 +89,7 @@ class extends Component {
     {
         abort_unless(auth()->user()?->can('prestasi.kelola'), 403);
 
-        $this->reset(['mahasiswa_id', 'judul', 'peringkat', 'penyelenggara', 'tanggal', 'url_bukti', 'idEdit', 'berkas', 'berkasLama']);
+        $this->reset(['mahasiswa_id', 'judul', 'capaian', 'peringkat', 'penyelenggara', 'tanggal', 'url_bukti', 'idEdit', 'berkas', 'berkasLama']);
         $this->jenis = 'akademik';
         $this->tingkat = 'lokal';
         $this->resetValidation();
@@ -105,6 +106,7 @@ class extends Component {
         $this->judul = $prestasi->judul;
         $this->jenis = $prestasi->jenis;
         $this->tingkat = $prestasi->tingkat;
+        $this->capaian = (string) $prestasi->capaian;
         $this->peringkat = (string) $prestasi->peringkat;
         $this->penyelenggara = (string) $prestasi->penyelenggara;
         $this->tanggal = optional($prestasi->tanggal)->format('Y-m-d') ?? '';
@@ -129,6 +131,7 @@ class extends Component {
             'judul'         => ['required', 'string', 'max:255'],
             'jenis'         => ['required', Rule::in(['akademik', 'non_akademik'])],
             'tingkat'       => ['required', Rule::in(['lokal', 'regional', 'nasional', 'internasional'])],
+            'capaian'       => ['nullable', Rule::in(['juara_1', 'juara_2', 'juara_3', 'finalis'])],
             'peringkat'     => ['nullable', 'string', 'max:100'],
             'penyelenggara' => ['nullable', 'string', 'max:255'],
             'tanggal'       => ['nullable', 'date'],
@@ -141,6 +144,7 @@ class extends Component {
             'judul'         => $data['judul'],
             'jenis'         => $data['jenis'],
             'tingkat'       => $data['tingkat'],
+            'capaian'       => $data['capaian'] ?: null,
             'peringkat'     => $data['peringkat'] ?: null,
             'penyelenggara' => $data['penyelenggara'] ?: null,
             'tanggal'       => $data['tanggal'] ?: null,
@@ -251,6 +255,7 @@ class extends Component {
                             <th class="py-2 pr-3 font-medium">Prestasi</th>
                             <th class="py-2 pr-3 font-medium">Jenis</th>
                             <th class="py-2 pr-3 font-medium">Tingkat</th>
+                            <th class="py-2 pr-3 font-medium text-right">Poin</th>
                             <th class="py-2 pr-3 font-medium">Tanggal</th>
                             @can('prestasi.kelola')
                                 <th class="py-2 pr-3 font-medium text-right">Aksi</th>
@@ -284,7 +289,9 @@ class extends Component {
                                 </td>
                                 <td class="py-2 pr-3">
                                     <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $kelasTingkat[$p->tingkat] ?? 'bg-slate-100 text-slate-600' }}">{{ $p->labelTingkat() }}</span>
+                                    @if ($p->labelCapaian())<span class="ml-1 text-[11px] text-slate-500">{{ $p->labelCapaian() }}</span>@endif
                                 </td>
+                                <td class="py-2 pr-3 text-right font-mono {{ $p->poin() > 0 ? 'font-medium text-slate-900' : 'text-slate-400' }}">{{ $p->poin() }}</td>
                                 <td class="py-2 pr-3 text-slate-600">{{ optional($p->tanggal)->translatedFormat('d M Y') ?? '—' }}</td>
                                 @can('prestasi.kelola')
                                     <td class="py-2 pr-3">
@@ -331,7 +338,7 @@ class extends Component {
                     @error('judul') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label for="p-jenis" class="block text-sm font-medium text-slate-700 mb-1.5">Jenis</label>
                         <select wire:model="jenis" id="p-jenis"
@@ -345,14 +352,27 @@ class extends Component {
                         <label for="p-tingkat" class="block text-sm font-medium text-slate-700 mb-1.5">Tingkat</label>
                         <select wire:model="tingkat" id="p-tingkat"
                                 class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
-                            <option value="lokal">Lokal</option>
-                            <option value="regional">Regional</option>
+                            <option value="lokal">Universitas/Fakultas</option>
+                            <option value="regional">Provinsi/Regional</option>
                             <option value="nasional">Nasional</option>
                             <option value="internasional">Internasional</option>
                         </select>
                         @error('tingkat') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
+                    <div>
+                        <label for="p-capaian" class="block text-sm font-medium text-slate-700 mb-1.5">Capaian <span class="text-slate-400 font-normal">(untuk poin)</span></label>
+                        <select wire:model="capaian" id="p-capaian"
+                                class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                            <option value="">— tidak berpoin —</option>
+                            <option value="juara_1">Juara 1</option>
+                            <option value="juara_2">Juara 2</option>
+                            <option value="juara_3">Juara 3</option>
+                            <option value="finalis">Finalis/Peserta</option>
+                        </select>
+                        @error('capaian') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    </div>
                 </div>
+                <p class="-mt-1 text-xs text-slate-500">Poin SKKM (fitur F5) dihitung otomatis dari kombinasi Tingkat &amp; Capaian sesuai rubrik.</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>

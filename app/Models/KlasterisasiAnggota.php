@@ -17,8 +17,12 @@ class KlasterisasiAnggota extends Model
 
     protected $fillable = [
         'eksekusi_id',
+        'klaster_id',
         'mahasiswa_id',
         'cluster',
+        'fitur_nilai',
+        'fitur_terskala',
+        'jarak_ke_centroid',
         'pca_x',
         'pca_y',
     ];
@@ -26,9 +30,12 @@ class KlasterisasiAnggota extends Model
     protected function casts(): array
     {
         return [
-            'cluster' => 'integer',
-            'pca_x'   => 'float',
-            'pca_y'   => 'float',
+            'cluster'           => 'integer',
+            'fitur_nilai'       => 'array',
+            'fitur_terskala'    => 'array',
+            'jarak_ke_centroid' => 'float',
+            'pca_x'             => 'float',
+            'pca_y'             => 'float',
         ];
     }
 
@@ -40,6 +47,16 @@ class KlasterisasiAnggota extends Model
     public function eksekusi(): BelongsTo
     {
         return $this->belongsTo(KlasterisasiEksekusi::class, 'eksekusi_id');
+    }
+
+    /**
+     * Profil klaster tempat anggota ini ditempatkan (centroid + label).
+     *
+     * @return BelongsTo<KlasterisasiKlaster, $this>
+     */
+    public function klaster(): BelongsTo
+    {
+        return $this->belongsTo(KlasterisasiKlaster::class, 'klaster_id');
     }
 
     /**

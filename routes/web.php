@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
     // Otorisasi finer-grained (lihat vs jalankan) ditangani di dalam komponen.
     Route::prefix('klasterisasi')->name('klasterisasi.')->group(function () {
         Volt::route('/', 'klasterisasi.index')->name('index');
+        // Detail satu klaster: centroid + anggota beserta snapshot fitur dasarnya.
+        Volt::route('/klaster/{klaster}', 'klasterisasi.klaster')->name('klaster');
     });
 
     // Modul Pengguna — manajemen akun & peran, khusus Administrator.
@@ -68,6 +70,16 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/', 'prestasi.index')->name('index');
     });
 
+    // Modul Kegiatan & Organisasi (SKKM fitur F6) — CRUD pendukung.
+    Route::prefix('kegiatan')->name('kegiatan.')->group(function () {
+        Volt::route('/', 'kegiatan.index')->name('index');
+    });
+
+    // Modul Pengabdian & Hibah (SKKM fitur F7) — CRUD pendukung.
+    Route::prefix('pengabdian')->name('pengabdian.')->group(function () {
+        Volt::route('/', 'pengabdian.index')->name('index');
+    });
+
     // Modul Laporan — rekap kemahasiswaan (read-only) + ekspor CSV.
     Route::prefix('laporan')->name('laporan.')->group(function () {
         Volt::route('/', 'laporan.index')->name('index');
@@ -78,6 +90,18 @@ Route::middleware(['auth'])->group(function () {
     // Modul Tracer Study — CRUD pendukung. Otorisasi (lihat vs kelola) di komponen.
     Route::prefix('tracer')->name('tracer.')->group(function () {
         Volt::route('/', 'tracer.index')->name('index');
+    });
+
+    // Modul Beasiswa — CRUD pendukung (penerima + master kategori).
+    // Otorisasi (lihat vs kelola) ditangani di dalam komponen.
+    Route::prefix('beasiswa')->name('beasiswa.')->group(function () {
+        Volt::route('/', 'beasiswa.index')->name('index');
+    });
+
+    // Modul KKN — CRUD pendukung (kelompok, peserta, lokasi, DPL).
+    // Otorisasi (lihat vs kelola) ditangani di dalam komponen.
+    Route::prefix('kkn')->name('kkn.')->group(function () {
+        Volt::route('/', 'kkn.index')->name('index');
     });
 
     // Modul Promosi/PMB — kegiatan promosi + master sekolah target.

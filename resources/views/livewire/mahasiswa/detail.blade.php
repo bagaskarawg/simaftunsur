@@ -42,7 +42,17 @@ class extends Component {
     {
         abort_unless(auth()->user()?->can('mahasiswa.lihat'), 403);
 
-        $this->mahasiswa = $mahasiswa->load('programStudi', 'nilaiIpkSemester');
+        $this->mahasiswa = $mahasiswa->load([
+            'programStudi',
+            'nilaiIpkSemester',
+            'prestasi',
+            'tracerStudy',
+            'klasterisasiAnggota.eksekusi',
+            'beasiswaPenerima.kategori',
+            'kknPeserta.kelompok.lokasi',
+            'kegiatanKemahasiswaan',
+            'pengabdianHibah',
+        ]);
     }
 
     /**
@@ -234,6 +244,11 @@ class extends Component {
         $ipkTerakhir = $mahasiswa->ipkTerakhir();
         $tren        = $mahasiswa->tren();
         $konsistensi = $mahasiswa->konsistensi();
+
+        // Skor SKKM non-akademik (fitur klasterisasi F5–F7).
+        $skorPrestasi   = $mahasiswa->skorPrestasi();
+        $skorKegiatan   = $mahasiswa->skorKegiatan();
+        $skorPengabdian = $mahasiswa->skorPengabdian();
     @endphp
 
     <div class="mb-6">
@@ -292,6 +307,13 @@ class extends Component {
         <x-kpi-card label="Konsistensi"
             :value="$konsistensi > 0 ? number_format($konsistensi, 3) : '—'"
             hint="Standar deviasi IPK" />
+    </section>
+
+    {{-- Skor SKKM non-akademik — fitur klasterisasi F5–F7 --}}
+    <section class="grid grid-cols-3 gap-4 mb-6">
+        <x-kpi-card label="Skor Prestasi (F5)" :value="$skorPrestasi" hint="total poin kejuaraan" />
+        <x-kpi-card label="Skor Kegiatan (F6)" :value="$skorKegiatan" hint="organisasi, panitia, seminar" />
+        <x-kpi-card label="Skor Pengabdian (F7)" :value="$skorPengabdian" hint="pengabdian & hibah/PKM" />
     </section>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -553,5 +575,332 @@ class extends Component {
                 </x-modal>
             @endif
         </div>
+    </div>
+
+    {{-- ===== Relasi pendukung lainnya ===== --}}
+    @php
+        $kelasJenisPrestasi = [
+            'akademik'     => 'bg-blue-50 text-blue-700',
+            'non_akademik' => 'bg-violet-50 text-violet-700',
+        ];
+        $kelasTingkatPrestasi = [
+            'lokal'         => 'bg-slate-100 text-slate-600',
+            'regional'      => 'bg-amber-50 text-amber-700',
+            'nasional'      => 'bg-green-50 text-green-700',
+            'internasional' => 'bg-red-50 text-red-700',
+        ];
+        $kelasStatusTracer = [
+            'bekerja'       => 'bg-green-50 text-green-700',
+            'wirausaha'     => 'bg-blue-50 text-blue-700',
+            'lanjut_studi'  => 'bg-violet-50 text-violet-700',
+            'belum_bekerja' => 'bg-slate-100 text-slate-600',
+        ];
+        $kelasStatusBeasiswa = [
+            'diusulkan'    => 'bg-slate-100 text-slate-600',
+            'diverifikasi' => 'bg-blue-50 text-blue-700',
+            'ditetapkan'   => 'bg-green-50 text-green-700',
+            'ditolak'      => 'bg-red-50 text-red-700',
+            'selesai'      => 'bg-violet-50 text-violet-700',
+            'dibekukan'    => 'bg-amber-50 text-amber-700',
+        ];
+        $kelasStatusKkn = [
+            'terdaftar'         => 'bg-slate-100 text-slate-600',
+            'aktif'             => 'bg-blue-50 text-blue-700',
+            'selesai'           => 'bg-green-50 text-green-700',
+            'mengundurkan_diri' => 'bg-red-50 text-red-700',
+        ];
+        // Palet selaras modul Klasterisasi (cluster 0-indexed dari scikit-learn).
+        $paletKlaster = ['#2563eb', '#16a34a', '#d97706', '#7c3aed', '#dc2626', '#0891b2', '#db2777', '#65a30d'];
+        // Cari label deskriptif klaster dari profil eksekusi.
+        $labelKlaster = function ($eksekusi, $cluster) {
+            foreach ($eksekusi?->profil_klaster ?? [] as $p) {
+                if ((int) ($p['cluster'] ?? -1) === (int) $cluster) {
+                    return $p['label_deskriptif'] ?? null;
+                }
+            }
+            return null;
+        };
+    @endphp
+
+    <div class="mt-4 space-y-4">
+
+        {{-- Prestasi --}}
+        <x-card title="Prestasi" :subtitle="$mahasiswa->prestasi->count().' catatan'">
+            <x-slot:action>
+                @can('prestasi.lihat')
+                    <a href="{{ route('prestasi.index') }}" wire:navigate
+                       class="text-xs font-medium text-primary-700 hover:text-primary-900 hover:underline">Kelola modul →</a>
+                @endcan
+            </x-slot:action>
+
+            @if ($mahasiswa->prestasi->isEmpty())
+                <p class="py-8 text-center text-sm text-slate-500">Belum ada prestasi tercatat untuk mahasiswa ini.</p>
+            @else
+                <x-data-table compact class="border-0 shadow-none rounded-none">
+                    <x-slot:head>
+                        <th>Prestasi</th>
+                        <th>Jenis</th>
+                        <th>Tingkat</th>
+                        <th class="text-right">Poin</th>
+                        <th class="text-right">Tanggal</th>
+                    </x-slot:head>
+
+                    @foreach ($mahasiswa->prestasi as $p)
+                        <tr wire:key="prestasi-{{ $p->id }}" class="hover:bg-slate-50">
+                            <x-data-table.cell compact>
+                                <p class="font-medium text-slate-900">{{ $p->judul }}</p>
+                                @if ($p->peringkat || $p->penyelenggara)
+                                    <p class="text-[11px] text-slate-500">
+                                        {{ $p->peringkat }}@if ($p->peringkat && $p->penyelenggara) · @endif{{ $p->penyelenggara }}
+                                    </p>
+                                @endif
+                                @if ($p->berkas_bukti || $p->url_bukti)
+                                    <a href="{{ $p->berkas_bukti ? \Storage::disk('public')->url($p->berkas_bukti) : $p->url_bukti }}"
+                                       target="_blank" class="inline-flex items-center gap-1 text-[11px] text-primary-700 hover:underline mt-0.5">
+                                        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+                                        Bukti
+                                    </a>
+                                @endif
+                            </x-data-table.cell>
+                            <x-data-table.cell compact>
+                                <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $kelasJenisPrestasi[$p->jenis] ?? 'bg-slate-100 text-slate-600' }}">{{ $p->labelJenis() }}</span>
+                            </x-data-table.cell>
+                            <x-data-table.cell compact>
+                                <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $kelasTingkatPrestasi[$p->tingkat] ?? 'bg-slate-100 text-slate-600' }}">{{ $p->labelTingkat() }}</span>
+                                @if ($p->labelCapaian())<span class="ml-1 text-[11px] text-slate-500">{{ $p->labelCapaian() }}</span>@endif
+                            </x-data-table.cell>
+                            <x-data-table.cell compact align="right" tabular>{{ $p->poin() }}</x-data-table.cell>
+                            <x-data-table.cell compact align="right">{{ optional($p->tanggal)->translatedFormat('d M Y') ?? '—' }}</x-data-table.cell>
+                        </tr>
+                    @endforeach
+                </x-data-table>
+            @endif
+        </x-card>
+
+        {{-- Kegiatan & Organisasi (F6) --}}
+        <x-card title="Kegiatan & Organisasi" :subtitle="$mahasiswa->kegiatanKemahasiswaan->count().' kegiatan · '.$skorKegiatan.' poin'">
+            <x-slot:action>
+                @can('kegiatan.lihat')
+                    <a href="{{ route('kegiatan.index') }}" wire:navigate
+                       class="text-xs font-medium text-primary-700 hover:text-primary-900 hover:underline">Kelola modul →</a>
+                @endcan
+            </x-slot:action>
+
+            @if ($mahasiswa->kegiatanKemahasiswaan->isEmpty())
+                <p class="py-8 text-center text-sm text-slate-500">Belum ada kegiatan/organisasi tercatat.</p>
+            @else
+                <x-data-table compact class="border-0 shadow-none rounded-none">
+                    <x-slot:head>
+                        <th>Kegiatan</th>
+                        <th>Jenis</th>
+                        <th>Peran</th>
+                        <th class="text-right">Poin</th>
+                    </x-slot:head>
+
+                    @foreach ($mahasiswa->kegiatanKemahasiswaan as $kg)
+                        <tr wire:key="keg-{{ $kg->id }}" class="hover:bg-slate-50">
+                            <x-data-table.cell compact>
+                                <p class="font-medium text-slate-900">{{ $kg->nama_kegiatan }}</p>
+                                <p class="text-[11px] text-slate-500">{{ $kg->penyelenggara }}{{ $kg->periode ? ' · '.$kg->periode : '' }}</p>
+                            </x-data-table.cell>
+                            <x-data-table.cell compact>{{ $kg->labelJenis() }}</x-data-table.cell>
+                            <x-data-table.cell compact>{{ $kg->labelPeran() }}</x-data-table.cell>
+                            <x-data-table.cell compact align="right" tabular>{{ $kg->poin() }}</x-data-table.cell>
+                        </tr>
+                    @endforeach
+                </x-data-table>
+            @endif
+        </x-card>
+
+        {{-- Pengabdian & Hibah (F7) --}}
+        <x-card title="Pengabdian & Hibah" :subtitle="$mahasiswa->pengabdianHibah->count().' catatan · '.$skorPengabdian.' poin'">
+            <x-slot:action>
+                @can('pengabdian.lihat')
+                    <a href="{{ route('pengabdian.index') }}" wire:navigate
+                       class="text-xs font-medium text-primary-700 hover:text-primary-900 hover:underline">Kelola modul →</a>
+                @endcan
+            </x-slot:action>
+
+            @if ($mahasiswa->pengabdianHibah->isEmpty())
+                <p class="py-8 text-center text-sm text-slate-500">Belum ada pengabdian/hibah tercatat.</p>
+            @else
+                <x-data-table compact class="border-0 shadow-none rounded-none">
+                    <x-slot:head>
+                        <th>Judul</th>
+                        <th>Jenis</th>
+                        <th>Peran</th>
+                        <th class="text-right">Tahun</th>
+                        <th class="text-right">Poin</th>
+                    </x-slot:head>
+
+                    @foreach ($mahasiswa->pengabdianHibah as $ph)
+                        <tr wire:key="peng-{{ $ph->id }}" class="hover:bg-slate-50">
+                            <x-data-table.cell compact>
+                                <p class="font-medium text-slate-900">{{ $ph->judul }}</p>
+                                <p class="text-[11px] text-slate-500">{{ $ph->sumber_dana }}</p>
+                            </x-data-table.cell>
+                            <x-data-table.cell compact>{{ $ph->labelJenis() }}</x-data-table.cell>
+                            <x-data-table.cell compact>{{ $ph->labelPeran() }}</x-data-table.cell>
+                            <x-data-table.cell compact align="right" tabular>{{ $ph->tahun ?? '—' }}</x-data-table.cell>
+                            <x-data-table.cell compact align="right" tabular>{{ $ph->poin() }}</x-data-table.cell>
+                        </tr>
+                    @endforeach
+                </x-data-table>
+            @endif
+        </x-card>
+
+        {{-- Tracer Study --}}
+        <x-card title="Tracer Study" :subtitle="$mahasiswa->tracerStudy->count().' pengisian'">
+            <x-slot:action>
+                @can('tracer.lihat')
+                    <a href="{{ route('tracer.index') }}" wire:navigate
+                       class="text-xs font-medium text-primary-700 hover:text-primary-900 hover:underline">Kelola modul →</a>
+                @endcan
+            </x-slot:action>
+
+            @if ($mahasiswa->tracerStudy->isEmpty())
+                <p class="py-8 text-center text-sm text-slate-500">Belum ada data tracer study (alumni) untuk mahasiswa ini.</p>
+            @else
+                <x-data-table compact class="border-0 shadow-none rounded-none">
+                    <x-slot:head>
+                        <th class="text-center">Lulus</th>
+                        <th>Status</th>
+                        <th>Instansi</th>
+                        <th>Relevansi</th>
+                        <th class="text-right">Masa Tunggu</th>
+                    </x-slot:head>
+
+                    @foreach ($mahasiswa->tracerStudy as $t)
+                        <tr wire:key="tracer-{{ $t->id }}" class="hover:bg-slate-50">
+                            <x-data-table.cell compact align="center" tabular>{{ $t->tahun_lulus ?? '—' }}</x-data-table.cell>
+                            <x-data-table.cell compact>
+                                <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $kelasStatusTracer[$t->status_pekerjaan] ?? 'bg-slate-100 text-slate-600' }}">{{ $t->labelStatus() }}</span>
+                            </x-data-table.cell>
+                            <x-data-table.cell compact>{{ $t->nama_instansi ?? '—' }}</x-data-table.cell>
+                            <x-data-table.cell compact>{{ $t->labelRelevansi() ?? '—' }}</x-data-table.cell>
+                            <x-data-table.cell compact align="right" tabular>{{ $t->masa_tunggu_bulan !== null ? $t->masa_tunggu_bulan.' bln' : '—' }}</x-data-table.cell>
+                        </tr>
+                    @endforeach
+                </x-data-table>
+            @endif
+        </x-card>
+
+        {{-- Beasiswa --}}
+        <x-card title="Beasiswa" :subtitle="$mahasiswa->beasiswaPenerima->count().' penerimaan'">
+            <x-slot:action>
+                @can('beasiswa.lihat')
+                    <a href="{{ route('beasiswa.index') }}" wire:navigate
+                       class="text-xs font-medium text-primary-700 hover:text-primary-900 hover:underline">Kelola modul →</a>
+                @endcan
+            </x-slot:action>
+
+            @if ($mahasiswa->beasiswaPenerima->isEmpty())
+                <p class="py-8 text-center text-sm text-slate-500">Mahasiswa ini belum pernah tercatat sebagai penerima beasiswa.</p>
+            @else
+                <x-data-table compact class="border-0 shadow-none rounded-none">
+                    <x-slot:head>
+                        <th>Kategori</th>
+                        <th>Periode</th>
+                        <th>Status</th>
+                        <th class="text-right">Nominal</th>
+                    </x-slot:head>
+
+                    @foreach ($mahasiswa->beasiswaPenerima as $b)
+                        <tr wire:key="beasiswa-{{ $b->id }}" class="hover:bg-slate-50">
+                            <x-data-table.cell compact>
+                                <p class="font-medium text-slate-900">{{ $b->kategori?->nama }}</p>
+                                @if ($b->no_sk)
+                                    <p class="text-[11px] text-slate-500">No. SK: {{ $b->no_sk }}</p>
+                                @endif
+                            </x-data-table.cell>
+                            <x-data-table.cell compact>
+                                <span class="font-mono">{{ $b->tahun_akademik }}</span>
+                                <span class="text-[11px] text-slate-500">· {{ $b->labelSemester() }}</span>
+                            </x-data-table.cell>
+                            <x-data-table.cell compact>
+                                <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $kelasStatusBeasiswa[$b->status] ?? 'bg-slate-100 text-slate-600' }}">{{ $b->labelStatus() }}</span>
+                            </x-data-table.cell>
+                            <x-data-table.cell compact align="right" tabular>{{ $b->nominal !== null ? 'Rp '.number_format((float) $b->nominal, 0, ',', '.') : '—' }}</x-data-table.cell>
+                        </tr>
+                    @endforeach
+                </x-data-table>
+            @endif
+        </x-card>
+
+        {{-- KKN --}}
+        <x-card title="KKN" :subtitle="$mahasiswa->kknPeserta->count().' keikutsertaan'">
+            <x-slot:action>
+                @can('kkn.lihat')
+                    <a href="{{ route('kkn.index') }}" wire:navigate
+                       class="text-xs font-medium text-primary-700 hover:text-primary-900 hover:underline">Kelola modul →</a>
+                @endcan
+            </x-slot:action>
+
+            @if ($mahasiswa->kknPeserta->isEmpty())
+                <p class="py-8 text-center text-sm text-slate-500">Mahasiswa ini belum pernah mengikuti KKN.</p>
+            @else
+                <x-data-table compact class="border-0 shadow-none rounded-none">
+                    <x-slot:head>
+                        <th>Kelompok / Lokasi</th>
+                        <th>Jabatan</th>
+                        <th>Status</th>
+                        <th class="text-right">Nilai</th>
+                    </x-slot:head>
+
+                    @foreach ($mahasiswa->kknPeserta as $kp)
+                        <tr wire:key="kkn-{{ $kp->id }}" class="hover:bg-slate-50">
+                            <x-data-table.cell compact>
+                                <p class="font-medium text-slate-900">{{ $kp->kelompok?->nama_kelompok ?? '—' }}</p>
+                                <p class="text-[11px] text-slate-500">{{ $kp->kelompok?->lokasi?->nama }} · {{ $kp->kelompok?->tahun_akademik }}</p>
+                            </x-data-table.cell>
+                            <x-data-table.cell compact>{{ $kp->labelJabatan() }}</x-data-table.cell>
+                            <x-data-table.cell compact>
+                                <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $kelasStatusKkn[$kp->status] ?? 'bg-slate-100 text-slate-600' }}">{{ $kp->labelStatus() }}</span>
+                            </x-data-table.cell>
+                            <x-data-table.cell compact align="right" tabular>
+                                {{ $kp->nilai_akhir !== null ? number_format((float) $kp->nilai_akhir, 1) : '—' }}{{ $kp->nilai_huruf ? ' ('.$kp->nilai_huruf.')' : '' }}
+                            </x-data-table.cell>
+                        </tr>
+                    @endforeach
+                </x-data-table>
+            @endif
+        </x-card>
+
+        {{-- Riwayat Klasterisasi --}}
+        <x-card title="Riwayat Klasterisasi" :subtitle="$mahasiswa->klasterisasiAnggota->count().' eksekusi'">
+            <x-slot:action>
+                @can('klasterisasi.lihat')
+                    <a href="{{ route('klasterisasi.index') }}" wire:navigate
+                       class="text-xs font-medium text-primary-700 hover:text-primary-900 hover:underline">Buka modul →</a>
+                @endcan
+            </x-slot:action>
+
+            @if ($mahasiswa->klasterisasiAnggota->isEmpty())
+                <p class="py-8 text-center text-sm text-slate-500">Mahasiswa ini belum pernah disertakan dalam eksekusi klasterisasi K-Means.</p>
+            @else
+                <x-data-table compact class="border-0 shadow-none rounded-none">
+                    <x-slot:head>
+                        <th>Tanggal Eksekusi</th>
+                        <th class="text-center">k</th>
+                        <th>Klaster</th>
+                        <th>Karakteristik</th>
+                    </x-slot:head>
+
+                    @foreach ($mahasiswa->klasterisasiAnggota as $a)
+                        <tr wire:key="klaster-anggota-{{ $a->id }}" class="hover:bg-slate-50">
+                            <x-data-table.cell compact>{{ optional($a->eksekusi?->created_at)->translatedFormat('d M Y, H:i') ?? '—' }}</x-data-table.cell>
+                            <x-data-table.cell compact align="center" tabular>{{ $a->eksekusi?->k_terpilih ?? '—' }}</x-data-table.cell>
+                            <x-data-table.cell compact>
+                                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700">
+                                    <span class="h-2.5 w-2.5 rounded-full" style="background: {{ $paletKlaster[$a->cluster % count($paletKlaster)] }}"></span>
+                                    Klaster {{ $a->cluster }}
+                                </span>
+                            </x-data-table.cell>
+                            <x-data-table.cell compact>{{ $labelKlaster($a->eksekusi, $a->cluster) ?? '—' }}</x-data-table.cell>
+                        </tr>
+                    @endforeach
+                </x-data-table>
+            @endif
+        </x-card>
     </div>
 </div>

@@ -113,6 +113,38 @@ it('mengirim fitur termetakan ke service dan menyimpan hasil + anggota', functio
     });
 });
 
+it('menyimpan jejak lengkap: profil klaster + snapshot fitur per anggota', function () {
+    $m1 = mahasiswaDenganIpk($this->prodi, 3);
+    $m2 = mahasiswaDenganIpk($this->prodi, 4);
+    $m3 = mahasiswaDenganIpk($this->prodi, 5);
+    $ids = [$m1->id, $m2->id, $m3->id];
+
+    Http::fake([
+        '*/sehat'        => Http::response(['status' => 'ok']),
+        '*/klasterisasi' => Http::response(tanggapanKlasterTiruan($ids)),
+    ]);
+
+    $eksekusi = app(KlasterisasiService::class)->jalankan();
+
+    // Profil klaster ternormalisasi tersimpan sebagai dasar label.
+    $klaster = $eksekusi->klaster()->where('cluster', 0)->first();
+    expect($klaster)->not->toBeNull()
+        ->and($klaster->label_deskriptif)->toBe('Berprestasi')
+        ->and($klaster->centroid)->toHaveKey('ipk_rata_rata');
+
+    // Kriteria kohort terekam untuk akuntabilitas.
+    expect($eksekusi->kriteria_data)->toContain('aktif');
+
+    // Tiap anggota membekukan snapshot fitur (satuan asli) yang jadi dasarnya,
+    // dan anggota di cluster 0 tertaut relasional ke profil klaster tersebut.
+    $anggota = $eksekusi->anggota()->where('mahasiswa_id', $m1->id)->first();
+    expect($anggota->fitur_nilai)->toHaveKey('ipk_rata_rata')
+        ->and($anggota->fitur_nilai)->toHaveKey('tren');
+
+    $anggotaCluster0 = $eksekusi->anggota()->where('cluster', 0)->first();
+    expect($anggotaCluster0->klaster_id)->toBe($klaster->id);
+});
+
 it('menolak menjalankan bila data layak kurang dari 3', function () {
     mahasiswaDenganIpk($this->prodi, 3);
     mahasiswaDenganIpk($this->prodi, 3);

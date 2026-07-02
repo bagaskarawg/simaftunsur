@@ -25,11 +25,15 @@ def bangkitkan_data_sintetik(jumlah: int = 120, seed: int = 42) -> list[dict]:
     """Buat data uji dengan 3 kelompok laten (tinggi/menengah/rendah)."""
     rng = np.random.default_rng(seed)
     pusat = [
-        {"ipk": 3.7, "tren": 0.08, "kons": 0.10},   # berprestasi
-        {"ipk": 3.1, "tren": 0.00, "kons": 0.18},   # menengah
-        {"ipk": 2.5, "tren": -0.06, "kons": 0.30},  # perlu pembinaan
+        {"ipk": 3.7, "tren": 0.08, "kons": 0.10, "skor": 120},  # berprestasi
+        {"ipk": 3.1, "tren": 0.00, "kons": 0.18, "skor": 50},   # menengah
+        {"ipk": 2.5, "tren": -0.06, "kons": 0.30, "skor": 10},  # perlu pembinaan
     ]
     prodi = ["TIF", "TSI", "TMI", "TID"]
+
+    def skor(basis: float) -> float:
+        """Skor SKKM non-negatif di sekitar basis kelompok laten."""
+        return round(max(0.0, float(rng.normal(basis, basis * 0.35))), 0)
 
     data: list[dict] = []
     for i in range(jumlah):
@@ -44,6 +48,9 @@ def bangkitkan_data_sintetik(jumlah: int = 120, seed: int = 42) -> list[dict]:
                 "ipk_terakhir": round(float(np.clip(ipk + rng.normal(0, 0.1), 0, 4)), 2),
                 "tren": round(float(rng.normal(g["tren"], 0.03)), 4),
                 "konsistensi": round(abs(float(rng.normal(g["kons"], 0.05))), 4),
+                "skor_prestasi": skor(g["skor"]),
+                "skor_kegiatan": skor(g["skor"] * 0.6),
+                "skor_pengabdian": skor(g["skor"] * 0.4),
                 "semester_aktif": int(rng.integers(3, 8)),
                 "program_studi": prodi[i % len(prodi)],
             }

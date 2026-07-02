@@ -9,11 +9,13 @@ koordinat PCA per mahasiswa.
 
 from __future__ import annotations
 
+import sklearn
+
 from .evaluate import evaluate
 from .feature_engineering import FITUR_NUMERIK_DEFAULT, feature_engineering
 from .interpret import interpret_clusters
 from .preprocess import preprocess
-from .train import pilih_k_optimal, train_kmeans
+from .train import RANDOM_STATE, pilih_k_optimal, train_kmeans
 
 # Ambang volume data minimum sesuai Batasan Masalah (100 mahasiswa aktif
 # >= 3 semester). Di bawah ini hasil tetap dihitung TAPI diberi peringatan
@@ -80,13 +82,15 @@ def jalankan_klasterisasi(
 
     # 6) Interpretasi & visualisasi.
     fitur_asli = [f for f in FITUR_NUMERIK_DEFAULT if f in df.columns]
-    profil_klaster, titik = interpret_clusters(model, df, X, fitur_asli)
+    profil_klaster, titik = interpret_clusters(model, df, X, fitur_asli, nama_fitur)
 
     return {
         "k_terpilih": int(k_terpilih),
         "metode_pemilihan_k": metode_k,
         "fitur_dipakai": nama_fitur,
         "skema_penskalaan": skema_penskalaan,
+        "random_state": int(RANDOM_STATE),
+        "versi_algoritma": f"scikit-learn {sklearn.__version__}",
         "jumlah_data": int(len(df)),
         "metrik": metrik,
         "evaluasi_k": tabel_evaluasi,
