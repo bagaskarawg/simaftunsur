@@ -59,8 +59,8 @@ function eksekusiContoh(ProgramStudi $prodi): KlasterisasiEksekusi
 }
 
 it('menolak akses tanpa izin klasterisasi.lihat', function () {
-    // Peran 'staf' tidak punya klasterisasi.lihat.
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+    // Peran 'staf_prodi' tidak punya klasterisasi.lihat.
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf_prodi']));
 
     Volt::test('klasterisasi.index')->assertForbidden();
 });

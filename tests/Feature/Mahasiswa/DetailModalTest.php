@@ -18,7 +18,7 @@ beforeEach(function () {
 });
 
 it('menampilkan form tambah IPK di dalam modal (bukan inline) saat dibuka', function () {
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf_wd3']));
 
     $komponen = Volt::test('mahasiswa.detail', ['mahasiswa' => $this->mahasiswa]);
 
@@ -34,7 +34,7 @@ it('menampilkan form tambah IPK di dalam modal (bukan inline) saat dibuka', func
 });
 
 it('menutup modal mengembalikan modePanel ke tutup', function () {
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf_wd3']));
 
     Volt::test('mahasiswa.detail', ['mahasiswa' => $this->mahasiswa])
         ->call('bukaPanel', 'impor')
@@ -46,7 +46,7 @@ it('menutup modal mengembalikan modePanel ke tutup', function () {
 });
 
 it('mengubah catatan IPK lewat modal (mode ubah)', function () {
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf_wd3']));
 
     $ipk = NilaiIpkSemester::factory()->create([
         'mahasiswa_id' => $this->mahasiswa->id, 'semester' => 1,
@@ -67,7 +67,7 @@ it('mengubah catatan IPK lewat modal (mode ubah)', function () {
 });
 
 it('menghapus catatan IPK', function () {
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf_wd3']));
 
     $ipk = NilaiIpkSemester::factory()->create([
         'mahasiswa_id' => $this->mahasiswa->id, 'semester' => 2,

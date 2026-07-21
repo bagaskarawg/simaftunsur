@@ -124,7 +124,7 @@ peran
 kata_sandi</pre>
                 <dl class="mt-4 space-y-2 text-xs text-slate-600">
                     <div><dt class="font-medium text-slate-700 inline">nip:</dt> NIP/NIDN (unik).</div>
-                    <div><dt class="font-medium text-slate-700 inline">peran:</dt> admin, dekan, wd3, kaprodi, staf, dosen.</div>
+                    <div><dt class="font-medium text-slate-700 inline">peran:</dt> admin, wd3, staf_wd3, kaprodi, staf_prodi.</div>
                     <div><dt class="font-medium text-slate-700 inline">email:</dt> opsional.</div>
                     <div><dt class="font-medium text-slate-700 inline">kata_sandi:</dt> opsional; kosong → default <code class="font-mono">rahasia123</code> (minta diganti).</div>
                 </dl>

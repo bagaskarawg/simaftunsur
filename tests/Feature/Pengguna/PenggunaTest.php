@@ -13,7 +13,7 @@ beforeEach(function () {
 });
 
 it('hanya admin yang dapat mengakses rute manajemen pengguna', function () {
-    $staf = Pengguna::factory()->create(['peran' => 'staf']);
+    $staf = Pengguna::factory()->create(['peran' => 'staf_prodi']);
 
     $this->actingAs($staf)->get(route('pengguna.index'))->assertForbidden();
     $this->actingAs($this->admin)->get(route('pengguna.index'))->assertOk();
@@ -25,18 +25,18 @@ it('menambahkan pengguna baru lewat form modal', function () {
     Volt::test('pengguna.index')
         ->call('bukaTambah')
         ->assertSet('modeForm', 'tambah')
-        ->set('nama', 'Dosen Baru')
+        ->set('nama', 'Pengguna Baru')
         ->set('nip', '199001012020121009')
-        ->set('email', 'dosen.baru@ft.unsur.ac.id')
+        ->set('email', 'pengguna.baru@ft.unsur.ac.id')
         ->set('kata_sandi', 'rahasia123')
-        ->set('peran', 'dosen')
+        ->set('peran', 'staf_wd3')
         ->call('simpan')
         ->assertHasNoErrors()
         ->assertSet('modeForm', 'tutup');
 
     $baru = Pengguna::where('nip', '199001012020121009')->first();
     expect($baru)->not->toBeNull()
-        ->and($baru->peran)->toBe('dosen')
+        ->and($baru->peran)->toBe('staf_wd3')
         ->and(Hash::check('rahasia123', $baru->kata_sandi))->toBeTrue();
 });
 
@@ -54,7 +54,7 @@ it('memvalidasi field wajib & kata sandi minimal 8 karakter saat menambah', func
 
 it('mengubah pengguna tanpa wajib mengganti kata sandi', function () {
     $target = Pengguna::factory()->create([
-        'nama' => 'Nama Lama', 'peran' => 'staf', 'kata_sandi' => Hash::make('sandilama123'),
+        'nama' => 'Nama Lama', 'peran' => 'staf_prodi', 'kata_sandi' => Hash::make('sandilama123'),
     ]);
 
     $this->actingAs($this->admin);
@@ -83,7 +83,7 @@ it('mencegah admin menghapus akunnya sendiri', function () {
 });
 
 it('menghapus pengguna lain', function () {
-    $lain = Pengguna::factory()->create(['peran' => 'staf']);
+    $lain = Pengguna::factory()->create(['peran' => 'staf_prodi']);
 
     $this->actingAs($this->admin);
 

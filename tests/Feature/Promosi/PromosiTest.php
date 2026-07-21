@@ -9,26 +9,26 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->withoutVite();
-    $this->staf = Pengguna::factory()->create(['peran' => 'staf']);       // promosi.kelola + lihat
-    $this->kaprodi = Pengguna::factory()->create(['peran' => 'kaprodi']); // promosi.lihat saja
-    $this->dosen = Pengguna::factory()->create(['peran' => 'dosen']);     // tanpa izin promosi
+    $this->pengelola = Pengguna::factory()->admin()->create();   // promosi.kelola (saat ini hanya admin)
+    $this->pemantau = Pengguna::factory()->wd3()->create();      // promosi.lihat saja
+    $this->tanpaIzin = Pengguna::factory()->kaprodi()->create(); // tanpa izin promosi
 });
 
 it('menolak akses tanpa izin promosi.lihat', function () {
-    $this->actingAs($this->dosen);
+    $this->actingAs($this->tanpaIzin);
     Volt::test('promosi.index')->assertForbidden();
 });
 
 it('menampilkan tombol kelola hanya untuk yang berizin promosi.kelola', function () {
-    $this->actingAs($this->kaprodi);
+    $this->actingAs($this->pemantau);
     Volt::test('promosi.index')->assertOk()->assertDontSee('Tambah Kegiatan');
 
-    $this->actingAs($this->staf);
+    $this->actingAs($this->pengelola);
     Volt::test('promosi.index')->assertOk()->assertSee('Tambah Kegiatan');
 });
 
 it('menambahkan kegiatan promosi lewat form modal', function () {
-    $this->actingAs($this->staf);
+    $this->actingAs($this->pengelola);
 
     Volt::test('promosi.index')
         ->call('bukaTambah')
@@ -48,7 +48,7 @@ it('menambahkan kegiatan promosi lewat form modal', function () {
 });
 
 it('memvalidasi field wajib saat menambah kegiatan', function () {
-    $this->actingAs($this->staf);
+    $this->actingAs($this->pengelola);
 
     Volt::test('promosi.index')
         ->call('bukaTambah')
@@ -61,7 +61,7 @@ it('memvalidasi field wajib saat menambah kegiatan', function () {
 it('mengubah dan menghapus kegiatan promosi', function () {
     $k = KegiatanPromosi::factory()->create(['nama_kegiatan' => 'Lama']);
 
-    $this->actingAs($this->staf);
+    $this->actingAs($this->pengelola);
 
     Volt::test('promosi.index')
         ->call('bukaEdit', $k->id)

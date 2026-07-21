@@ -31,7 +31,7 @@ class PenggunaFactory extends Factory
             'nama' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'kata_sandi' => static::$kataSandi ??= Hash::make('rahasia123'),
-            'peran' => 'staf',
+            'peran' => 'staf_prodi',
             'email_terverifikasi_pada' => now(),
             'remember_token' => Str::random(10),
         ];
@@ -51,5 +51,29 @@ class PenggunaFactory extends Factory
     public function wd3(): static
     {
         return $this->state(fn (array $atribut) => ['peran' => 'wd3']);
+    }
+
+    /**
+     * Tandai pengguna sebagai Staf WD III.
+     */
+    public function stafWd3(): static
+    {
+        return $this->state(fn (array $atribut) => ['peran' => 'staf_wd3']);
+    }
+
+    /**
+     * Tandai pengguna sebagai Ketua Program Studi.
+     */
+    public function kaprodi(): static
+    {
+        return $this->state(fn (array $atribut) => ['peran' => 'kaprodi']);
+    }
+
+    /**
+     * Tandai pengguna sebagai Staf Prodi.
+     */
+    public function stafProdi(): static
+    {
+        return $this->state(fn (array $atribut) => ['peran' => 'staf_prodi']);
     }
 }

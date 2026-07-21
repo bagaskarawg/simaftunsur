@@ -28,7 +28,7 @@ it('mencatat log saat entitas bisnis dibuat', function () {
 });
 
 it('mencatat aktivitas masuk', function () {
-    $pengguna = Pengguna::factory()->create(['peran' => 'staf']);
+    $pengguna = Pengguna::factory()->create(['peran' => 'staf_prodi']);
 
     event(new Login('web', $pengguna, false));
 

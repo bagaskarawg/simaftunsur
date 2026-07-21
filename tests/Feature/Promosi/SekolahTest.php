@@ -9,26 +9,26 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->withoutVite();
-    $this->staf = Pengguna::factory()->create(['peran' => 'staf']);     // promosi.kelola
-    $this->kaprodi = Pengguna::factory()->create(['peran' => 'kaprodi']); // promosi.lihat
-    $this->dosen = Pengguna::factory()->create(['peran' => 'dosen']);   // tanpa izin promosi
+    $this->pengelola = Pengguna::factory()->admin()->create();   // promosi.kelola (saat ini hanya admin)
+    $this->pemantau = Pengguna::factory()->wd3()->create();      // promosi.lihat saja
+    $this->tanpaIzin = Pengguna::factory()->kaprodi()->create(); // tanpa izin promosi
 });
 
 it('menolak akses master sekolah tanpa izin promosi.lihat', function () {
-    $this->actingAs($this->dosen);
+    $this->actingAs($this->tanpaIzin);
     Volt::test('promosi.sekolah')->assertForbidden();
 });
 
 it('menampilkan tombol kelola hanya bagi yang berizin promosi.kelola', function () {
-    $this->actingAs($this->kaprodi);
+    $this->actingAs($this->pemantau);
     Volt::test('promosi.sekolah')->assertOk()->assertDontSee('Tambah Sekolah');
 
-    $this->actingAs($this->staf);
+    $this->actingAs($this->pengelola);
     Volt::test('promosi.sekolah')->assertOk()->assertSee('Tambah Sekolah');
 });
 
 it('menambahkan, mengubah, dan menghapus sekolah', function () {
-    $this->actingAs($this->staf);
+    $this->actingAs($this->pengelola);
 
     Volt::test('promosi.sekolah')
         ->call('bukaTambah')

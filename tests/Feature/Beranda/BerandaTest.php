@@ -32,7 +32,7 @@ function eksekusiBeranda(): KlasterisasiEksekusi
 }
 
 it('beranda tampil untuk pengguna terautentikasi', function () {
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf_prodi']));
 
     $this->get(route('beranda'))->assertOk()->assertSee('Selamat datang');
 });
@@ -49,7 +49,7 @@ it('menampilkan ringkasan klaster bagi yang berizin saat ada eksekusi', function
 
 it('menyembunyikan kartu klaster bagi peran tanpa izin klasterisasi.lihat', function () {
     eksekusiBeranda();
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf'])); // tanpa klasterisasi.lihat
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf_prodi'])); // tanpa klasterisasi.lihat
 
     $this->get(route('beranda'))
         ->assertOk()

@@ -10,6 +10,7 @@ use App\Models\KknDpl;
 use App\Models\KknKelompok;
 use App\Models\KknLokasi;
 use App\Models\KknPeserta;
+use App\Models\KlasterisasiKategori;
 use App\Models\PengabdianHibah;
 use App\Models\Mahasiswa;
 use App\Models\NilaiIpkSemester;
@@ -24,7 +25,8 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Mengisi data awal:
-     *  - 3 akun pengguna demo (admin, WD III, staf).
+     *  - 5 akun pengguna demo (satu per peran: admin, WD III, Staf WD III,
+     *    Kaprodi, Staf Prodi).
      *  - 4 program studi FT UNSUR.
      *  - 30 mahasiswa (>=5 per prodi) dengan riwayat IPK 4-6 semester.
      */
@@ -41,10 +43,50 @@ class DatabaseSeeder extends Seeder
         $this->seedBeasiswa();
         $this->seedKkn();
         $this->seedSkkm();
+        $this->seedKategoriKlaster();
     }
 
     /**
-     * Tiga akun pengguna demo untuk uji peran berbeda.
+     * Katalog default "Kategori Klaster" — nama label + rekomendasi pembinaan
+     * yang dipetakan ke hasil klaster menurut peringkat skor komposit
+     * (urutan 1 = komposit tertinggi). Dapat diubah pimpinan lewat CRUD.
+     */
+    protected function seedKategoriKlaster(): void
+    {
+        $definisi = [
+            [
+                'nama'        => 'Berprestasi',
+                'urutan'      => 1,
+                'warna'      => 'cluster-1',
+                'deskripsi'   => 'Skor komposit tertinggi: akademik kuat dan/atau aktivitas non-akademik menonjol.',
+                'rekomendasi' => 'Pertahankan capaian; dorong kompetisi tingkat nasional/internasional, '
+                    .'prioritaskan untuk beasiswa prestasi, dan libatkan sebagai mentor bagi klaster lain.',
+            ],
+            [
+                'nama'        => 'Menengah',
+                'urutan'      => 2,
+                'warna'      => 'cluster-2',
+                'deskripsi'   => 'Skor komposit menengah; potensi berkembang pada salah satu dimensi.',
+                'rekomendasi' => 'Dorong keterlibatan kegiatan/organisasi dan keikutsertaan lomba agar '
+                    .'profil non-akademik meningkat; berikan bimbingan akademik terarah.',
+            ],
+            [
+                'nama'        => 'Perlu Bimbingan',
+                'urutan'      => 3,
+                'warna'      => 'cluster-3',
+                'deskripsi'   => 'Skor komposit terendah: akademik dan aktivitas non-akademik sama-sama perlu perhatian.',
+                'rekomendasi' => 'Pendampingan akademik intensif (perwalian/remedial), dorong keikutsertaan '
+                    .'kegiatan dasar, dan pantau perkembangan IPK tiap semester.',
+            ],
+        ];
+
+        foreach ($definisi as $isi) {
+            KlasterisasiKategori::create([...$isi, 'aktif' => true]);
+        }
+    }
+
+    /**
+     * Lima akun pengguna demo — satu untuk tiap peran.
      */
     protected function seedPengguna(): void
     {
@@ -69,7 +111,23 @@ class DatabaseSeeder extends Seeder
             'nama'       => 'Siti Nurhaliza, S.Kom.',
             'email'      => 'siti@ft.unsur.ac.id',
             'kata_sandi' => Hash::make('rahasia123'),
-            'peran'      => 'staf',
+            'peran'      => 'staf_wd3',
+        ]);
+
+        Pengguna::factory()->create([
+            'nip'        => '197805102003121003',
+            'nama'       => 'Ir. Dedi Kurniawan, M.Kom.',
+            'email'      => 'dedi@ft.unsur.ac.id',
+            'kata_sandi' => Hash::make('rahasia123'),
+            'peran'      => 'kaprodi',
+        ]);
+
+        Pengguna::factory()->create([
+            'nip'        => '199103252015042004',
+            'nama'       => 'Rina Marlina, S.T.',
+            'email'      => 'rina@ft.unsur.ac.id',
+            'kata_sandi' => Hash::make('rahasia123'),
+            'peran'      => 'staf_prodi',
         ]);
     }
 

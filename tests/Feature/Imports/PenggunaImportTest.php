@@ -25,8 +25,8 @@ $header = ['nip', 'nama', 'email', 'peran', 'kata_sandi'];
 it('mengimpor pengguna baru; kata sandi default bila kosong', function () use ($header) {
     $path = csvPenggunaSementara([
         $header,
-        ['198001012005011001', 'Andi Wijaya', 'andi@ft.unsur.ac.id', 'dosen', ''],
-        ['199002022010012002', 'Rina Marlina', 'rina@ft.unsur.ac.id', 'staf', 'rahasiabaru1'],
+        ['198001012005011001', 'Andi Wijaya', 'andi@ft.unsur.ac.id', 'kaprodi', ''],
+        ['199002022010012002', 'Rina Marlina', 'rina@ft.unsur.ac.id', 'staf_wd3', 'rahasiabaru1'],
     ]);
 
     $import = new PenggunaMassalImport();
@@ -37,7 +37,7 @@ it('mengimpor pengguna baru; kata sandi default bila kosong', function () use ($
         ->and($import->hasil->gagal)->toBeEmpty();
 
     $andi = Pengguna::where('nip', '198001012005011001')->first();
-    expect($andi->peran)->toBe('dosen')
+    expect($andi->peran)->toBe('kaprodi')
         ->and(Hash::check('rahasia123', $andi->kata_sandi))->toBeTrue(); // default
 
     $rina = Pengguna::where('nip', '199002022010012002')->first();
@@ -63,12 +63,12 @@ it('melaporkan baris dengan peran tidak valid', function () use ($header) {
 
 it('memperbarui pengguna yang NIP-nya sudah ada tanpa mengubah sandi', function () use ($header) {
     $lama = Pengguna::factory()->create([
-        'nip' => '198001012005011001', 'peran' => 'staf', 'kata_sandi' => Hash::make('sandilama1'),
+        'nip' => '198001012005011001', 'peran' => 'staf_wd3', 'kata_sandi' => Hash::make('sandilama1'),
     ]);
 
     $path = csvPenggunaSementara([
         $header,
-        ['198001012005011001', 'Andi Updated', 'andi@ft.unsur.ac.id', 'dosen', ''],
+        ['198001012005011001', 'Andi Updated', 'andi@ft.unsur.ac.id', 'kaprodi', ''],
     ]);
 
     $import = new PenggunaMassalImport();
@@ -78,7 +78,7 @@ it('memperbarui pengguna yang NIP-nya sudah ada tanpa mengubah sandi', function 
         ->and($import->hasil->ditimpa)->toBe(1);
 
     $lama->refresh();
-    expect($lama->peran)->toBe('dosen')
+    expect($lama->peran)->toBe('kaprodi')
         ->and($lama->nama)->toBe('Andi Updated')
         ->and(Hash::check('sandilama1', $lama->kata_sandi))->toBeTrue(); // sandi tak berubah
 

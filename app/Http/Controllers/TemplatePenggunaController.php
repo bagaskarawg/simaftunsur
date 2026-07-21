@@ -16,8 +16,8 @@ class TemplatePenggunaController extends Controller
 
         $kolom = ['nip', 'nama', 'email', 'peran', 'kata_sandi'];
         $contoh = [
-            ['198001012005011001', 'Dr. Andi Wijaya, M.T.', 'andi@ft.unsur.ac.id', 'dosen', ''],
-            ['199002022010012002', 'Rina Marlina, S.Kom.', 'rina@ft.unsur.ac.id', 'staf', 'rahasia123'],
+            ['198001012005011001', 'Dr. Andi Wijaya, M.T.', 'andi@ft.unsur.ac.id', 'kaprodi', ''],
+            ['199002022010012002', 'Rina Marlina, S.Kom.', 'rina@ft.unsur.ac.id', 'staf_prodi', 'rahasia123'],
         ];
 
         return response()->streamDownload(function () use ($kolom, $contoh) {

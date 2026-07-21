@@ -13,28 +13,37 @@ it('memberi admin akses penuh lewat wildcard', function () {
     expect($admin->punyaIzin('izin.fiktif.yang.belum.ada'))->toBeTrue();
 });
 
-it('membatasi izin staf sesuai konfigurasi', function () {
-    $staf = Pengguna::factory()->create(['peran' => 'staf']);
+it('membatasi izin Staf WD III sesuai konfigurasi', function () {
+    $stafWd3 = Pengguna::factory()->stafWd3()->create();
 
-    expect($staf->punyaIzin('mahasiswa.kelola'))->toBeTrue();
-    expect($staf->punyaIzin('prestasi.kelola'))->toBeTrue();
-    expect($staf->punyaIzin('klasterisasi.jalankan'))->toBeFalse();
-    expect($staf->punyaIzin('laporan.ekspor'))->toBeFalse();
+    expect($stafWd3->punyaIzin('mahasiswa.kelola'))->toBeTrue();
+    expect($stafWd3->punyaIzin('klasterisasi.jalankan'))->toBeTrue();
+    expect($stafWd3->punyaIzin('prestasi.kelola'))->toBeFalse();
+    expect($stafWd3->punyaIzin('laporan.ekspor'))->toBeFalse();
 });
 
-it('mengaktifkan Gate Laravel untuk staf dan menolak dosen', function () {
-    $staf = Pengguna::factory()->create(['peran' => 'staf']);
-    $dosen = Pengguna::factory()->create(['peran' => 'dosen']);
+it('membatasi izin Staf Prodi sesuai konfigurasi', function () {
+    $stafProdi = Pengguna::factory()->stafProdi()->create();
 
-    expect($staf->can('mahasiswa.kelola'))->toBeTrue();
-    expect($dosen->can('mahasiswa.kelola'))->toBeFalse();
-    expect($dosen->can('mahasiswa.lihat'))->toBeTrue();
+    expect($stafProdi->punyaIzin('prestasi.kelola'))->toBeTrue();
+    expect($stafProdi->punyaIzin('kegiatan.kelola'))->toBeTrue();
+    expect($stafProdi->punyaIzin('mahasiswa.kelola'))->toBeFalse();
+    expect($stafProdi->punyaIzin('klasterisasi.lihat'))->toBeFalse();
+});
+
+it('mengaktifkan Gate Laravel untuk Staf WD III dan menolak kaprodi', function () {
+    $stafWd3 = Pengguna::factory()->stafWd3()->create();
+    $kaprodi = Pengguna::factory()->kaprodi()->create();
+
+    expect($stafWd3->can('mahasiswa.kelola'))->toBeTrue();
+    expect($kaprodi->can('mahasiswa.kelola'))->toBeFalse();
+    expect($kaprodi->can('mahasiswa.lihat'))->toBeTrue();
 });
 
 it('middleware peran menolak non-admin pada rute admin (pengguna)', function () {
     $this->withoutVite();
 
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']))
+    $this->actingAs(Pengguna::factory()->stafWd3()->create())
         ->get(route('pengguna.index'))->assertForbidden();
 
     $this->actingAs(Pengguna::factory()->wd3()->create())

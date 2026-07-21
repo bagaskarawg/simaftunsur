@@ -12,7 +12,7 @@ beforeEach(function () {
 });
 
 it('memperbarui nama & email profil sendiri', function () {
-    $pengguna = Pengguna::factory()->create(['peran' => 'staf', 'nama' => 'Nama Lama']);
+    $pengguna = Pengguna::factory()->create(['peran' => 'staf_prodi', 'nama' => 'Nama Lama']);
     $this->actingAs($pengguna);
 
     Volt::test('profil.index')
@@ -28,7 +28,7 @@ it('memperbarui nama & email profil sendiri', function () {
 
 it('mengubah kata sandi dengan kata sandi lama yang benar', function () {
     $pengguna = Pengguna::factory()->create([
-        'peran' => 'staf', 'kata_sandi' => Hash::make('lamasandi123'),
+        'peran' => 'staf_prodi', 'kata_sandi' => Hash::make('lamasandi123'),
     ]);
     $this->actingAs($pengguna);
 
@@ -44,7 +44,7 @@ it('mengubah kata sandi dengan kata sandi lama yang benar', function () {
 
 it('menolak ubah kata sandi bila kata sandi lama salah', function () {
     $pengguna = Pengguna::factory()->create([
-        'peran' => 'staf', 'kata_sandi' => Hash::make('lamasandi123'),
+        'peran' => 'staf_prodi', 'kata_sandi' => Hash::make('lamasandi123'),
     ]);
     $this->actingAs($pengguna);
 
@@ -60,7 +60,7 @@ it('menolak ubah kata sandi bila kata sandi lama salah', function () {
 
 it('menolak ubah kata sandi bila konfirmasi tidak cocok', function () {
     $pengguna = Pengguna::factory()->create([
-        'peran' => 'staf', 'kata_sandi' => Hash::make('lamasandi123'),
+        'peran' => 'staf_prodi', 'kata_sandi' => Hash::make('lamasandi123'),
     ]);
     $this->actingAs($pengguna);
 

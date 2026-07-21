@@ -54,7 +54,7 @@
                     <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Akses terbatas untuk staf, dosen, dan pimpinan FT UNSUR</span>
+                    <span>Akses terbatas untuk pimpinan dan staf FT UNSUR</span>
                 </div>
                 <p class="font-mono text-[10px] text-blue-300/50">v1.0.0 &middot; Build 2026.05</p>
             </div>

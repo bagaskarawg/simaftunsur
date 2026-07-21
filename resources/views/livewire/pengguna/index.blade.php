@@ -30,7 +30,7 @@ class extends Component {
     public string $nama = '';
     public string $email = '';
     public string $kata_sandi = '';
-    public string $peran = 'staf';
+    public string $peran = 'staf_prodi';
 
     public function updating($properti): void
     {
@@ -67,7 +67,7 @@ class extends Component {
     public function bukaTambah(): void
     {
         $this->reset(['nip', 'nama', 'email', 'kata_sandi', 'idEdit']);
-        $this->peran = 'staf';
+        $this->peran = 'staf_prodi';
         $this->resetValidation();
         $this->modeForm = 'tambah';
     }
@@ -150,11 +150,10 @@ class extends Component {
     {
         return match ($kode) {
             'admin'   => 'Administrator',
-            'dekan'   => 'Dekan',
-            'wd3'     => 'Wakil Dekan III',
-            'kaprodi' => 'Ketua Program Studi',
-            'staf'    => 'Staf Kemahasiswaan',
-            'dosen'   => 'Dosen',
+            'wd3'        => 'Wakil Dekan III',
+            'staf_wd3'   => 'Staf WD III',
+            'kaprodi'    => 'Ketua Program Studi',
+            'staf_prodi' => 'Staf Prodi',
             default   => ucfirst($kode),
         };
     }

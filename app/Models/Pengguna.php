@@ -89,13 +89,12 @@ class Pengguna extends Authenticatable
     public function labelPeran(): string
     {
         return match ($this->peran) {
-            'admin'   => 'Administrator',
-            'dekan'   => 'Dekan',
-            'wd3'     => 'Wakil Dekan III',
-            'kaprodi' => 'Ketua Program Studi',
-            'staf'    => 'Staf Kemahasiswaan',
-            'dosen'   => 'Dosen',
-            default   => 'Pengguna',
+            'admin'      => 'Administrator',
+            'wd3'        => 'Wakil Dekan III',
+            'staf_wd3'   => 'Staf WD III',
+            'kaprodi'    => 'Ketua Program Studi',
+            'staf_prodi' => 'Staf Prodi',
+            default      => 'Pengguna',
         };
     }
 
@@ -142,11 +141,11 @@ class Pengguna extends Authenticatable
             return $daftar;
         }
 
-        // Wildcard → kembalikan gabungan unik seluruh izin yang pernah
-        // didefinisikan di config (agar konsumen API dapat melihat
-        // cakupan akses admin secara eksplisit).
-        $semua = collect((array) Config::get('peran.peta', []))
-            ->flatten()
+        // Wildcard → kembalikan gabungan unik seluruh izin yang dikenal
+        // sistem: daftar kanonik 'peran.izin' + peta peran (agar konsumen
+        // API dapat melihat cakupan akses admin secara eksplisit).
+        $semua = collect((array) Config::get('peran.izin', []))
+            ->merge(collect((array) Config::get('peran.peta', []))->flatten())
             ->reject(fn ($v) => $v === '*')
             ->unique()
             ->values()

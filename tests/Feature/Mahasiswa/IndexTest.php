@@ -12,7 +12,7 @@ uses(RefreshDatabase::class);
 beforeEach(function () {
     $this->withoutVite();
     $this->prodi = ProgramStudi::create(['kode' => 'TIF', 'nama' => 'Teknik Informatika', 'jenjang' => 'S1']);
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf_wd3']));
 });
 
 /** Helper: mahasiswa dengan satu catatan IPK bernilai $ipk. */

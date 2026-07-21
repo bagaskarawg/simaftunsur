@@ -53,12 +53,12 @@ it('mengagregasi ringkasan & rekap dengan benar', function () {
 });
 
 it('hanya dapat dilihat oleh yang berizin laporan.lihat', function () {
-    // staf tidak punya laporan.lihat.
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'staf']));
+    // staf_wd3 tidak punya laporan.lihat.
+    $this->actingAs(Pengguna::factory()->stafWd3()->create());
     Volt::test('laporan.index')->assertForbidden();
 
-    // dekan punya laporan.lihat.
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'dekan']));
+    // wd3 punya laporan.lihat.
+    $this->actingAs(Pengguna::factory()->wd3()->create());
     Volt::test('laporan.index')->assertOk()
         ->assertSee('Rekap per Program Studi')
         ->assertSee('Status Pekerjaan Alumni (Tracer)')
@@ -89,8 +89,8 @@ it('membatasi ekspor CSV hanya untuk yang berizin laporan.ekspor', function () {
         ->assertOk()
         ->assertDownload('laporan-rekap-prodi.csv');
 
-    // dekan boleh lihat tapi TIDAK boleh ekspor.
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'dekan']));
+    // kaprodi tidak punya laporan.ekspor.
+    $this->actingAs(Pengguna::factory()->kaprodi()->create());
     $this->get(route('laporan.ekspor.prodi'))->assertForbidden();
 });
 
@@ -104,7 +104,7 @@ it('mengekspor laporan PDF bagi yang berizin ekspor', function () {
 });
 
 it('menolak ekspor PDF bagi yang tak berizin ekspor', function () {
-    $this->actingAs(Pengguna::factory()->create(['peran' => 'dekan']));
+    $this->actingAs(Pengguna::factory()->kaprodi()->create());
 
     $this->get(route('laporan.ekspor.pdf'))->assertForbidden();
 });

@@ -18,7 +18,7 @@ return new class extends Migration
             $tabel->string('nama');
             $tabel->string('email')->unique()->nullable();
             $tabel->string('kata_sandi');
-            $tabel->string('peran', 32)->default('staf')->comment('admin|dekan|wd3|kaprodi|staf|dosen');
+            $tabel->string('peran', 32)->default('staf_prodi')->comment('admin|wd3|staf_wd3|kaprodi|staf_prodi');
             $tabel->timestamp('email_terverifikasi_pada')->nullable();
             $tabel->rememberToken();
             $tabel->timestamps();

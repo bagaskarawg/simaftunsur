@@ -15,26 +15,26 @@ beforeEach(function () {
     $this->withoutVite();
     $this->prodi = ProgramStudi::create(['kode' => 'TIF', 'nama' => 'Teknik Informatika', 'jenjang' => 'S1']);
     $this->mahasiswa = Mahasiswa::factory()->untukProdi($this->prodi)->create();
-    $this->staf = Pengguna::factory()->create(['peran' => 'staf']);   // prestasi.kelola
-    $this->dosen = Pengguna::factory()->create(['peran' => 'dosen']); // prestasi.lihat saja
+    $this->stafProdi = Pengguna::factory()->stafProdi()->create(); // prestasi.kelola
+    $this->pemantau = Pengguna::factory()->wd3()->create();        // prestasi.lihat saja
 });
 
 it('menampilkan tombol kelola hanya untuk yang berizin prestasi.kelola', function () {
-    $this->actingAs($this->dosen);
+    $this->actingAs($this->pemantau);
     Volt::test('prestasi.index')->assertOk()->assertDontSee('Tambah Prestasi');
 
-    $this->actingAs($this->staf);
+    $this->actingAs($this->stafProdi);
     Volt::test('prestasi.index')->assertOk()->assertSee('Tambah Prestasi');
 });
 
 it('menolak aksi kelola dari pengguna yang hanya berizin lihat', function () {
-    $this->actingAs($this->dosen);
+    $this->actingAs($this->pemantau);
 
     Volt::test('prestasi.index')->call('bukaTambah')->assertForbidden();
 });
 
 it('menambahkan prestasi lewat form modal', function () {
-    $this->actingAs($this->staf);
+    $this->actingAs($this->stafProdi);
 
     Volt::test('prestasi.index')
         ->call('bukaTambah')
@@ -57,7 +57,7 @@ it('menambahkan prestasi lewat form modal', function () {
 
 it('mengunggah berkas bukti saat menambah prestasi', function () {
     Storage::fake('public');
-    $this->actingAs($this->staf);
+    $this->actingAs($this->stafProdi);
 
     Volt::test('prestasi.index')
         ->call('bukaTambah')
@@ -74,7 +74,7 @@ it('mengunggah berkas bukti saat menambah prestasi', function () {
 });
 
 it('memvalidasi field wajib saat menambah prestasi', function () {
-    $this->actingAs($this->staf);
+    $this->actingAs($this->stafProdi);
 
     Volt::test('prestasi.index')
         ->call('bukaTambah')
@@ -90,7 +90,7 @@ it('mengubah dan menghapus prestasi', function () {
         'mahasiswa_id' => $this->mahasiswa->id, 'judul' => 'Judul Lama', 'tingkat' => 'lokal',
     ]);
 
-    $this->actingAs($this->staf);
+    $this->actingAs($this->stafProdi);
 
     Volt::test('prestasi.index')
         ->call('bukaEdit', $prestasi->id)

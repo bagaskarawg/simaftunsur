@@ -86,13 +86,16 @@ class AppServiceProvider extends ServiceProvider
      *   - @can('mahasiswa.kelola') aktif di Blade.
      *   - $pengguna->can('mahasiswa.kelola') aktif di PHP/Livewire.
      *
-     * Wildcard '*' di config tidak didaftarkan sebagai Gate sendiri;
-     * resolusinya ditangani Pengguna::punyaIzin().
+     * Sumber utama: daftar kanonik 'peran.izin' — mencakup izin yang hanya
+     * dimiliki admin lewat wildcard. Peta peran ikut digabung sebagai
+     * jaring pengaman bila ada izin baru yang belum masuk daftar kanonik.
+     * Wildcard '*' tidak didaftarkan sebagai Gate sendiri; resolusinya
+     * ditangani Pengguna::punyaIzin().
      */
     protected function daftarkanGateIzin(): void
     {
-        $kodeIzin = collect((array) Config::get('peran.peta', []))
-            ->flatten()
+        $kodeIzin = collect((array) Config::get('peran.izin', []))
+            ->merge(collect((array) Config::get('peran.peta', []))->flatten())
             ->reject(fn ($kode) => $kode === '*')
             ->unique()
             ->values();
