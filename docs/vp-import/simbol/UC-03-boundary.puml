@@ -1,0 +1,11 @@
+' Simbol Use Case — Batas Sistem (system boundary). UML 2.5.1.
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam classAttributeIconSize 0
+hide circle
+rectangle "Batas Sistem" {
+  usecase "Use Case" as U
+}
+@enduml

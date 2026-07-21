@@ -1,0 +1,27 @@
+' Flowchart FC-04 — Proses Silhouette Coefficient. ISO 5807:1985.
+@startdot
+digraph FC04 {
+  rankdir=TB; bgcolor="white";
+  graph [nodesep=0.4, ranksep=0.42];
+  node [fontname="Segoe UI", fontsize=11, color="#333333", style=filled, fillcolor="white", margin="0.14,0.07"];
+  edge [fontname="Segoe UI", fontsize=10, color="#333333"];
+
+  mulai  [shape=ellipse, fillcolor="#ECECEC", label="Mulai"];
+  input  [shape=parallelogram, label="Input: data terskala + label klaster (k berjalan)"];
+  a      [shape=box, label="Hitung a(i): rata-rata jarak titik i ke titik lain\nDALAM klaster yang sama (kohesi)"];
+  b      [shape=box, label="Hitung b(i): rata-rata jarak i ke klaster lain,\nambil yang terkecil antar-klaster (separasi)"];
+  s      [shape=box, label="Hitung s(i) = ( b(i) - a(i) ) / maks( a(i), b(i) )"];
+  dmore  [shape=diamond, fillcolor="#F7F7F7", label="Masih ada titik\nyang belum dihitung?"];
+  nextp  [shape=box, label="Ambil titik berikutnya"];
+  avg    [shape=box, label="Silhouette Coefficient = rata-rata s(i) seluruh titik"];
+  interp [shape=box, label="Interpretasi: mendekati +1 = baik;\n~0 = tumpang tindih; negatif = salah kelompok"];
+  output [shape=parallelogram, label="Output: Silhouette Coefficient untuk k berjalan"];
+  selesai[shape=ellipse, fillcolor="#ECECEC", label="Selesai"];
+
+  mulai -> input -> a -> b -> s -> dmore;
+  dmore -> nextp [label="Ya"];
+  nextp -> a;
+  dmore -> avg   [label="Tidak"];
+  avg -> interp -> output -> selesai;
+}
+@enddot

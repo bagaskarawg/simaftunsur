@@ -1,0 +1,22 @@
+' Flowchart FC-05 — Proses Davies-Bouldin Index. ISO 5807:1985.
+@startdot
+digraph FC05 {
+  rankdir=TB; bgcolor="white";
+  graph [nodesep=0.4, ranksep=0.42];
+  node [fontname="Segoe UI", fontsize=11, color="#333333", style=filled, fillcolor="white", margin="0.14,0.07"];
+  edge [fontname="Segoe UI", fontsize=10, color="#333333"];
+
+  mulai  [shape=ellipse, fillcolor="#ECECEC", label="Mulai"];
+  input  [shape=parallelogram, label="Input: data terskala + label + centroid (k berjalan)"];
+  si     [shape=box, label="Untuk tiap klaster i, hitung sebaran intra-klaster\nS_i = rata-rata jarak anggota ke centroid c_i"];
+  mij    [shape=box, label="Untuk tiap pasangan (i, j), hitung jarak antar-centroid\nM_ij = || c_i - c_j ||"];
+  rij    [shape=box, label="Hitung rasio kemiripan\nR_ij = ( S_i + S_j ) / M_ij"];
+  ri     [shape=box, label="Untuk tiap klaster i, ambil rasio terburuk\nR_i = maks (j != i) R_ij"];
+  dbi    [shape=box, label="Hitung DBI = (1/k) sigma R_i"];
+  interp [shape=box, label="Interpretasi: makin KECIL makin baik\n(klaster rapat & saling berjauhan)"];
+  output [shape=parallelogram, label="Output: DBI untuk k berjalan"];
+  selesai[shape=ellipse, fillcolor="#ECECEC", label="Selesai"];
+
+  mulai -> input -> si -> mij -> rij -> ri -> dbi -> interp -> output -> selesai;
+}
+@enddot

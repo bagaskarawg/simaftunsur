@@ -1,0 +1,66 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><link rel="stylesheet" href="app.css"></head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo">SI</div><div><b>SIMAFTUNSUR</b><small>FT UNSUR</small></div></div>
+    <div class="eyebrow">Utama</div>
+    <nav class="nav">
+      <a class="active"><span class="ic ic-home"></span>Beranda</a>
+      <a><span class="ic ic-user"></span>Data Mahasiswa<span class="caret">▾</span></a>
+      <a><span class="ic ic-cluster"></span>Klasterisasi</a>
+      <a><span class="ic ic-trophy"></span>Prestasi</a>
+      <a><span class="ic ic-cal"></span>Kegiatan &amp; Organisasi</a>
+      <a><span class="ic ic-heart"></span>Pengabdian &amp; Hibah</a>
+      <a><span class="ic ic-route"></span>Tracer Study</a>
+      <a><span class="ic ic-cash"></span>Beasiswa</a>
+      <a><span class="ic ic-map"></span>KKN</a>
+      <a><span class="ic ic-mega"></span>Promosi / PMB</a>
+      <a><span class="ic ic-doc"></span>Laporan</a>
+    </nav>
+    <div class="eyebrow">Administrasi</div>
+    <nav class="nav">
+      <a><span class="ic ic-shield"></span>Pengguna</a>
+      <a><span class="ic ic-cog"></span>Pengaturan Sistem</a>
+      <a><span class="ic ic-clip"></span>Log Aktivitas</a>
+    </nav>
+    <div class="sidefoot">v1.0.0 · 2026.05</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">SIMAFTUNSUR / <b>Beranda</b></div>
+      <div class="spacer"></div>
+      <div class="userchip"><div class="avatar">BS</div><div><div class="nm">Budi Santoso</div><div class="rl">Administrator</div></div></div>
+    </header>
+
+    <div class="content">
+      <h1 class="page-h">Selamat datang, Budi.</h1>
+      <p class="page-sub">Ringkasan data kemahasiswaan FT UNSUR &amp; hasil klasterisasi profil mahasiswa (K-Means).</p>
+
+      <div class="grid" style="grid-template-columns:2fr 1fr">
+        <div class="card">
+          <div style="font-size:12.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;font-weight:700">Anda masuk sebagai Administrator</div>
+          <div style="font-size:18px;font-weight:700;margin:8px 0 2px">Budi Santoso</div>
+          <div style="color:var(--ink-2);font-size:13px">Administrator · NIP 1970...001</div>
+          <div class="row mt"><button class="btn btn-primary">Buka Data Mahasiswa</button><button class="btn btn-ghost">Lihat Klasterisasi</button></div>
+          <div style="margin-top:14px;color:var(--ink-2);font-size:13px">320 mahasiswa terdaftar · 290 aktif</div>
+        </div>
+        <div class="card" style="background:var(--fill-2)">
+          <div style="font-size:12px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;font-weight:700">Klasterisasi Terkini</div>
+          <div style="font-size:19px;font-weight:750;margin:6px 0">2 klaster (otomatis) · 265 mahasiswa</div>
+          <div style="color:var(--ink-2);font-size:12.5px;margin-bottom:12px">k dari data · Silhouette 0.54 · DBI 0.71</div>
+          <div style="font-size:13px;line-height:2"><span class="dot d1">1</span>Berprestasi — 150<br><span class="dot d2">2</span>Perlu Bimbingan — 115</div>
+          <div style="margin-top:12px;font-size:12.5px;text-decoration:underline;color:var(--ink)">Lihat detail klaster →</div>
+        </div>
+      </div>
+
+      <div class="grid mt" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi"><div class="lbl">Mahasiswa Aktif</div><div class="val">290</div><div class="hint">320 total terdaftar</div></div>
+        <div class="kpi"><div class="lbl">Program Studi</div><div class="val">4</div><div class="hint">Jenjang S1 FT UNSUR</div></div>
+        <div class="kpi"><div class="lbl">Rata-rata IPK</div><div class="val">3.21</div><div class="hint">Seluruh catatan semester</div></div>
+        <div class="kpi acc"><div class="lbl">Siap Klaster</div><div class="val">265</div><div class="hint">Aktif &amp; semester ≥ 3</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

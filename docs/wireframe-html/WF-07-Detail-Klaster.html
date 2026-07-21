@@ -1,0 +1,84 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><link rel="stylesheet" href="app.css"></head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo">SI</div><div><b>SIMAFTUNSUR</b><small>FT UNSUR</small></div></div>
+    <div class="eyebrow">Utama</div>
+    <nav class="nav">
+      <a><span class="ic ic-home"></span>Beranda</a>
+      <a><span class="ic ic-user"></span>Data Mahasiswa<span class="caret">▾</span></a>
+      <a class="active"><span class="ic ic-cluster"></span>Klasterisasi</a>
+      <a><span class="ic ic-trophy"></span>Prestasi</a>
+      <a><span class="ic ic-cal"></span>Kegiatan &amp; Organisasi</a>
+      <a><span class="ic ic-heart"></span>Pengabdian &amp; Hibah</a>
+      <a><span class="ic ic-route"></span>Tracer Study</a>
+      <a><span class="ic ic-cash"></span>Beasiswa</a>
+      <a><span class="ic ic-map"></span>KKN</a>
+      <a><span class="ic ic-mega"></span>Promosi / PMB</a>
+      <a><span class="ic ic-doc"></span>Laporan</a>
+    </nav>
+    <div class="eyebrow">Administrasi</div>
+    <nav class="nav">
+      <a><span class="ic ic-shield"></span>Pengguna</a>
+      <a><span class="ic ic-cog"></span>Pengaturan Sistem</a>
+      <a><span class="ic ic-clip"></span>Log Aktivitas</a>
+    </nav>
+    <div class="sidefoot">v1.0.0 · 2026.05</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">Klasterisasi / <b>Klaster 1</b></div>
+      <div class="spacer"></div>
+      <div class="userchip"><div class="avatar">BS</div><div><div class="nm">Budi Santoso</div><div class="rl">Administrator</div></div></div>
+    </header>
+
+    <div class="content">
+      <h1 class="page-h"><span class="dot d1">1</span>Klaster 1 — Berprestasi</h1>
+      <p class="page-sub">Klaster 1 · 150 mahasiswa · dari eksekusi 30/06/2026 (k = 2, ditentukan otomatis)</p>
+
+      <div class="grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi"><div class="lbl">Anggota</div><div class="val">150</div></div>
+        <div class="kpi"><div class="lbl">Label</div><div class="val" style="font-size:18px">Berprestasi</div></div>
+        <div class="kpi"><div class="lbl">Silhouette (run)</div><div class="val">0.54</div></div>
+        <div class="kpi"><div class="lbl">Fitur dipakai</div><div class="val">7</div></div>
+      </div>
+
+      <div class="grid mt" style="grid-template-columns:2fr 1fr">
+        <div class="card">
+          <div class="card-h"><h3>Karakteristik Centroid</h3><span class="sub">posisi relatif terhadap min–maks antar-klaster</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:4px"><span>IPK Rata-rata</span><span><b>3.62</b> <span class="badge">Tertinggi</span></span></div>
+          <div class="bar-track"><span style="left:88%"></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:12px"><span>Tren</span><span><b>+0.06</b> <span class="badge">Tertinggi</span></span></div>
+          <div class="bar-track"><span style="left:80%"></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:12px"><span>Konsistensi</span><span><b>0.10</b> <span class="badge">Terendah</span></span></div>
+          <div class="bar-track"><span style="left:8%"></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:12px"><span>Skor Prestasi</span><span><b>55</b> <span class="badge">Tertinggi</span></span></div>
+          <div class="bar-track"><span style="left:92%"></span></div>
+          <div class="note" style="margin-top:14px">Titik = posisi centroid klaster ini pada rentang nilai seluruh klaster.</div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3>Interpretasi &amp; Rekomendasi</h3></div>
+          <p style="font-size:13px;color:var(--ink-2);margin:0 0 14px">IPK tinggi dan stabil, aktivitas non-akademik menonjol.</p>
+          <div style="font-weight:700;font-size:13px;margin-bottom:6px">Rekomendasi Pembinaan</div>
+          <p style="font-size:13px;color:var(--ink-2);margin:0">Pertahankan capaian; dorong kompetisi tingkat nasional dan peran sebagai mentor bagi klaster lain.</p>
+        </div>
+      </div>
+
+      <div class="card mt">
+        <div class="card-h"><h3>Anggota Klaster (150)</h3><span class="sub">diurutkan terdekat ke centroid; nilai = snapshot saat eksekusi</span></div>
+        <table>
+          <thead><tr><th>Mahasiswa</th><th>Prodi</th><th class="r">IPK Rt</th><th class="r">IPK Akh</th><th class="r">Tren</th><th class="r">Kons</th><th class="r">Prest</th><th class="r">Keg</th><th class="r">Peng</th><th class="r">Jarak</th></tr></thead>
+          <tbody>
+            <tr><td>Budi Santoso<div class="npm">5520119124</div></td><td>TIF</td><td class="r">3.72</td><td class="r">3.80</td><td class="r">+0.05</td><td class="r">0.10</td><td class="r">60</td><td class="r">30</td><td class="r">15</td><td class="r">0.08</td></tr>
+            <tr><td>Siti Aminah<div class="npm">5520120017</div></td><td>TSI</td><td class="r">3.65</td><td class="r">3.70</td><td class="r">+0.04</td><td class="r">0.12</td><td class="r">50</td><td class="r">25</td><td class="r">10</td><td class="r">0.11</td></tr>
+            <tr><td>Dedi Kurnia<div class="npm">5520119088</div></td><td>TIF</td><td class="r">3.58</td><td class="r">3.62</td><td class="r">+0.03</td><td class="r">0.13</td><td class="r">45</td><td class="r">20</td><td class="r">10</td><td class="r">0.15</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:14px;font-size:12px;color:var(--ink-3)">Eksekusi 30/06/2026 10:14 · oleh Staf WD III · penskalaan StandardScaler · kohort mahasiswa aktif ≥ 3 semester</div>
+    </div>
+  </div>
+</div>
+</body></html>

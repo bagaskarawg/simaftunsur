@@ -1,0 +1,12 @@
+' Simbol Use Case — Asosiasi (garis aktor-use case). UML 2.5.1.
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam classAttributeIconSize 0
+hide circle
+left to right direction
+actor "Aktor" as A
+usecase "Use Case" as U
+A -- U
+@enduml

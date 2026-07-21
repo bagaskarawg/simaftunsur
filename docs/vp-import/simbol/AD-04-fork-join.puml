@@ -1,0 +1,8 @@
+' Simbol Activity — Fork/Join (batang tebal). UML 2.5.1.
+@startdot
+digraph AD04 {
+  bgcolor="white"; margin=0;
+  node [shape=box, style=filled, fillcolor=black, color=black, fixedsize=true, width=1.6, height=0.09, label=""];
+  n;
+}
+@enddot

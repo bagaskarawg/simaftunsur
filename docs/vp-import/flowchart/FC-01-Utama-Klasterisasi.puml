@@ -1,0 +1,43 @@
+' Flowchart FC-01 — Proses Klasterisasi K-Means (utama)
+' Notasi flowchart baku ISO 5807:1985 (terminal = OVAL, proses = persegi,
+' keputusan = belah ketupat, input/output = jajar genjang).
+' Render: tools/render-flowchart.ps1 (PlantUML @startdot -> SVG -> PNG).
+@startdot
+digraph FC01 {
+  rankdir=TB; bgcolor="white";
+  graph [nodesep=0.4, ranksep=0.42];
+  node [fontname="Segoe UI", fontsize=11, color="#333333", style=filled, fillcolor="white", margin="0.14,0.07"];
+  edge [fontname="Segoe UI", fontsize=10, color="#333333"];
+
+  mulai   [shape=ellipse, fillcolor="#ECECEC", label="Mulai"];
+  input   [shape=parallelogram, label="Input: data mahasiswa layak\n(aktif, >= 3 catatan IPK) — 7 fitur SKKM"];
+  pra     [shape=box, label="Praproses data\n(missing value, outlier, encoding)"];
+  skala   [shape=box, label="Penskalaan fitur StandardScaler\nz = (x - mu) / sigma"];
+  setk    [shape=box, label="Tetapkan k = 2 (k_min)"];
+  train   [shape=box, label="Latih K-Means percobaan dengan k klaster\n(inisialisasi k-means++)   [lihat FC-02]"];
+  elbow   [shape=box, label="PROSES ELBOW:\nhitung WCSS untuk k ini   [lihat FC-03]"];
+  sil     [shape=box, label="PROSES SILHOUETTE:\nhitung Silhouette untuk k ini   [lihat FC-04]"];
+  dbi     [shape=box, label="PROSES DAVIES-BOULDIN:\nhitung DBI untuk k ini   [lihat FC-05]"];
+  dkmax   [shape=diamond, fillcolor="#F7F7F7", label="k < k_max (8)?"];
+  inck    [shape=box, label="k = k + 1"];
+  pilih   [shape=box, label="Pilih k optimal = k dengan Silhouette tertinggi\n(kurva Elbow & DBI sebagai pembanding)"];
+  final   [shape=box, label="Latih model K-Means final dengan k optimal\n(k-means++, random_state = 42, n_init = 10)"];
+  eval    [shape=box, label="Hitung metrik evaluasi final\n(Silhouette, Davies-Bouldin, WCSS)"];
+  dvol    [shape=diamond, fillcolor="#F7F7F7", label="Jumlah data >= 100\n(ambang ideal)?"];
+  warn    [shape=box, label="Tandai peringatan:\nhasil bersifat indikatif"];
+  interp  [shape=box, label="Interpretasi klaster\n(profil centroid + proyeksi PCA 2D)"];
+  output  [shape=parallelogram, label="Output: label klaster, jumlah klaster,\ncentroid, metrik, tabel evaluasi per-k, PCA"];
+  selesai [shape=ellipse, fillcolor="#ECECEC", label="Selesai"];
+
+  mulai -> input -> pra -> skala -> setk;
+  setk -> train -> elbow -> sil -> dbi -> dkmax;
+  dkmax -> inck  [label="Ya"];
+  inck -> train;
+  dkmax -> pilih [label="Tidak"];
+  pilih -> final -> eval -> dvol;
+  dvol -> warn   [label="Tidak"];
+  warn -> interp;
+  dvol -> interp [label="Ya"];
+  interp -> output -> selesai;
+}
+@enddot

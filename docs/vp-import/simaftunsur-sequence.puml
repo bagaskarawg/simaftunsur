@@ -1,0 +1,27 @@
+' =====================================================================
+' SIMAFTUNSUR — Sequence Diagram integrasi ML <-> Sistem Informasi
+' (PlantUML, latar putih). Padanan render dari sequence Mermaid di
+' docs/bab2-scikit-learn-integrasi.md.
+' =====================================================================
+
+@startuml Integrasi-Laravel-Python-Sequence
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Segoe UI
+
+actor "Pengguna\n(Staf WD III)" as P
+participant "SIMAFTUNSUR\n(Laravel)" as L
+database "MySQL" as DB
+participant "Layanan Klasterisasi\n(FastAPI + scikit-learn)" as ML
+
+P -> L : Klik "Jalankan Klasterisasi"
+L -> DB : Ambil mahasiswa layak\n(aktif, >= 3 catatan IPK)
+DB --> L : Data mahasiswa + riwayat\nIPK/prestasi/kegiatan/pengabdian
+L -> L : Susun snapshot 7 fitur per mahasiswa
+L -> ML : POST /klasterisasi\n(JSON: data, k_min=2, k_max=8, skema penskalaan)
+activate ML
+ML -> ML : Praproses -> StandardScaler ->\nloop k=2..8 (K-Means + WCSS + Silhouette + DBI)\n-> pilih k -> model final -> interpretasi + PCA
+ML --> L : JSON: label klaster per mahasiswa, centroid,\nmetrik, evaluasi per-k, koordinat PCA
+deactivate ML
+L -> DB : Simpan dalam 1 transaksi:\neksekusi, klaster, anggota
+L --> P : Dashboard hasil\n(metrik, profil klaster, sebaran PCA)
+@enduml

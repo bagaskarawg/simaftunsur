@@ -1,0 +1,25 @@
+' Flowchart FC-03 — Proses Metode Elbow (WCSS). ISO 5807:1985.
+@startdot
+digraph FC03 {
+  rankdir=TB; bgcolor="white";
+  graph [nodesep=0.4, ranksep=0.42];
+  node [fontname="Segoe UI", fontsize=11, color="#333333", style=filled, fillcolor="white", margin="0.14,0.07"];
+  edge [fontname="Segoe UI", fontsize=10, color="#333333"];
+
+  mulai  [shape=ellipse, fillcolor="#ECECEC", label="Mulai"];
+  input  [shape=parallelogram, label="Input: hasil K-Means tiap kandidat k\n(label + centroid, k = 2..8)"];
+  calc   [shape=box, label="Hitung WCSS untuk k berjalan\nWCSS = sigma-j sigma (x di C_j) || x - c_j ||^2"];
+  dmore  [shape=diamond, fillcolor="#F7F7F7", label="Masih ada kandidat k\nyang belum dihitung?"];
+  nextk  [shape=box, label="Ambil kandidat k berikutnya"];
+  curve  [shape=box, label="Susun kurva k terhadap WCSS\n(WCSS menurun saat k bertambah)"];
+  elbow  [shape=box, label="Tentukan titik siku (elbow):\nk tempat penurunan WCSS mulai melandai"];
+  output [shape=parallelogram, label="Output: tabel WCSS per-k + kandidat k versi Elbow"];
+  selesai[shape=ellipse, fillcolor="#ECECEC", label="Selesai"];
+
+  mulai -> input -> calc -> dmore;
+  dmore -> nextk [label="Ya"];
+  nextk -> calc;
+  dmore -> curve [label="Tidak"];
+  curve -> elbow -> output -> selesai;
+}
+@enddot

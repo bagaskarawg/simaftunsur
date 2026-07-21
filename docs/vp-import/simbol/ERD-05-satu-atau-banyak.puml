@@ -1,0 +1,9 @@
+' Simbol ERD — Kardinalitas "satu atau banyak" (1..*). Crow's foot: kaki gagak + garis.
+@startdot
+digraph ERD05 {
+  rankdir=LR; bgcolor="white"; margin=0;
+  node [style=invis, shape=point, width=0.01];
+  edge [color="#333333", penwidth=1.6, dir=forward, arrowhead=crowtee];
+  a -> b [minlen=4];
+}
+@enddot

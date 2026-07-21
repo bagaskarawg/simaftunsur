@@ -265,7 +265,7 @@ tidak bergantung pada runtime Python untuk fungsi non-ML.
 %%{init: {'theme': 'default'}}%%
 sequenceDiagram
     autonumber
-    actor P as Pengguna (WD III/Admin)
+    actor P as Pengguna (Staf WD III)
     participant L as SIMAFTUNSUR (Laravel)
     participant DB as MySQL
     participant ML as Layanan Python (FastAPI + scikit-learn)

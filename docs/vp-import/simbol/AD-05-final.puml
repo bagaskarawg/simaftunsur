@@ -1,0 +1,8 @@
+' Simbol Activity — Activity Final node (lingkaran ganda terisi). UML 2.5.1.
+@startdot
+digraph AD05 {
+  bgcolor="white"; margin=0;
+  node [shape=circle, style=filled, fillcolor=black, color=black, peripheries=2, fixedsize=true, width=0.34, height=0.34, label=""];
+  n;
+}
+@enddot

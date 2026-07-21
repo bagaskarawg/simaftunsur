@@ -1,0 +1,8 @@
+' Simbol Flowchart — Flow line (arah alur). ISO 5807:1985.
+@startdot
+digraph SIM06 {
+  rankdir=LR; bgcolor="white"; margin=0;
+  node [style=invis, shape=point, width=0.01];
+  a -> b [color="#333333", penwidth=1.8, arrowsize=1.6, minlen=3];
+}
+@enddot

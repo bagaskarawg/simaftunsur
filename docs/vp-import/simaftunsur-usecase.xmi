@@ -5,39 +5,33 @@
   Elemen masuk ke Model Explorer; buat Use Case Diagram baru dan seret
   aktor/use case ke kanvas (relasi tergambar otomatis).
 
+  LIMA AKTOR (kesepakatan bimbingan 2 Juli 2026):
+    - Administrator      : manajemen sistem, pengguna & hak akses, konfigurasi.
+    - Wakil Dekan III    : konsumen utama — dashboard klasterisasi, profil
+                           mahasiswa, laporan kemahasiswaan (read-only).
+    - Staf WD III        : kelola data mahasiswa & IPK; menjalankan klasterisasi.
+    - Ketua Program Studi: monitoring IPK mahasiswa & penerima beasiswa (read-only).
+    - Staf Prodi         : update prestasi akademik/non-akademik; kelola kegiatan.
+
   Diturunkan dari: routes/web.php + config/peran.php (2026-07-02).
-  Catatan: use case "extend" tidak diberi asosiasi aktor langsung —
-  aksesnya mengikuti use case dasar yang diperluas.
+  Catatan:
+  - Use case "extend" tidak diberi asosiasi aktor langsung — aksesnya
+    mengikuti use case dasar yang diperluas.
+  - Use case kelola untuk Tracer, Promosi/PMB, Beasiswa, KKN, dan
+    Pengabdian saat ini hanya terhubung ke Administrator (wildcard),
+    karena belum ada peran fungsional yang ditetapkan mengelolanya.
 -->
 <xmi:XMI xmi:version="2.1"
          xmlns:xmi="http://schema.omg.org/spec/XMI/2.1"
          xmlns:uml="http://schema.omg.org/spec/UML/2.1">
   <uml:Model xmi:id="model_simaftunsur_uc" name="SIMAFTUNSUR — Use Case">
 
-    <!-- ======================= AKTOR ======================= -->
-    <!-- Aktor induk abstrak: seluruh peran mewarisi use case autentikasi -->
-    <packagedElement xmi:type="uml:Actor" xmi:id="actor_pengguna" name="Pengguna" isAbstract="true"/>
-
-    <packagedElement xmi:type="uml:Actor" xmi:id="actor_admin" name="Administrator">
-      <generalization xmi:id="gen_admin" general="actor_pengguna"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Actor" xmi:id="actor_wd3" name="Wakil Dekan III">
-      <generalization xmi:id="gen_wd3" general="actor_pengguna"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Actor" xmi:id="actor_dekan" name="Dekan">
-      <generalization xmi:id="gen_dekan" general="actor_pengguna"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Actor" xmi:id="actor_kaprodi" name="Ketua Program Studi">
-      <generalization xmi:id="gen_kaprodi" general="actor_pengguna"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Actor" xmi:id="actor_staf" name="Staf Kemahasiswaan">
-      <generalization xmi:id="gen_staf" general="actor_pengguna"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Actor" xmi:id="actor_dosen" name="Dosen">
-      <generalization xmi:id="gen_dosen" general="actor_pengguna"/>
-    </packagedElement>
-    <!-- Aktor sistem eksternal (sekunder) -->
-    <packagedElement xmi:type="uml:Actor" xmi:id="actor_python" name="Layanan Klasterisasi (Python)"/>
+    <!-- ======================= AKTOR (5) ======================= -->
+    <packagedElement xmi:type="uml:Actor" xmi:id="actor_admin" name="Administrator"/>
+    <packagedElement xmi:type="uml:Actor" xmi:id="actor_wd3" name="Wakil Dekan III"/>
+    <packagedElement xmi:type="uml:Actor" xmi:id="actor_stafwd3" name="Staf WD III"/>
+    <packagedElement xmi:type="uml:Actor" xmi:id="actor_kaprodi" name="Ketua Program Studi"/>
+    <packagedElement xmi:type="uml:Actor" xmi:id="actor_stafprodi" name="Staf Prodi"/>
 
     <!-- ======================= USE CASE — AUTENTIKASI ======================= -->
     <packagedElement xmi:type="uml:UseCase" xmi:id="uc_masuk" name="Masuk (Login)"/>
@@ -102,465 +96,341 @@
     </packagedElement>
     <packagedElement xmi:type="uml:UseCase" xmi:id="uc_log" name="Melihat Log Aktivitas"/>
 
-    <!-- ======================= ASOSIASI: Pengguna (abstrak) — autentikasi ======================= -->
-    <packagedElement xmi:type="uml:Association" xmi:id="as_p1">
-      <memberEnd xmi:idref="as_p1_a"/><memberEnd xmi:idref="as_p1_b"/>
-      <ownedEnd xmi:id="as_p1_a" type="actor_pengguna" association="as_p1"/>
-      <ownedEnd xmi:id="as_p1_b" type="uc_masuk" association="as_p1"/>
+    <!-- ======================= ASOSIASI AUTENTIKASI (semua aktor) ======================= -->
+    <packagedElement xmi:type="uml:Association" xmi:id="au1">
+      <memberEnd xmi:idref="au1_a"/><memberEnd xmi:idref="au1_b"/>
+      <ownedEnd xmi:id="au1_a" type="actor_admin" association="au1"/>
+      <ownedEnd xmi:id="au1_b" type="uc_masuk" association="au1"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_p2">
-      <memberEnd xmi:idref="as_p2_a"/><memberEnd xmi:idref="as_p2_b"/>
-      <ownedEnd xmi:id="as_p2_a" type="actor_pengguna" association="as_p2"/>
-      <ownedEnd xmi:id="as_p2_b" type="uc_keluar" association="as_p2"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="au2">
+      <memberEnd xmi:idref="au2_a"/><memberEnd xmi:idref="au2_b"/>
+      <ownedEnd xmi:id="au2_a" type="actor_admin" association="au2"/>
+      <ownedEnd xmi:id="au2_b" type="uc_keluar" association="au2"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_p3">
-      <memberEnd xmi:idref="as_p3_a"/><memberEnd xmi:idref="as_p3_b"/>
-      <ownedEnd xmi:id="as_p3_a" type="actor_pengguna" association="as_p3"/>
-      <ownedEnd xmi:id="as_p3_b" type="uc_beranda" association="as_p3"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="au3">
+      <memberEnd xmi:idref="au3_a"/><memberEnd xmi:idref="au3_b"/>
+      <ownedEnd xmi:id="au3_a" type="actor_admin" association="au3"/>
+      <ownedEnd xmi:id="au3_b" type="uc_beranda" association="au3"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_p4">
-      <memberEnd xmi:idref="as_p4_a"/><memberEnd xmi:idref="as_p4_b"/>
-      <ownedEnd xmi:id="as_p4_a" type="actor_pengguna" association="as_p4"/>
-      <ownedEnd xmi:id="as_p4_b" type="uc_profil" association="as_p4"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="au4">
+      <memberEnd xmi:idref="au4_a"/><memberEnd xmi:idref="au4_b"/>
+      <ownedEnd xmi:id="au4_a" type="actor_admin" association="au4"/>
+      <ownedEnd xmi:id="au4_b" type="uc_profil" association="au4"/>
     </packagedElement>
-
-    <!-- ======================= ASOSIASI: Administrator (izin: *) ======================= -->
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad1">
-      <memberEnd xmi:idref="as_ad1_a"/><memberEnd xmi:idref="as_ad1_b"/>
-      <ownedEnd xmi:id="as_ad1_a" type="actor_admin" association="as_ad1"/>
-      <ownedEnd xmi:id="as_ad1_b" type="uc_mhs_lihat" association="as_ad1"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="wu1">
+      <memberEnd xmi:idref="wu1_a"/><memberEnd xmi:idref="wu1_b"/>
+      <ownedEnd xmi:id="wu1_a" type="actor_wd3" association="wu1"/>
+      <ownedEnd xmi:id="wu1_b" type="uc_masuk" association="wu1"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad2">
-      <memberEnd xmi:idref="as_ad2_a"/><memberEnd xmi:idref="as_ad2_b"/>
-      <ownedEnd xmi:id="as_ad2_a" type="actor_admin" association="as_ad2"/>
-      <ownedEnd xmi:id="as_ad2_b" type="uc_mhs_kelola" association="as_ad2"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="wu2">
+      <memberEnd xmi:idref="wu2_a"/><memberEnd xmi:idref="wu2_b"/>
+      <ownedEnd xmi:id="wu2_a" type="actor_wd3" association="wu2"/>
+      <ownedEnd xmi:id="wu2_b" type="uc_keluar" association="wu2"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad3">
-      <memberEnd xmi:idref="as_ad3_a"/><memberEnd xmi:idref="as_ad3_b"/>
-      <ownedEnd xmi:id="as_ad3_a" type="actor_admin" association="as_ad3"/>
-      <ownedEnd xmi:id="as_ad3_b" type="uc_ipk_kelola" association="as_ad3"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="wu3">
+      <memberEnd xmi:idref="wu3_a"/><memberEnd xmi:idref="wu3_b"/>
+      <ownedEnd xmi:id="wu3_a" type="actor_wd3" association="wu3"/>
+      <ownedEnd xmi:id="wu3_b" type="uc_beranda" association="wu3"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad4">
-      <memberEnd xmi:idref="as_ad4_a"/><memberEnd xmi:idref="as_ad4_b"/>
-      <ownedEnd xmi:id="as_ad4_a" type="actor_admin" association="as_ad4"/>
-      <ownedEnd xmi:id="as_ad4_b" type="uc_klaster_lihat" association="as_ad4"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="wu4">
+      <memberEnd xmi:idref="wu4_a"/><memberEnd xmi:idref="wu4_b"/>
+      <ownedEnd xmi:id="wu4_a" type="actor_wd3" association="wu4"/>
+      <ownedEnd xmi:id="wu4_b" type="uc_profil" association="wu4"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad5">
-      <memberEnd xmi:idref="as_ad5_a"/><memberEnd xmi:idref="as_ad5_b"/>
-      <ownedEnd xmi:id="as_ad5_a" type="actor_admin" association="as_ad5"/>
-      <ownedEnd xmi:id="as_ad5_b" type="uc_klaster_jalan" association="as_ad5"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="su1">
+      <memberEnd xmi:idref="su1_a"/><memberEnd xmi:idref="su1_b"/>
+      <ownedEnd xmi:id="su1_a" type="actor_stafwd3" association="su1"/>
+      <ownedEnd xmi:id="su1_b" type="uc_masuk" association="su1"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad6">
-      <memberEnd xmi:idref="as_ad6_a"/><memberEnd xmi:idref="as_ad6_b"/>
-      <ownedEnd xmi:id="as_ad6_a" type="actor_admin" association="as_ad6"/>
-      <ownedEnd xmi:id="as_ad6_b" type="uc_prestasi_lihat" association="as_ad6"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="su2">
+      <memberEnd xmi:idref="su2_a"/><memberEnd xmi:idref="su2_b"/>
+      <ownedEnd xmi:id="su2_a" type="actor_stafwd3" association="su2"/>
+      <ownedEnd xmi:id="su2_b" type="uc_keluar" association="su2"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad7">
-      <memberEnd xmi:idref="as_ad7_a"/><memberEnd xmi:idref="as_ad7_b"/>
-      <ownedEnd xmi:id="as_ad7_a" type="actor_admin" association="as_ad7"/>
-      <ownedEnd xmi:id="as_ad7_b" type="uc_prestasi_kelola" association="as_ad7"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="su3">
+      <memberEnd xmi:idref="su3_a"/><memberEnd xmi:idref="su3_b"/>
+      <ownedEnd xmi:id="su3_a" type="actor_stafwd3" association="su3"/>
+      <ownedEnd xmi:id="su3_b" type="uc_beranda" association="su3"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad8">
-      <memberEnd xmi:idref="as_ad8_a"/><memberEnd xmi:idref="as_ad8_b"/>
-      <ownedEnd xmi:id="as_ad8_a" type="actor_admin" association="as_ad8"/>
-      <ownedEnd xmi:id="as_ad8_b" type="uc_kegiatan_lihat" association="as_ad8"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="su4">
+      <memberEnd xmi:idref="su4_a"/><memberEnd xmi:idref="su4_b"/>
+      <ownedEnd xmi:id="su4_a" type="actor_stafwd3" association="su4"/>
+      <ownedEnd xmi:id="su4_b" type="uc_profil" association="su4"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad9">
-      <memberEnd xmi:idref="as_ad9_a"/><memberEnd xmi:idref="as_ad9_b"/>
-      <ownedEnd xmi:id="as_ad9_a" type="actor_admin" association="as_ad9"/>
-      <ownedEnd xmi:id="as_ad9_b" type="uc_kegiatan_kelola" association="as_ad9"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ku1">
+      <memberEnd xmi:idref="ku1_a"/><memberEnd xmi:idref="ku1_b"/>
+      <ownedEnd xmi:id="ku1_a" type="actor_kaprodi" association="ku1"/>
+      <ownedEnd xmi:id="ku1_b" type="uc_masuk" association="ku1"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad10">
-      <memberEnd xmi:idref="as_ad10_a"/><memberEnd xmi:idref="as_ad10_b"/>
-      <ownedEnd xmi:id="as_ad10_a" type="actor_admin" association="as_ad10"/>
-      <ownedEnd xmi:id="as_ad10_b" type="uc_pengabdian_lihat" association="as_ad10"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ku2">
+      <memberEnd xmi:idref="ku2_a"/><memberEnd xmi:idref="ku2_b"/>
+      <ownedEnd xmi:id="ku2_a" type="actor_kaprodi" association="ku2"/>
+      <ownedEnd xmi:id="ku2_b" type="uc_keluar" association="ku2"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad11">
-      <memberEnd xmi:idref="as_ad11_a"/><memberEnd xmi:idref="as_ad11_b"/>
-      <ownedEnd xmi:id="as_ad11_a" type="actor_admin" association="as_ad11"/>
-      <ownedEnd xmi:id="as_ad11_b" type="uc_pengabdian_kelola" association="as_ad11"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ku3">
+      <memberEnd xmi:idref="ku3_a"/><memberEnd xmi:idref="ku3_b"/>
+      <ownedEnd xmi:id="ku3_a" type="actor_kaprodi" association="ku3"/>
+      <ownedEnd xmi:id="ku3_b" type="uc_beranda" association="ku3"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad12">
-      <memberEnd xmi:idref="as_ad12_a"/><memberEnd xmi:idref="as_ad12_b"/>
-      <ownedEnd xmi:id="as_ad12_a" type="actor_admin" association="as_ad12"/>
-      <ownedEnd xmi:id="as_ad12_b" type="uc_beasiswa_lihat" association="as_ad12"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ku4">
+      <memberEnd xmi:idref="ku4_a"/><memberEnd xmi:idref="ku4_b"/>
+      <ownedEnd xmi:id="ku4_a" type="actor_kaprodi" association="ku4"/>
+      <ownedEnd xmi:id="ku4_b" type="uc_profil" association="ku4"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad13">
-      <memberEnd xmi:idref="as_ad13_a"/><memberEnd xmi:idref="as_ad13_b"/>
-      <ownedEnd xmi:id="as_ad13_a" type="actor_admin" association="as_ad13"/>
-      <ownedEnd xmi:id="as_ad13_b" type="uc_beasiswa_kelola" association="as_ad13"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="pu1">
+      <memberEnd xmi:idref="pu1_a"/><memberEnd xmi:idref="pu1_b"/>
+      <ownedEnd xmi:id="pu1_a" type="actor_stafprodi" association="pu1"/>
+      <ownedEnd xmi:id="pu1_b" type="uc_masuk" association="pu1"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad14">
-      <memberEnd xmi:idref="as_ad14_a"/><memberEnd xmi:idref="as_ad14_b"/>
-      <ownedEnd xmi:id="as_ad14_a" type="actor_admin" association="as_ad14"/>
-      <ownedEnd xmi:id="as_ad14_b" type="uc_kkn_lihat" association="as_ad14"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="pu2">
+      <memberEnd xmi:idref="pu2_a"/><memberEnd xmi:idref="pu2_b"/>
+      <ownedEnd xmi:id="pu2_a" type="actor_stafprodi" association="pu2"/>
+      <ownedEnd xmi:id="pu2_b" type="uc_keluar" association="pu2"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad15">
-      <memberEnd xmi:idref="as_ad15_a"/><memberEnd xmi:idref="as_ad15_b"/>
-      <ownedEnd xmi:id="as_ad15_a" type="actor_admin" association="as_ad15"/>
-      <ownedEnd xmi:id="as_ad15_b" type="uc_kkn_kelola" association="as_ad15"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="pu3">
+      <memberEnd xmi:idref="pu3_a"/><memberEnd xmi:idref="pu3_b"/>
+      <ownedEnd xmi:id="pu3_a" type="actor_stafprodi" association="pu3"/>
+      <ownedEnd xmi:id="pu3_b" type="uc_beranda" association="pu3"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad16">
-      <memberEnd xmi:idref="as_ad16_a"/><memberEnd xmi:idref="as_ad16_b"/>
-      <ownedEnd xmi:id="as_ad16_a" type="actor_admin" association="as_ad16"/>
-      <ownedEnd xmi:id="as_ad16_b" type="uc_tracer_lihat" association="as_ad16"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad17">
-      <memberEnd xmi:idref="as_ad17_a"/><memberEnd xmi:idref="as_ad17_b"/>
-      <ownedEnd xmi:id="as_ad17_a" type="actor_admin" association="as_ad17"/>
-      <ownedEnd xmi:id="as_ad17_b" type="uc_tracer_kelola" association="as_ad17"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad18">
-      <memberEnd xmi:idref="as_ad18_a"/><memberEnd xmi:idref="as_ad18_b"/>
-      <ownedEnd xmi:id="as_ad18_a" type="actor_admin" association="as_ad18"/>
-      <ownedEnd xmi:id="as_ad18_b" type="uc_promosi_lihat" association="as_ad18"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad19">
-      <memberEnd xmi:idref="as_ad19_a"/><memberEnd xmi:idref="as_ad19_b"/>
-      <ownedEnd xmi:id="as_ad19_a" type="actor_admin" association="as_ad19"/>
-      <ownedEnd xmi:id="as_ad19_b" type="uc_promosi_kelola" association="as_ad19"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad20">
-      <memberEnd xmi:idref="as_ad20_a"/><memberEnd xmi:idref="as_ad20_b"/>
-      <ownedEnd xmi:id="as_ad20_a" type="actor_admin" association="as_ad20"/>
-      <ownedEnd xmi:id="as_ad20_b" type="uc_laporan_lihat" association="as_ad20"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad21">
-      <memberEnd xmi:idref="as_ad21_a"/><memberEnd xmi:idref="as_ad21_b"/>
-      <ownedEnd xmi:id="as_ad21_a" type="actor_admin" association="as_ad21"/>
-      <ownedEnd xmi:id="as_ad21_b" type="uc_pengguna" association="as_ad21"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad22">
-      <memberEnd xmi:idref="as_ad22_a"/><memberEnd xmi:idref="as_ad22_b"/>
-      <ownedEnd xmi:id="as_ad22_a" type="actor_admin" association="as_ad22"/>
-      <ownedEnd xmi:id="as_ad22_b" type="uc_pengaturan" association="as_ad22"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_ad23">
-      <memberEnd xmi:idref="as_ad23_a"/><memberEnd xmi:idref="as_ad23_b"/>
-      <ownedEnd xmi:id="as_ad23_a" type="actor_admin" association="as_ad23"/>
-      <ownedEnd xmi:id="as_ad23_b" type="uc_log" association="as_ad23"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="pu4">
+      <memberEnd xmi:idref="pu4_a"/><memberEnd xmi:idref="pu4_b"/>
+      <ownedEnd xmi:id="pu4_a" type="actor_stafprodi" association="pu4"/>
+      <ownedEnd xmi:id="pu4_b" type="uc_profil" association="pu4"/>
     </packagedElement>
 
-    <!-- ======================= ASOSIASI: Wakil Dekan III ======================= -->
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w1">
-      <memberEnd xmi:idref="as_w1_a"/><memberEnd xmi:idref="as_w1_b"/>
-      <ownedEnd xmi:id="as_w1_a" type="actor_wd3" association="as_w1"/>
-      <ownedEnd xmi:id="as_w1_b" type="uc_mhs_lihat" association="as_w1"/>
+    <!-- ============ ASOSIASI: Administrator (wildcard — seluruh modul) ============ -->
+    <packagedElement xmi:type="uml:Association" xmi:id="ad1">
+      <memberEnd xmi:idref="ad1_a"/><memberEnd xmi:idref="ad1_b"/>
+      <ownedEnd xmi:id="ad1_a" type="actor_admin" association="ad1"/>
+      <ownedEnd xmi:id="ad1_b" type="uc_mhs_lihat" association="ad1"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w2">
-      <memberEnd xmi:idref="as_w2_a"/><memberEnd xmi:idref="as_w2_b"/>
-      <ownedEnd xmi:id="as_w2_a" type="actor_wd3" association="as_w2"/>
-      <ownedEnd xmi:id="as_w2_b" type="uc_mhs_kelola" association="as_w2"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad2">
+      <memberEnd xmi:idref="ad2_a"/><memberEnd xmi:idref="ad2_b"/>
+      <ownedEnd xmi:id="ad2_a" type="actor_admin" association="ad2"/>
+      <ownedEnd xmi:id="ad2_b" type="uc_mhs_kelola" association="ad2"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w3">
-      <memberEnd xmi:idref="as_w3_a"/><memberEnd xmi:idref="as_w3_b"/>
-      <ownedEnd xmi:id="as_w3_a" type="actor_wd3" association="as_w3"/>
-      <ownedEnd xmi:id="as_w3_b" type="uc_ipk_kelola" association="as_w3"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad3">
+      <memberEnd xmi:idref="ad3_a"/><memberEnd xmi:idref="ad3_b"/>
+      <ownedEnd xmi:id="ad3_a" type="actor_admin" association="ad3"/>
+      <ownedEnd xmi:id="ad3_b" type="uc_ipk_kelola" association="ad3"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w4">
-      <memberEnd xmi:idref="as_w4_a"/><memberEnd xmi:idref="as_w4_b"/>
-      <ownedEnd xmi:id="as_w4_a" type="actor_wd3" association="as_w4"/>
-      <ownedEnd xmi:id="as_w4_b" type="uc_klaster_lihat" association="as_w4"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad4">
+      <memberEnd xmi:idref="ad4_a"/><memberEnd xmi:idref="ad4_b"/>
+      <ownedEnd xmi:id="ad4_a" type="actor_admin" association="ad4"/>
+      <ownedEnd xmi:id="ad4_b" type="uc_klaster_lihat" association="ad4"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w5">
-      <memberEnd xmi:idref="as_w5_a"/><memberEnd xmi:idref="as_w5_b"/>
-      <ownedEnd xmi:id="as_w5_a" type="actor_wd3" association="as_w5"/>
-      <ownedEnd xmi:id="as_w5_b" type="uc_klaster_jalan" association="as_w5"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad5">
+      <memberEnd xmi:idref="ad5_a"/><memberEnd xmi:idref="ad5_b"/>
+      <ownedEnd xmi:id="ad5_a" type="actor_admin" association="ad5"/>
+      <ownedEnd xmi:id="ad5_b" type="uc_klaster_jalan" association="ad5"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w6">
-      <memberEnd xmi:idref="as_w6_a"/><memberEnd xmi:idref="as_w6_b"/>
-      <ownedEnd xmi:id="as_w6_a" type="actor_wd3" association="as_w6"/>
-      <ownedEnd xmi:id="as_w6_b" type="uc_laporan_lihat" association="as_w6"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad6">
+      <memberEnd xmi:idref="ad6_a"/><memberEnd xmi:idref="ad6_b"/>
+      <ownedEnd xmi:id="ad6_a" type="actor_admin" association="ad6"/>
+      <ownedEnd xmi:id="ad6_b" type="uc_prestasi_lihat" association="ad6"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w7">
-      <memberEnd xmi:idref="as_w7_a"/><memberEnd xmi:idref="as_w7_b"/>
-      <ownedEnd xmi:id="as_w7_a" type="actor_wd3" association="as_w7"/>
-      <ownedEnd xmi:id="as_w7_b" type="uc_prestasi_lihat" association="as_w7"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad7">
+      <memberEnd xmi:idref="ad7_a"/><memberEnd xmi:idref="ad7_b"/>
+      <ownedEnd xmi:id="ad7_a" type="actor_admin" association="ad7"/>
+      <ownedEnd xmi:id="ad7_b" type="uc_prestasi_kelola" association="ad7"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w8">
-      <memberEnd xmi:idref="as_w8_a"/><memberEnd xmi:idref="as_w8_b"/>
-      <ownedEnd xmi:id="as_w8_a" type="actor_wd3" association="as_w8"/>
-      <ownedEnd xmi:id="as_w8_b" type="uc_prestasi_kelola" association="as_w8"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad8">
+      <memberEnd xmi:idref="ad8_a"/><memberEnd xmi:idref="ad8_b"/>
+      <ownedEnd xmi:id="ad8_a" type="actor_admin" association="ad8"/>
+      <ownedEnd xmi:id="ad8_b" type="uc_kegiatan_lihat" association="ad8"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w9">
-      <memberEnd xmi:idref="as_w9_a"/><memberEnd xmi:idref="as_w9_b"/>
-      <ownedEnd xmi:id="as_w9_a" type="actor_wd3" association="as_w9"/>
-      <ownedEnd xmi:id="as_w9_b" type="uc_kegiatan_lihat" association="as_w9"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad9">
+      <memberEnd xmi:idref="ad9_a"/><memberEnd xmi:idref="ad9_b"/>
+      <ownedEnd xmi:id="ad9_a" type="actor_admin" association="ad9"/>
+      <ownedEnd xmi:id="ad9_b" type="uc_kegiatan_kelola" association="ad9"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w10">
-      <memberEnd xmi:idref="as_w10_a"/><memberEnd xmi:idref="as_w10_b"/>
-      <ownedEnd xmi:id="as_w10_a" type="actor_wd3" association="as_w10"/>
-      <ownedEnd xmi:id="as_w10_b" type="uc_kegiatan_kelola" association="as_w10"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad10">
+      <memberEnd xmi:idref="ad10_a"/><memberEnd xmi:idref="ad10_b"/>
+      <ownedEnd xmi:id="ad10_a" type="actor_admin" association="ad10"/>
+      <ownedEnd xmi:id="ad10_b" type="uc_pengabdian_lihat" association="ad10"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w11">
-      <memberEnd xmi:idref="as_w11_a"/><memberEnd xmi:idref="as_w11_b"/>
-      <ownedEnd xmi:id="as_w11_a" type="actor_wd3" association="as_w11"/>
-      <ownedEnd xmi:id="as_w11_b" type="uc_pengabdian_lihat" association="as_w11"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad11">
+      <memberEnd xmi:idref="ad11_a"/><memberEnd xmi:idref="ad11_b"/>
+      <ownedEnd xmi:id="ad11_a" type="actor_admin" association="ad11"/>
+      <ownedEnd xmi:id="ad11_b" type="uc_pengabdian_kelola" association="ad11"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w12">
-      <memberEnd xmi:idref="as_w12_a"/><memberEnd xmi:idref="as_w12_b"/>
-      <ownedEnd xmi:id="as_w12_a" type="actor_wd3" association="as_w12"/>
-      <ownedEnd xmi:id="as_w12_b" type="uc_pengabdian_kelola" association="as_w12"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad12">
+      <memberEnd xmi:idref="ad12_a"/><memberEnd xmi:idref="ad12_b"/>
+      <ownedEnd xmi:id="ad12_a" type="actor_admin" association="ad12"/>
+      <ownedEnd xmi:id="ad12_b" type="uc_beasiswa_lihat" association="ad12"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w13">
-      <memberEnd xmi:idref="as_w13_a"/><memberEnd xmi:idref="as_w13_b"/>
-      <ownedEnd xmi:id="as_w13_a" type="actor_wd3" association="as_w13"/>
-      <ownedEnd xmi:id="as_w13_b" type="uc_beasiswa_lihat" association="as_w13"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad13">
+      <memberEnd xmi:idref="ad13_a"/><memberEnd xmi:idref="ad13_b"/>
+      <ownedEnd xmi:id="ad13_a" type="actor_admin" association="ad13"/>
+      <ownedEnd xmi:id="ad13_b" type="uc_beasiswa_kelola" association="ad13"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w14">
-      <memberEnd xmi:idref="as_w14_a"/><memberEnd xmi:idref="as_w14_b"/>
-      <ownedEnd xmi:id="as_w14_a" type="actor_wd3" association="as_w14"/>
-      <ownedEnd xmi:id="as_w14_b" type="uc_beasiswa_kelola" association="as_w14"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad14">
+      <memberEnd xmi:idref="ad14_a"/><memberEnd xmi:idref="ad14_b"/>
+      <ownedEnd xmi:id="ad14_a" type="actor_admin" association="ad14"/>
+      <ownedEnd xmi:id="ad14_b" type="uc_kkn_lihat" association="ad14"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w15">
-      <memberEnd xmi:idref="as_w15_a"/><memberEnd xmi:idref="as_w15_b"/>
-      <ownedEnd xmi:id="as_w15_a" type="actor_wd3" association="as_w15"/>
-      <ownedEnd xmi:id="as_w15_b" type="uc_kkn_lihat" association="as_w15"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad15">
+      <memberEnd xmi:idref="ad15_a"/><memberEnd xmi:idref="ad15_b"/>
+      <ownedEnd xmi:id="ad15_a" type="actor_admin" association="ad15"/>
+      <ownedEnd xmi:id="ad15_b" type="uc_kkn_kelola" association="ad15"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w16">
-      <memberEnd xmi:idref="as_w16_a"/><memberEnd xmi:idref="as_w16_b"/>
-      <ownedEnd xmi:id="as_w16_a" type="actor_wd3" association="as_w16"/>
-      <ownedEnd xmi:id="as_w16_b" type="uc_kkn_kelola" association="as_w16"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad16">
+      <memberEnd xmi:idref="ad16_a"/><memberEnd xmi:idref="ad16_b"/>
+      <ownedEnd xmi:id="ad16_a" type="actor_admin" association="ad16"/>
+      <ownedEnd xmi:id="ad16_b" type="uc_tracer_lihat" association="ad16"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w17">
-      <memberEnd xmi:idref="as_w17_a"/><memberEnd xmi:idref="as_w17_b"/>
-      <ownedEnd xmi:id="as_w17_a" type="actor_wd3" association="as_w17"/>
-      <ownedEnd xmi:id="as_w17_b" type="uc_tracer_lihat" association="as_w17"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad17">
+      <memberEnd xmi:idref="ad17_a"/><memberEnd xmi:idref="ad17_b"/>
+      <ownedEnd xmi:id="ad17_a" type="actor_admin" association="ad17"/>
+      <ownedEnd xmi:id="ad17_b" type="uc_tracer_kelola" association="ad17"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w18">
-      <memberEnd xmi:idref="as_w18_a"/><memberEnd xmi:idref="as_w18_b"/>
-      <ownedEnd xmi:id="as_w18_a" type="actor_wd3" association="as_w18"/>
-      <ownedEnd xmi:id="as_w18_b" type="uc_tracer_kelola" association="as_w18"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad18">
+      <memberEnd xmi:idref="ad18_a"/><memberEnd xmi:idref="ad18_b"/>
+      <ownedEnd xmi:id="ad18_a" type="actor_admin" association="ad18"/>
+      <ownedEnd xmi:id="ad18_b" type="uc_promosi_lihat" association="ad18"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w19">
-      <memberEnd xmi:idref="as_w19_a"/><memberEnd xmi:idref="as_w19_b"/>
-      <ownedEnd xmi:id="as_w19_a" type="actor_wd3" association="as_w19"/>
-      <ownedEnd xmi:id="as_w19_b" type="uc_promosi_lihat" association="as_w19"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad19">
+      <memberEnd xmi:idref="ad19_a"/><memberEnd xmi:idref="ad19_b"/>
+      <ownedEnd xmi:id="ad19_a" type="actor_admin" association="ad19"/>
+      <ownedEnd xmi:id="ad19_b" type="uc_promosi_kelola" association="ad19"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_w20">
-      <memberEnd xmi:idref="as_w20_a"/><memberEnd xmi:idref="as_w20_b"/>
-      <ownedEnd xmi:id="as_w20_a" type="actor_wd3" association="as_w20"/>
-      <ownedEnd xmi:id="as_w20_b" type="uc_promosi_kelola" association="as_w20"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad20">
+      <memberEnd xmi:idref="ad20_a"/><memberEnd xmi:idref="ad20_b"/>
+      <ownedEnd xmi:id="ad20_a" type="actor_admin" association="ad20"/>
+      <ownedEnd xmi:id="ad20_b" type="uc_laporan_lihat" association="ad20"/>
     </packagedElement>
-
-    <!-- ======================= ASOSIASI: Dekan (lihat saja) ======================= -->
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d1">
-      <memberEnd xmi:idref="as_d1_a"/><memberEnd xmi:idref="as_d1_b"/>
-      <ownedEnd xmi:id="as_d1_a" type="actor_dekan" association="as_d1"/>
-      <ownedEnd xmi:id="as_d1_b" type="uc_mhs_lihat" association="as_d1"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad21">
+      <memberEnd xmi:idref="ad21_a"/><memberEnd xmi:idref="ad21_b"/>
+      <ownedEnd xmi:id="ad21_a" type="actor_admin" association="ad21"/>
+      <ownedEnd xmi:id="ad21_b" type="uc_pengguna" association="ad21"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d2">
-      <memberEnd xmi:idref="as_d2_a"/><memberEnd xmi:idref="as_d2_b"/>
-      <ownedEnd xmi:id="as_d2_a" type="actor_dekan" association="as_d2"/>
-      <ownedEnd xmi:id="as_d2_b" type="uc_klaster_lihat" association="as_d2"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad22">
+      <memberEnd xmi:idref="ad22_a"/><memberEnd xmi:idref="ad22_b"/>
+      <ownedEnd xmi:id="ad22_a" type="actor_admin" association="ad22"/>
+      <ownedEnd xmi:id="ad22_b" type="uc_pengaturan" association="ad22"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d3">
-      <memberEnd xmi:idref="as_d3_a"/><memberEnd xmi:idref="as_d3_b"/>
-      <ownedEnd xmi:id="as_d3_a" type="actor_dekan" association="as_d3"/>
-      <ownedEnd xmi:id="as_d3_b" type="uc_laporan_lihat" association="as_d3"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d4">
-      <memberEnd xmi:idref="as_d4_a"/><memberEnd xmi:idref="as_d4_b"/>
-      <ownedEnd xmi:id="as_d4_a" type="actor_dekan" association="as_d4"/>
-      <ownedEnd xmi:id="as_d4_b" type="uc_prestasi_lihat" association="as_d4"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d5">
-      <memberEnd xmi:idref="as_d5_a"/><memberEnd xmi:idref="as_d5_b"/>
-      <ownedEnd xmi:id="as_d5_a" type="actor_dekan" association="as_d5"/>
-      <ownedEnd xmi:id="as_d5_b" type="uc_tracer_lihat" association="as_d5"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d6">
-      <memberEnd xmi:idref="as_d6_a"/><memberEnd xmi:idref="as_d6_b"/>
-      <ownedEnd xmi:id="as_d6_a" type="actor_dekan" association="as_d6"/>
-      <ownedEnd xmi:id="as_d6_b" type="uc_promosi_lihat" association="as_d6"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d7">
-      <memberEnd xmi:idref="as_d7_a"/><memberEnd xmi:idref="as_d7_b"/>
-      <ownedEnd xmi:id="as_d7_a" type="actor_dekan" association="as_d7"/>
-      <ownedEnd xmi:id="as_d7_b" type="uc_beasiswa_lihat" association="as_d7"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d8">
-      <memberEnd xmi:idref="as_d8_a"/><memberEnd xmi:idref="as_d8_b"/>
-      <ownedEnd xmi:id="as_d8_a" type="actor_dekan" association="as_d8"/>
-      <ownedEnd xmi:id="as_d8_b" type="uc_kkn_lihat" association="as_d8"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d9">
-      <memberEnd xmi:idref="as_d9_a"/><memberEnd xmi:idref="as_d9_b"/>
-      <ownedEnd xmi:id="as_d9_a" type="actor_dekan" association="as_d9"/>
-      <ownedEnd xmi:id="as_d9_b" type="uc_kegiatan_lihat" association="as_d9"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_d10">
-      <memberEnd xmi:idref="as_d10_a"/><memberEnd xmi:idref="as_d10_b"/>
-      <ownedEnd xmi:id="as_d10_a" type="actor_dekan" association="as_d10"/>
-      <ownedEnd xmi:id="as_d10_b" type="uc_pengabdian_lihat" association="as_d10"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="ad23">
+      <memberEnd xmi:idref="ad23_a"/><memberEnd xmi:idref="ad23_b"/>
+      <ownedEnd xmi:id="ad23_a" type="actor_admin" association="ad23"/>
+      <ownedEnd xmi:id="ad23_b" type="uc_log" association="ad23"/>
     </packagedElement>
 
-    <!-- ======================= ASOSIASI: Ketua Program Studi ======================= -->
-    <packagedElement xmi:type="uml:Association" xmi:id="as_k1">
-      <memberEnd xmi:idref="as_k1_a"/><memberEnd xmi:idref="as_k1_b"/>
-      <ownedEnd xmi:id="as_k1_a" type="actor_kaprodi" association="as_k1"/>
-      <ownedEnd xmi:id="as_k1_b" type="uc_mhs_lihat" association="as_k1"/>
+    <!-- ============ ASOSIASI: Wakil Dekan III (konsumen utama, read-only) ============ -->
+    <packagedElement xmi:type="uml:Association" xmi:id="w1">
+      <memberEnd xmi:idref="w1_a"/><memberEnd xmi:idref="w1_b"/>
+      <ownedEnd xmi:id="w1_a" type="actor_wd3" association="w1"/>
+      <ownedEnd xmi:id="w1_b" type="uc_mhs_lihat" association="w1"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_k2">
-      <memberEnd xmi:idref="as_k2_a"/><memberEnd xmi:idref="as_k2_b"/>
-      <ownedEnd xmi:id="as_k2_a" type="actor_kaprodi" association="as_k2"/>
-      <ownedEnd xmi:id="as_k2_b" type="uc_laporan_lihat" association="as_k2"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="w2">
+      <memberEnd xmi:idref="w2_a"/><memberEnd xmi:idref="w2_b"/>
+      <ownedEnd xmi:id="w2_a" type="actor_wd3" association="w2"/>
+      <ownedEnd xmi:id="w2_b" type="uc_klaster_lihat" association="w2"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_k3">
-      <memberEnd xmi:idref="as_k3_a"/><memberEnd xmi:idref="as_k3_b"/>
-      <ownedEnd xmi:id="as_k3_a" type="actor_kaprodi" association="as_k3"/>
-      <ownedEnd xmi:id="as_k3_b" type="uc_prestasi_lihat" association="as_k3"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="w3">
+      <memberEnd xmi:idref="w3_a"/><memberEnd xmi:idref="w3_b"/>
+      <ownedEnd xmi:id="w3_a" type="actor_wd3" association="w3"/>
+      <ownedEnd xmi:id="w3_b" type="uc_laporan_lihat" association="w3"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_k4">
-      <memberEnd xmi:idref="as_k4_a"/><memberEnd xmi:idref="as_k4_b"/>
-      <ownedEnd xmi:id="as_k4_a" type="actor_kaprodi" association="as_k4"/>
-      <ownedEnd xmi:id="as_k4_b" type="uc_tracer_lihat" association="as_k4"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="w4">
+      <memberEnd xmi:idref="w4_a"/><memberEnd xmi:idref="w4_b"/>
+      <ownedEnd xmi:id="w4_a" type="actor_wd3" association="w4"/>
+      <ownedEnd xmi:id="w4_b" type="uc_prestasi_lihat" association="w4"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_k5">
-      <memberEnd xmi:idref="as_k5_a"/><memberEnd xmi:idref="as_k5_b"/>
-      <ownedEnd xmi:id="as_k5_a" type="actor_kaprodi" association="as_k5"/>
-      <ownedEnd xmi:id="as_k5_b" type="uc_promosi_lihat" association="as_k5"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="w5">
+      <memberEnd xmi:idref="w5_a"/><memberEnd xmi:idref="w5_b"/>
+      <ownedEnd xmi:id="w5_a" type="actor_wd3" association="w5"/>
+      <ownedEnd xmi:id="w5_b" type="uc_kegiatan_lihat" association="w5"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_k6">
-      <memberEnd xmi:idref="as_k6_a"/><memberEnd xmi:idref="as_k6_b"/>
-      <ownedEnd xmi:id="as_k6_a" type="actor_kaprodi" association="as_k6"/>
-      <ownedEnd xmi:id="as_k6_b" type="uc_beasiswa_lihat" association="as_k6"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="w6">
+      <memberEnd xmi:idref="w6_a"/><memberEnd xmi:idref="w6_b"/>
+      <ownedEnd xmi:id="w6_a" type="actor_wd3" association="w6"/>
+      <ownedEnd xmi:id="w6_b" type="uc_pengabdian_lihat" association="w6"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_k7">
-      <memberEnd xmi:idref="as_k7_a"/><memberEnd xmi:idref="as_k7_b"/>
-      <ownedEnd xmi:id="as_k7_a" type="actor_kaprodi" association="as_k7"/>
-      <ownedEnd xmi:id="as_k7_b" type="uc_kkn_lihat" association="as_k7"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="w7">
+      <memberEnd xmi:idref="w7_a"/><memberEnd xmi:idref="w7_b"/>
+      <ownedEnd xmi:id="w7_a" type="actor_wd3" association="w7"/>
+      <ownedEnd xmi:id="w7_b" type="uc_beasiswa_lihat" association="w7"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_k8">
-      <memberEnd xmi:idref="as_k8_a"/><memberEnd xmi:idref="as_k8_b"/>
-      <ownedEnd xmi:id="as_k8_a" type="actor_kaprodi" association="as_k8"/>
-      <ownedEnd xmi:id="as_k8_b" type="uc_kegiatan_lihat" association="as_k8"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="w8">
+      <memberEnd xmi:idref="w8_a"/><memberEnd xmi:idref="w8_b"/>
+      <ownedEnd xmi:id="w8_a" type="actor_wd3" association="w8"/>
+      <ownedEnd xmi:id="w8_b" type="uc_kkn_lihat" association="w8"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_k9">
-      <memberEnd xmi:idref="as_k9_a"/><memberEnd xmi:idref="as_k9_b"/>
-      <ownedEnd xmi:id="as_k9_a" type="actor_kaprodi" association="as_k9"/>
-      <ownedEnd xmi:id="as_k9_b" type="uc_pengabdian_lihat" association="as_k9"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="w9">
+      <memberEnd xmi:idref="w9_a"/><memberEnd xmi:idref="w9_b"/>
+      <ownedEnd xmi:id="w9_a" type="actor_wd3" association="w9"/>
+      <ownedEnd xmi:id="w9_b" type="uc_tracer_lihat" association="w9"/>
     </packagedElement>
-
-    <!-- ======================= ASOSIASI: Staf Kemahasiswaan ======================= -->
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s1">
-      <memberEnd xmi:idref="as_s1_a"/><memberEnd xmi:idref="as_s1_b"/>
-      <ownedEnd xmi:id="as_s1_a" type="actor_staf" association="as_s1"/>
-      <ownedEnd xmi:id="as_s1_b" type="uc_mhs_lihat" association="as_s1"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s2">
-      <memberEnd xmi:idref="as_s2_a"/><memberEnd xmi:idref="as_s2_b"/>
-      <ownedEnd xmi:id="as_s2_a" type="actor_staf" association="as_s2"/>
-      <ownedEnd xmi:id="as_s2_b" type="uc_mhs_kelola" association="as_s2"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s3">
-      <memberEnd xmi:idref="as_s3_a"/><memberEnd xmi:idref="as_s3_b"/>
-      <ownedEnd xmi:id="as_s3_a" type="actor_staf" association="as_s3"/>
-      <ownedEnd xmi:id="as_s3_b" type="uc_ipk_kelola" association="as_s3"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s4">
-      <memberEnd xmi:idref="as_s4_a"/><memberEnd xmi:idref="as_s4_b"/>
-      <ownedEnd xmi:id="as_s4_a" type="actor_staf" association="as_s4"/>
-      <ownedEnd xmi:id="as_s4_b" type="uc_prestasi_lihat" association="as_s4"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s5">
-      <memberEnd xmi:idref="as_s5_a"/><memberEnd xmi:idref="as_s5_b"/>
-      <ownedEnd xmi:id="as_s5_a" type="actor_staf" association="as_s5"/>
-      <ownedEnd xmi:id="as_s5_b" type="uc_prestasi_kelola" association="as_s5"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s6">
-      <memberEnd xmi:idref="as_s6_a"/><memberEnd xmi:idref="as_s6_b"/>
-      <ownedEnd xmi:id="as_s6_a" type="actor_staf" association="as_s6"/>
-      <ownedEnd xmi:id="as_s6_b" type="uc_tracer_lihat" association="as_s6"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s7">
-      <memberEnd xmi:idref="as_s7_a"/><memberEnd xmi:idref="as_s7_b"/>
-      <ownedEnd xmi:id="as_s7_a" type="actor_staf" association="as_s7"/>
-      <ownedEnd xmi:id="as_s7_b" type="uc_tracer_kelola" association="as_s7"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s8">
-      <memberEnd xmi:idref="as_s8_a"/><memberEnd xmi:idref="as_s8_b"/>
-      <ownedEnd xmi:id="as_s8_a" type="actor_staf" association="as_s8"/>
-      <ownedEnd xmi:id="as_s8_b" type="uc_promosi_lihat" association="as_s8"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s9">
-      <memberEnd xmi:idref="as_s9_a"/><memberEnd xmi:idref="as_s9_b"/>
-      <ownedEnd xmi:id="as_s9_a" type="actor_staf" association="as_s9"/>
-      <ownedEnd xmi:id="as_s9_b" type="uc_promosi_kelola" association="as_s9"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s10">
-      <memberEnd xmi:idref="as_s10_a"/><memberEnd xmi:idref="as_s10_b"/>
-      <ownedEnd xmi:id="as_s10_a" type="actor_staf" association="as_s10"/>
-      <ownedEnd xmi:id="as_s10_b" type="uc_beasiswa_lihat" association="as_s10"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s11">
-      <memberEnd xmi:idref="as_s11_a"/><memberEnd xmi:idref="as_s11_b"/>
-      <ownedEnd xmi:id="as_s11_a" type="actor_staf" association="as_s11"/>
-      <ownedEnd xmi:id="as_s11_b" type="uc_beasiswa_kelola" association="as_s11"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s12">
-      <memberEnd xmi:idref="as_s12_a"/><memberEnd xmi:idref="as_s12_b"/>
-      <ownedEnd xmi:id="as_s12_a" type="actor_staf" association="as_s12"/>
-      <ownedEnd xmi:id="as_s12_b" type="uc_kkn_lihat" association="as_s12"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s13">
-      <memberEnd xmi:idref="as_s13_a"/><memberEnd xmi:idref="as_s13_b"/>
-      <ownedEnd xmi:id="as_s13_a" type="actor_staf" association="as_s13"/>
-      <ownedEnd xmi:id="as_s13_b" type="uc_kkn_kelola" association="as_s13"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s14">
-      <memberEnd xmi:idref="as_s14_a"/><memberEnd xmi:idref="as_s14_b"/>
-      <ownedEnd xmi:id="as_s14_a" type="actor_staf" association="as_s14"/>
-      <ownedEnd xmi:id="as_s14_b" type="uc_kegiatan_lihat" association="as_s14"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s15">
-      <memberEnd xmi:idref="as_s15_a"/><memberEnd xmi:idref="as_s15_b"/>
-      <ownedEnd xmi:id="as_s15_a" type="actor_staf" association="as_s15"/>
-      <ownedEnd xmi:id="as_s15_b" type="uc_kegiatan_kelola" association="as_s15"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s16">
-      <memberEnd xmi:idref="as_s16_a"/><memberEnd xmi:idref="as_s16_b"/>
-      <ownedEnd xmi:id="as_s16_a" type="actor_staf" association="as_s16"/>
-      <ownedEnd xmi:id="as_s16_b" type="uc_pengabdian_lihat" association="as_s16"/>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_s17">
-      <memberEnd xmi:idref="as_s17_a"/><memberEnd xmi:idref="as_s17_b"/>
-      <ownedEnd xmi:id="as_s17_a" type="actor_staf" association="as_s17"/>
-      <ownedEnd xmi:id="as_s17_b" type="uc_pengabdian_kelola" association="as_s17"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="w10">
+      <memberEnd xmi:idref="w10_a"/><memberEnd xmi:idref="w10_b"/>
+      <ownedEnd xmi:id="w10_a" type="actor_wd3" association="w10"/>
+      <ownedEnd xmi:id="w10_b" type="uc_promosi_lihat" association="w10"/>
     </packagedElement>
 
-    <!-- ======================= ASOSIASI: Dosen ======================= -->
-    <packagedElement xmi:type="uml:Association" xmi:id="as_o1">
-      <memberEnd xmi:idref="as_o1_a"/><memberEnd xmi:idref="as_o1_b"/>
-      <ownedEnd xmi:id="as_o1_a" type="actor_dosen" association="as_o1"/>
-      <ownedEnd xmi:id="as_o1_b" type="uc_mhs_lihat" association="as_o1"/>
+    <!-- ============ ASOSIASI: Staf WD III (data mahasiswa/IPK + klasterisasi) ============ -->
+    <packagedElement xmi:type="uml:Association" xmi:id="s1">
+      <memberEnd xmi:idref="s1_a"/><memberEnd xmi:idref="s1_b"/>
+      <ownedEnd xmi:id="s1_a" type="actor_stafwd3" association="s1"/>
+      <ownedEnd xmi:id="s1_b" type="uc_mhs_lihat" association="s1"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_o2">
-      <memberEnd xmi:idref="as_o2_a"/><memberEnd xmi:idref="as_o2_b"/>
-      <ownedEnd xmi:id="as_o2_a" type="actor_dosen" association="as_o2"/>
-      <ownedEnd xmi:id="as_o2_b" type="uc_prestasi_lihat" association="as_o2"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="s2">
+      <memberEnd xmi:idref="s2_a"/><memberEnd xmi:idref="s2_b"/>
+      <ownedEnd xmi:id="s2_a" type="actor_stafwd3" association="s2"/>
+      <ownedEnd xmi:id="s2_b" type="uc_mhs_kelola" association="s2"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_o3">
-      <memberEnd xmi:idref="as_o3_a"/><memberEnd xmi:idref="as_o3_b"/>
-      <ownedEnd xmi:id="as_o3_a" type="actor_dosen" association="as_o3"/>
-      <ownedEnd xmi:id="as_o3_b" type="uc_kkn_lihat" association="as_o3"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="s3">
+      <memberEnd xmi:idref="s3_a"/><memberEnd xmi:idref="s3_b"/>
+      <ownedEnd xmi:id="s3_a" type="actor_stafwd3" association="s3"/>
+      <ownedEnd xmi:id="s3_b" type="uc_ipk_kelola" association="s3"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_o4">
-      <memberEnd xmi:idref="as_o4_a"/><memberEnd xmi:idref="as_o4_b"/>
-      <ownedEnd xmi:id="as_o4_a" type="actor_dosen" association="as_o4"/>
-      <ownedEnd xmi:id="as_o4_b" type="uc_kegiatan_lihat" association="as_o4"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="s4">
+      <memberEnd xmi:idref="s4_a"/><memberEnd xmi:idref="s4_b"/>
+      <ownedEnd xmi:id="s4_a" type="actor_stafwd3" association="s4"/>
+      <ownedEnd xmi:id="s4_b" type="uc_klaster_lihat" association="s4"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="as_o5">
-      <memberEnd xmi:idref="as_o5_a"/><memberEnd xmi:idref="as_o5_b"/>
-      <ownedEnd xmi:id="as_o5_a" type="actor_dosen" association="as_o5"/>
-      <ownedEnd xmi:id="as_o5_b" type="uc_pengabdian_lihat" association="as_o5"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="s5">
+      <memberEnd xmi:idref="s5_a"/><memberEnd xmi:idref="s5_b"/>
+      <ownedEnd xmi:id="s5_a" type="actor_stafwd3" association="s5"/>
+      <ownedEnd xmi:id="s5_b" type="uc_klaster_jalan" association="s5"/>
     </packagedElement>
 
-    <!-- ======================= ASOSIASI: Layanan Klasterisasi (Python) ======================= -->
-    <packagedElement xmi:type="uml:Association" xmi:id="as_py1">
-      <memberEnd xmi:idref="as_py1_a"/><memberEnd xmi:idref="as_py1_b"/>
-      <ownedEnd xmi:id="as_py1_a" type="actor_python" association="as_py1"/>
-      <ownedEnd xmi:id="as_py1_b" type="uc_klaster_jalan" association="as_py1"/>
+    <!-- ============ ASOSIASI: Ketua Program Studi (monitoring read-only) ============ -->
+    <packagedElement xmi:type="uml:Association" xmi:id="k1">
+      <memberEnd xmi:idref="k1_a"/><memberEnd xmi:idref="k1_b"/>
+      <ownedEnd xmi:id="k1_a" type="actor_kaprodi" association="k1"/>
+      <ownedEnd xmi:id="k1_b" type="uc_mhs_lihat" association="k1"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="k2">
+      <memberEnd xmi:idref="k2_a"/><memberEnd xmi:idref="k2_b"/>
+      <ownedEnd xmi:id="k2_a" type="actor_kaprodi" association="k2"/>
+      <ownedEnd xmi:id="k2_b" type="uc_beasiswa_lihat" association="k2"/>
+    </packagedElement>
+
+    <!-- ============ ASOSIASI: Staf Prodi (prestasi & kegiatan) ============ -->
+    <packagedElement xmi:type="uml:Association" xmi:id="p1">
+      <memberEnd xmi:idref="p1_a"/><memberEnd xmi:idref="p1_b"/>
+      <ownedEnd xmi:id="p1_a" type="actor_stafprodi" association="p1"/>
+      <ownedEnd xmi:id="p1_b" type="uc_mhs_lihat" association="p1"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="p2">
+      <memberEnd xmi:idref="p2_a"/><memberEnd xmi:idref="p2_b"/>
+      <ownedEnd xmi:id="p2_a" type="actor_stafprodi" association="p2"/>
+      <ownedEnd xmi:id="p2_b" type="uc_prestasi_lihat" association="p2"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="p3">
+      <memberEnd xmi:idref="p3_a"/><memberEnd xmi:idref="p3_b"/>
+      <ownedEnd xmi:id="p3_a" type="actor_stafprodi" association="p3"/>
+      <ownedEnd xmi:id="p3_b" type="uc_prestasi_kelola" association="p3"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="p4">
+      <memberEnd xmi:idref="p4_a"/><memberEnd xmi:idref="p4_b"/>
+      <ownedEnd xmi:id="p4_a" type="actor_stafprodi" association="p4"/>
+      <ownedEnd xmi:id="p4_b" type="uc_kegiatan_lihat" association="p4"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="p5">
+      <memberEnd xmi:idref="p5_a"/><memberEnd xmi:idref="p5_b"/>
+      <ownedEnd xmi:id="p5_a" type="actor_stafprodi" association="p5"/>
+      <ownedEnd xmi:id="p5_b" type="uc_kegiatan_kelola" association="p5"/>
     </packagedElement>
 
   </uml:Model>

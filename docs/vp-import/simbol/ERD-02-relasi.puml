@@ -1,0 +1,9 @@
+' Simbol ERD — Garis relasi antar-entitas. Crow's foot.
+@startdot
+digraph ERD02 {
+  rankdir=LR; bgcolor="white"; margin=0;
+  node [style=invis, shape=point, width=0.01];
+  edge [color="#333333", penwidth=1.6, dir=none];
+  a -> b [minlen=4];
+}
+@enddot

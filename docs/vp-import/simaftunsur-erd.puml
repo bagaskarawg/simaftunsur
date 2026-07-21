@@ -1,0 +1,423 @@
+' =====================================================================
+' SIMAFTUNSUR — ERD terpecah per kelompok modul (PlantUML, crow's foot)
+' Dipecah menjadi: 1 peta ringkas + 5 ERD detail, LENGKAP DENGAN TIPE DATA.
+'
+' PERAN BERKAS INI: pelengkap/lampiran (pembacaan rinci per modul).
+' Gambar UTAMA di naskah adalah ERD UTUH satu halaman A4 landscape —
+' lihat simaftunsur-erd-lengkap.puml (permintaan pembimbing: seluruh
+' relasi tampil dalam satu gambar). Versi utuh tidak memuat tipe data
+' agar tetap terbaca saat dicetak; tipe data dibaca di sini & di
+' simaftunsur-erd.sql.
+'
+' Catatan penyajian: kolom created_at & updated_at ada di semua tabel
+' (kecuali klasterisasi_anggota) — TIDAK digambarkan agar ringkas;
+' beri keterangan itu di caption gambar laporan.
+' Entitas rujukan lintas-gambar (mis. mahasiswa) ditampilkan ringkas.
+' Sumber kebenaran kolom lengkap: simaftunsur-erd.sql.
+' =====================================================================
+
+@startuml ERD-00-Peta-Ringkas
+skinparam backgroundColor #FFFFFF
+hide members
+
+entity program_studi
+entity mahasiswa
+entity nilai_ipk_semester
+entity klasterisasi_eksekusi
+entity klasterisasi_klaster
+entity klasterisasi_anggota
+entity klasterisasi_kategori
+entity prestasi
+entity kegiatan_kemahasiswaan
+entity pengabdian_hibah
+entity beasiswa_kategori
+entity beasiswa_penerima
+entity kkn_lokasi
+entity kkn_dpl
+entity kkn_kelompok
+entity kkn_peserta
+entity tracer_study
+entity kegiatan_promosi
+entity sekolah
+entity pengguna
+entity log_aktivitas
+entity pengaturan
+
+program_studi ||--o{ mahasiswa
+mahasiswa ||--o{ nilai_ipk_semester
+mahasiswa ||--o{ prestasi
+mahasiswa ||--o{ kegiatan_kemahasiswaan
+mahasiswa ||--o{ pengabdian_hibah
+mahasiswa ||--o{ beasiswa_penerima
+mahasiswa ||--o{ kkn_peserta
+mahasiswa ||--o{ tracer_study
+mahasiswa ||--o{ klasterisasi_anggota
+beasiswa_kategori ||--o{ beasiswa_penerima
+kkn_lokasi ||--o{ kkn_kelompok
+kkn_dpl |o--o{ kkn_kelompok
+kkn_kelompok ||--o{ kkn_peserta
+klasterisasi_eksekusi ||--o{ klasterisasi_klaster
+klasterisasi_eksekusi ||--o{ klasterisasi_anggota
+klasterisasi_klaster |o--o{ klasterisasi_anggota
+klasterisasi_kategori .. klasterisasi_klaster : pemetaan label
+pengguna |o--o{ klasterisasi_eksekusi
+pengguna |o--o{ log_aktivitas
+@enduml
+
+@startuml ERD-01-Inti-Data-Mahasiswa
+skinparam backgroundColor #FFFFFF
+
+entity program_studi {
+  * id : bigint <<PK>>
+  --
+  * kode : varchar(8) <<UK>>
+  * nama : varchar(255)
+  * jenjang : enum(D3,D4,S1,S2)
+}
+
+entity mahasiswa {
+  * id : bigint <<PK>>
+  --
+  * npm : varchar(11) <<UK>>
+  * nama : varchar(255)
+  * program_studi_id : bigint <<FK>>
+  * angkatan : year
+  * semester_aktif : tinyint
+  * jenis_kelamin : enum(L,P)
+  * status : enum(aktif,cuti,non_aktif,lulus,do)
+  status_akhir : enum (label lanjutan, BAB V)
+  email : varchar(255)
+  nomor_telepon : varchar(20)
+}
+
+entity nilai_ipk_semester {
+  * id : bigint <<PK>>
+  --
+  * mahasiswa_id : bigint <<FK>>
+  * semester : tinyint (1-14)
+  * tahun_akademik : varchar(9)
+  * semester_ganjil_genap : enum(ganjil,genap)
+  * ipk : decimal(3,2)
+  * sks_diambil : smallint
+  * sks_lulus : smallint
+  .. unik: (mahasiswa_id, semester) ..
+}
+
+program_studi ||--o{ mahasiswa : fk_mhs_prodi
+mahasiswa ||--o{ nilai_ipk_semester : fk_ipk_mhs
+@enduml
+
+@startuml ERD-02-Klasterisasi
+skinparam backgroundColor #FFFFFF
+
+entity mahasiswa {
+  * id : bigint <<PK>>
+  --
+  * npm : varchar(11) <<UK>>
+  * nama : varchar(255)
+  .. (rincian di ERD 1) ..
+}
+
+entity pengguna {
+  * id : bigint <<PK>>
+  --
+  * nip : varchar(32) <<UK>>
+  * nama : varchar(255)
+  * peran : varchar(32)
+  .. (rincian di ERD 5) ..
+}
+
+entity klasterisasi_eksekusi {
+  * id : bigint <<PK>>
+  --
+  * k_terpilih : tinyint
+  * metode_pemilihan_k : varchar(255)
+  * fitur_dipakai : json
+  * skema_penskalaan : varchar(16)
+  random_state : int
+  versi_algoritma : varchar(255)
+  kriteria_data : varchar(255)
+  * jumlah_data : int
+  silhouette : decimal(6,4)
+  davies_bouldin : decimal(6,4)
+  inertia : double
+  * evaluasi_k : json
+  * profil_klaster : json
+  peringatan : json
+  dijalankan_oleh : bigint <<FK>>
+}
+
+entity klasterisasi_klaster {
+  * id : bigint <<PK>>
+  --
+  * eksekusi_id : bigint <<FK>>
+  * cluster : tinyint
+  label_deskriptif : varchar(255)
+  * jumlah_anggota : int
+  * centroid : json
+  centroid_terskala : json
+  skor_akademik : double
+  skor_non_akademik : double
+  skor_komposit : double
+  ringkasan_profil : text
+  interpretasi : text
+  .. unik: (eksekusi_id, cluster) ..
+}
+
+entity klasterisasi_kategori {
+  * id : bigint <<PK>>
+  --
+  * nama : varchar(255) <<UK>>
+  * urutan : tinyint (1 = skor tertinggi)
+  deskripsi : text
+  rekomendasi : text
+  warna : varchar(16)
+  * aktif : boolean
+}
+
+entity klasterisasi_anggota {
+  * id : bigint <<PK>>
+  --
+  * eksekusi_id : bigint <<FK>>
+  klaster_id : bigint <<FK>>
+  * mahasiswa_id : bigint <<FK>>
+  * cluster : tinyint
+  fitur_nilai : json (snapshot)
+  fitur_terskala : json
+  jarak_ke_centroid : double
+  * pca_x : double
+  * pca_y : double
+  .. unik: (eksekusi_id, mahasiswa_id) ..
+}
+
+pengguna |o--o{ klasterisasi_eksekusi : fk_eksekusi_pengguna
+klasterisasi_eksekusi ||--o{ klasterisasi_klaster : fk_klaster_eksekusi
+klasterisasi_eksekusi ||--o{ klasterisasi_anggota : fk_anggota_eksekusi
+klasterisasi_klaster |o--o{ klasterisasi_anggota : fk_anggota_klaster
+mahasiswa ||--o{ klasterisasi_anggota : fk_anggota_mhs
+klasterisasi_kategori .. klasterisasi_klaster : pemetaan label (bukan FK)
+@enduml
+
+@startuml ERD-03-Prestasi-SKKM
+skinparam backgroundColor #FFFFFF
+
+entity mahasiswa {
+  * id : bigint <<PK>>
+  --
+  * npm : varchar(11) <<UK>>
+  * nama : varchar(255)
+  .. (rincian di ERD 1) ..
+}
+
+entity prestasi {
+  * id : bigint <<PK>>
+  --
+  * mahasiswa_id : bigint <<FK>>
+  * judul : varchar(255)
+  * jenis : enum(akademik,non_akademik)
+  * tingkat : enum(lokal,regional,nasional,internasional)
+  capaian : enum(juara_1,juara_2,juara_3,finalis)
+  peringkat : varchar(255)
+  penyelenggara : varchar(255)
+  tanggal : date
+  url_bukti : varchar(255)
+  berkas_bukti : varchar(255)
+}
+
+entity kegiatan_kemahasiswaan {
+  * id : bigint <<PK>>
+  --
+  * mahasiswa_id : bigint <<FK>>
+  * jenis : enum(organisasi,kepanitiaan,seminar)
+  * peran : varchar(255)
+  * nama_kegiatan : varchar(255)
+  penyelenggara : varchar(255)
+  periode : varchar(255)
+  tanggal : date
+  url_bukti : varchar(255)
+  keterangan : text
+}
+
+entity pengabdian_hibah {
+  * id : bigint <<PK>>
+  --
+  * mahasiswa_id : bigint <<FK>>
+  * jenis : enum(hibah_didanai,proposal_lolos,pengabdian_masyarakat)
+  * peran : varchar(255)
+  * judul : varchar(255)
+  sumber_dana : varchar(255)
+  tahun : year
+  url_bukti : varchar(255)
+  keterangan : text
+}
+
+mahasiswa ||--o{ prestasi : fk_prestasi_mhs
+mahasiswa ||--o{ kegiatan_kemahasiswaan : fk_kegiatan_mhs
+mahasiswa ||--o{ pengabdian_hibah : fk_pengabdian_mhs
+@enduml
+
+@startuml ERD-04-Beasiswa-KKN
+skinparam backgroundColor #FFFFFF
+
+entity mahasiswa {
+  * id : bigint <<PK>>
+  --
+  * npm : varchar(11) <<UK>>
+  * nama : varchar(255)
+  .. (rincian di ERD 1) ..
+}
+
+entity beasiswa_kategori {
+  * id : bigint <<PK>>
+  --
+  * kode : varchar(30) <<UK>>
+  * nama : varchar(255)
+  * jenis_bantuan : enum(ukt,biaya_hidup,total)
+  * sumber_dana : enum(ftunsur,lldikti,kemendikti)
+  * aktif : boolean
+  keterangan : text
+}
+
+entity beasiswa_penerima {
+  * id : bigint <<PK>>
+  --
+  * mahasiswa_id : bigint <<FK>>
+  * beasiswa_kategori_id : bigint <<FK>>
+  * tahun_akademik : varchar(9)
+  * semester : enum(ganjil,genap)
+  * status : enum(diusulkan..dibekukan)
+  nominal : decimal(12,2)
+  no_sk : varchar(255)
+  tanggal_sk : date
+  sumber_usulan : varchar(255)
+}
+
+entity kkn_lokasi {
+  * id : bigint <<PK>>
+  --
+  * nama : varchar(255)
+  kecamatan : varchar(255)
+  kabupaten : varchar(255)
+  * tahun_akademik : varchar(9)
+  kuota : smallint
+  mitra : varchar(255)
+  * aktif : boolean
+}
+
+entity kkn_dpl {
+  * id : bigint <<PK>>
+  --
+  * nama : varchar(255)
+  nip : varchar(255)
+  nomor_telepon : varchar(255)
+  bidang_keahlian : varchar(255)
+  * aktif : boolean
+}
+
+entity kkn_kelompok {
+  * id : bigint <<PK>>
+  --
+  * nama_kelompok : varchar(255)
+  * kkn_lokasi_id : bigint <<FK>>
+  kkn_dpl_id : bigint <<FK>>
+  * tahun_akademik : varchar(9)
+  * status : enum(persiapan,berjalan,selesai)
+}
+
+entity kkn_peserta {
+  * id : bigint <<PK>>
+  --
+  * kkn_kelompok_id : bigint <<FK>>
+  * mahasiswa_id : bigint <<FK>>
+  * jabatan : enum(ketua,sekretaris,bendahara,anggota)
+  * status : enum(terdaftar,aktif,selesai,mengundurkan_diri)
+  nilai_akhir : decimal(5,2)
+  nilai_huruf : varchar(2)
+  .. unik: (kkn_kelompok_id, mahasiswa_id) ..
+}
+
+beasiswa_kategori ||--o{ beasiswa_penerima : fk_bpen_kategori
+mahasiswa ||--o{ beasiswa_penerima : fk_bpen_mhs
+kkn_lokasi ||--o{ kkn_kelompok : fk_kkel_lokasi
+kkn_dpl |o--o{ kkn_kelompok : fk_kkel_dpl
+kkn_kelompok ||--o{ kkn_peserta : fk_kpes_kelompok
+mahasiswa ||--o{ kkn_peserta : fk_kpes_mhs
+@enduml
+
+@startuml ERD-05-Pendukung-Sistem
+skinparam backgroundColor #FFFFFF
+
+entity mahasiswa {
+  * id : bigint <<PK>>
+  --
+  * npm : varchar(11) <<UK>>
+  * nama : varchar(255)
+  .. (rincian di ERD 1) ..
+}
+
+entity tracer_study {
+  * id : bigint <<PK>>
+  --
+  * mahasiswa_id : bigint <<FK>>
+  tahun_lulus : year
+  * status_pekerjaan : enum(bekerja,wirausaha,lanjut_studi,belum_bekerja)
+  masa_tunggu_bulan : smallint
+  nama_instansi : varchar(255)
+  relevansi : enum(sangat_relevan..tidak_relevan)
+  rentang_gaji : varchar(255)
+  tanggal_isi : date
+}
+
+entity kegiatan_promosi {
+  * id : bigint <<PK>>
+  --
+  * nama_kegiatan : varchar(255)
+  * sekolah_target : varchar(255)
+  kota : varchar(255)
+  tanggal : date
+  petugas : varchar(255)
+  jumlah_peminat : int
+  catatan : text
+}
+
+entity sekolah {
+  * id : bigint <<PK>>
+  --
+  * nama : varchar(255)
+  * jenjang : enum(SMA,SMK,MA,Lainnya)
+  kota : varchar(255)
+  alamat : varchar(255)
+  kontak : varchar(255)
+}
+
+entity pengguna {
+  * id : bigint <<PK>>
+  --
+  * nip : varchar(32) <<UK>>
+  * nama : varchar(255)
+  email : varchar(255) <<UK>>
+  * kata_sandi : varchar(255)
+  * peran : varchar(32) (admin|wd3|staf_wd3|kaprodi|staf_prodi)
+  email_terverifikasi_pada : timestamp
+}
+
+entity log_aktivitas {
+  * id : bigint <<PK>>
+  --
+  pengguna_id : bigint <<FK>>
+  * aksi : varchar(32)
+  model : varchar(64)
+  deskripsi : varchar(255)
+  ip : varchar(45)
+}
+
+entity pengaturan {
+  * id : bigint <<PK>>
+  --
+  * kunci : varchar(255) <<UK>>
+  nilai : text
+}
+
+mahasiswa ||--o{ tracer_study : fk_tracer_mhs
+pengguna |o--o{ log_aktivitas : fk_log_pengguna
+@enduml

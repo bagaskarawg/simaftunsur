@@ -1,0 +1,13 @@
+' Simbol Use Case — Aktor. UML 2.5.1.
+' (dummy use case di-remove agar dianggap diagram use case, bukan sequence)
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam classAttributeIconSize 0
+hide circle
+actor "Aktor" as A
+usecase "x" as D
+A -[hidden]- D
+remove D
+@enduml

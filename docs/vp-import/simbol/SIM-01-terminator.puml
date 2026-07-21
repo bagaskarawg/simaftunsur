@@ -1,0 +1,8 @@
+' Simbol Flowchart — Terminator (Mulai/Selesai). ISO 5807:1985.
+@startdot
+digraph SIM01 {
+  bgcolor="white"; margin=0;
+  node [fontname="Segoe UI", color="#333333", penwidth=1.4, style=filled];
+  n [shape=ellipse, fillcolor="#ECECEC", width=1.9, height=0.8, fixedsize=true, label=""];
+}
+@enddot

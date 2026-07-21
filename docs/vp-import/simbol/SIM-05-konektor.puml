@@ -1,0 +1,8 @@
+' Simbol Flowchart — Connector (penghubung dalam satu halaman). ISO 5807:1985.
+@startdot
+digraph SIM05 {
+  bgcolor="white"; margin=0;
+  node [fontname="Segoe UI", color="#333333", penwidth=1.4, style=filled];
+  n [shape=circle, fillcolor="white", width=0.7, height=0.7, fixedsize=true, label=""];
+}
+@enddot

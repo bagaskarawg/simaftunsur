@@ -1,0 +1,26 @@
+' Flowchart FC-02 — Algoritma K-Means (jarak Euclidean). ISO 5807:1985.
+@startdot
+digraph FC02 {
+  rankdir=TB; bgcolor="white";
+  graph [nodesep=0.4, ranksep=0.42];
+  node [fontname="Segoe UI", fontsize=11, color="#333333", style=filled, fillcolor="white", margin="0.14,0.07"];
+  edge [fontname="Segoe UI", fontsize=10, color="#333333"];
+
+  mulai  [shape=ellipse, fillcolor="#ECECEC", label="Mulai"];
+  input  [shape=parallelogram, label="Input: data terskala Z, jumlah klaster k"];
+  init   [shape=box, label="Tentukan k centroid awal dengan k-means++\n(centroid pertama acak; berikutnya berpeluang\nsebanding kuadrat jarak ke centroid terdekat)"];
+  dist   [shape=box, label="Hitung jarak Euclidean tiap titik ke tiap centroid\nd(x, c) = akar( sigma (x - c)^2 )"];
+  assign [shape=box, label="Tugaskan tiap titik ke klaster\ndengan centroid terdekat (jarak minimum)"];
+  recmp  [shape=box, label="Hitung ulang tiap centroid\n= rata-rata seluruh titik anggota klaster"];
+  dconv  [shape=diamond, fillcolor="#F7F7F7", label="Centroid masih\nberubah?"];
+  iter   [shape=box, label="Perbarui centroid\n& lanjut iterasi"];
+  output [shape=parallelogram, label="Output: label klaster tiap titik, centroid akhir"];
+  selesai[shape=ellipse, fillcolor="#ECECEC", label="Selesai"];
+
+  mulai -> input -> init -> dist -> assign -> recmp -> dconv;
+  dconv -> iter    [label="Ya"];
+  iter -> dist;
+  dconv -> output  [label="Tidak"];
+  output -> selesai;
+}
+@enddot

@@ -1,0 +1,8 @@
+' Simbol Activity — Action/aktivitas (persegi sudut membulat). UML 2.5.1.
+@startdot
+digraph AD02 {
+  bgcolor="white"; margin=0;
+  node [shape=box, style="rounded,filled", fillcolor=white, color="#333333", penwidth=1.4, fixedsize=true, width=1.7, height=0.7, label=""];
+  n;
+}
+@enddot

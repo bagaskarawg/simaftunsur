@@ -1,0 +1,8 @@
+' Simbol Activity — Control flow (panah arah alur). UML 2.5.1.
+@startdot
+digraph AD06 {
+  rankdir=LR; bgcolor="white"; margin=0;
+  node [style=invis, shape=point, width=0.01];
+  a -> b [color="#333333", penwidth=1.8, arrowsize=1.6, minlen=3];
+}
+@enddot

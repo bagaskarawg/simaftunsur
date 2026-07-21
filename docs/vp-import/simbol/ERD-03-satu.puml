@@ -1,0 +1,9 @@
+' Simbol ERD — Kardinalitas "satu dan hanya satu" (1). Crow's foot: dua garis.
+@startdot
+digraph ERD03 {
+  rankdir=LR; bgcolor="white"; margin=0;
+  node [style=invis, shape=point, width=0.01];
+  edge [color="#333333", penwidth=1.6, dir=forward, arrowhead=teetee];
+  a -> b [minlen=4];
+}
+@enddot

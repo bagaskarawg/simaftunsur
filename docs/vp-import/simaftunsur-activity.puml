@@ -10,7 +10,7 @@
 ' =====================================================================
 
 @startuml AD-01-Masuk-Login
-title Activity Diagram — Masuk (Login)
+skinparam backgroundColor #FFFFFF
 |Pengguna|
 start
 :Membuka halaman login;
@@ -28,7 +28,7 @@ stop
 @enduml
 
 @startuml AD-02-Kelola-Data-Mahasiswa
-title Activity Diagram — Mengelola Data Mahasiswa (Tambah)
+skinparam backgroundColor #FFFFFF
 |Pengguna|
 start
 :Memilih menu Data Mahasiswa;
@@ -51,7 +51,7 @@ stop
 @enduml
 
 @startuml AD-03-Impor-IPK-Massal
-title Activity Diagram — Mengimpor IPK Massal (Excel)
+skinparam backgroundColor #FFFFFF
 |Pengguna|
 start
 :Membuka halaman impor IPK;
@@ -76,13 +76,13 @@ stop
 @enduml
 
 @startuml AD-04-Klasterisasi-K-Means
-title Activity Diagram — Menjalankan Klasterisasi K-Means
-|Pengguna (WD III / Administrator)|
+skinparam backgroundColor #FFFFFF
+|Pengguna (Staf WD III / WD III)|
 start
 :Membuka halaman Klasterisasi;
 |SIMAFTUNSUR (Laravel)|
 :Menampilkan dashboard dan status kesiapan data;
-|Pengguna (WD III / Administrator)|
+|Pengguna (Staf WD III / WD III)|
 :Menekan tombol Jalankan Klasterisasi;
 |SIMAFTUNSUR (Laravel)|
 :Mengambil data mahasiswa layak\n(status aktif, minimal 3 catatan IPK);
@@ -101,9 +101,16 @@ endif
 |Layanan Klasterisasi (Python / scikit-learn)|
 :Melakukan praproses data\n(missing value, outlier, encoding);
 :Melakukan penskalaan fitur (StandardScaler);
-:Menentukan k optimal\n(Silhouette tertinggi pada rentang k=2..8;\nElbow/WCSS sebagai pembanding);
-:Melatih model K-Means (inisialisasi k-means++);
-:Menghitung metrik evaluasi internal\n(Silhouette, Davies-Bouldin, Inertia/WCSS);
+:Menetapkan k = 2 (k_min);
+repeat :Melatih K-Means percobaan dengan k klaster\n(inisialisasi k-means++);
+:PROSES ELBOW:\nmenghitung WCSS/inertia untuk k berjalan;
+:PROSES SILHOUETTE:\nmenghitung Silhouette Coefficient untuk k berjalan;
+:PROSES DAVIES-BOULDIN:\nmenghitung Davies-Bouldin Index untuk k berjalan;
+backward :Menaikkan k = k + 1;
+repeat while (k masih kurang dari k_max (8)?) is (Ya) not (Tidak)
+:Memilih k optimal = k dengan Silhouette tertinggi\n(kurva Elbow dan DBI sebagai pembanding);
+:Melatih model K-Means final dengan k optimal\n(k-means++);
+:Menghitung metrik evaluasi final\n(Silhouette, Davies-Bouldin, WCSS);
 if (Volume data memenuhi ambang ideal 100?) then (Tidak)
   :Menambahkan peringatan hasil bersifat indikatif;
 else (Ya)
@@ -113,7 +120,7 @@ endif
 |SIMAFTUNSUR (Laravel)|
 :Menyimpan eksekusi, klaster, dan anggota\ndalam satu transaksi basis data;
 :Menampilkan dashboard hasil\n(metrik, profil klaster, sebaran PCA);
-|Pengguna (WD III / Administrator)|
+|Pengguna (Staf WD III / WD III)|
 :Menganalisis hasil untuk strategi pembinaan;
 stop
 @enduml

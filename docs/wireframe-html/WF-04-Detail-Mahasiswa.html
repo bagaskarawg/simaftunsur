@@ -1,0 +1,97 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><link rel="stylesheet" href="app.css"></head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo">SI</div><div><b>SIMAFTUNSUR</b><small>FT UNSUR</small></div></div>
+    <div class="eyebrow">Utama</div>
+    <nav class="nav">
+      <a><span class="ic ic-home"></span>Beranda</a>
+      <a class="active"><span class="ic ic-user"></span>Data Mahasiswa<span class="caret">▾</span></a>
+      <a><span class="ic ic-cluster"></span>Klasterisasi</a>
+      <a><span class="ic ic-trophy"></span>Prestasi</a>
+      <a><span class="ic ic-cal"></span>Kegiatan &amp; Organisasi</a>
+      <a><span class="ic ic-heart"></span>Pengabdian &amp; Hibah</a>
+      <a><span class="ic ic-route"></span>Tracer Study</a>
+      <a><span class="ic ic-cash"></span>Beasiswa</a>
+      <a><span class="ic ic-map"></span>KKN</a>
+      <a><span class="ic ic-mega"></span>Promosi / PMB</a>
+      <a><span class="ic ic-doc"></span>Laporan</a>
+    </nav>
+    <div class="eyebrow">Administrasi</div>
+    <nav class="nav">
+      <a><span class="ic ic-shield"></span>Pengguna</a>
+      <a><span class="ic ic-cog"></span>Pengaturan Sistem</a>
+      <a><span class="ic ic-clip"></span>Log Aktivitas</a>
+    </nav>
+    <div class="sidefoot">v1.0.0 · 2026.05</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">Data Mahasiswa / <b>Budi Santoso</b></div>
+      <div class="spacer"></div>
+      <div class="userchip"><div class="avatar">BS</div><div><div class="nm">Budi Santoso</div><div class="rl">Administrator</div></div></div>
+    </header>
+
+    <div class="content">
+      <div class="row" style="align-items:flex-start">
+        <div>
+          <h1 class="page-h">Budi Santoso</h1>
+          <p class="page-sub" style="margin-bottom:0">NPM 5520119124 · TIF · Angkatan 2022 · Semester 5</p>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost">Ubah Data</button>
+        <button class="btn btn-danger">Hapus</button>
+      </div>
+
+      <div class="grid mt" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi"><div class="lbl">IPK Rata-rata</div><div class="val">3.45</div></div>
+        <div class="kpi"><div class="lbl">IPK Terakhir</div><div class="val">3.55</div></div>
+        <div class="kpi"><div class="lbl">Tren</div><div class="val">+0.05</div></div>
+        <div class="kpi"><div class="lbl">Konsistensi</div><div class="val">0.12</div></div>
+      </div>
+      <div class="grid mt" style="grid-template-columns:repeat(3,1fr)">
+        <div class="kpi"><div class="lbl">Skor Prestasi (F5)</div><div class="val">40</div></div>
+        <div class="kpi"><div class="lbl">Skor Kegiatan (F6)</div><div class="val">25</div></div>
+        <div class="kpi"><div class="lbl">Skor Pengabdian (F7)</div><div class="val">10</div></div>
+      </div>
+
+      <div class="grid mt" style="grid-template-columns:1fr 2fr">
+        <div class="card">
+          <div class="card-h"><h3>Profil Mahasiswa</h3></div>
+          <dl class="dl">
+            <dt>Jenis Kelamin</dt><dd>Laki-laki</dd>
+            <dt>Status</dt><dd><span class="badge">aktif</span></dd>
+            <dt>Program Studi</dt><dd>Teknik Informatika</dd>
+            <dt>Email</dt><dd>budi@student.unsur.ac.id</dd>
+            <dt>Nomor Telepon</dt><dd>0812-xxxx-xxxx</dd>
+          </dl>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3>Riwayat IPK per Semester</h3><span class="sub">6 catatan tersimpan</span><div class="act"><button class="btn btn-ghost btn-sm">Impor File</button><button class="btn btn-primary btn-sm">+ Tambah IPK</button></div></div>
+          <table>
+            <thead><tr><th class="c">Smt</th><th>Tahun Akademik</th><th>Periode</th><th class="r">SKS Diambil</th><th class="r">SKS Lulus</th><th class="r">IPK</th><th class="r">Aksi</th></tr></thead>
+            <tbody>
+              <tr><td class="c">1</td><td>2022/2023</td><td>ganjil</td><td class="r">22</td><td class="r">22</td><td class="r">3.30</td><td class="r tacts"><a>Ubah</a><a class="del">Hapus</a></td></tr>
+              <tr><td class="c">2</td><td>2022/2023</td><td>genap</td><td class="r">24</td><td class="r">24</td><td class="r">3.40</td><td class="r tacts"><a>Ubah</a><a class="del">Hapus</a></td></tr>
+              <tr><td class="c">3</td><td>2023/2024</td><td>ganjil</td><td class="r">23</td><td class="r">21</td><td class="r">3.50</td><td class="r tacts"><a>Ubah</a><a class="del">Hapus</a></td></tr>
+              <tr><td class="c">4</td><td>2023/2024</td><td>genap</td><td class="r">24</td><td class="r">24</td><td class="r">3.55</td><td class="r tacts"><a>Ubah</a><a class="del">Hapus</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card mt">
+        <div class="card-h"><h3>Prestasi</h3><div class="act"><span style="font-size:12.5px;text-decoration:underline;color:var(--ink-2)">Kelola modul →</span></div></div>
+        <table>
+          <thead><tr><th>Prestasi</th><th>Jenis</th><th>Tingkat</th><th class="r">Poin</th><th class="r">Tanggal</th></tr></thead>
+          <tbody>
+            <tr><td>Juara 1 LKTI Nasional</td><td><span class="badge">akademik</span></td><td>Nasional</td><td class="r">40</td><td class="r">12/03/2026</td></tr>
+            <tr><td>Finalis Debat Regional</td><td><span class="badge">non-akademik</span></td><td>Regional</td><td class="r">15</td><td class="r">20/04/2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

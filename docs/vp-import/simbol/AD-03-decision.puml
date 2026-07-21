@@ -1,0 +1,8 @@
+' Simbol Activity — Decision/Merge (belah ketupat). UML 2.5.1.
+@startdot
+digraph AD03 {
+  bgcolor="white"; margin=0;
+  node [shape=diamond, style=filled, fillcolor="#F7F7F7", color="#333333", penwidth=1.4, fixedsize=true, width=1.9, height=1.1, label=""];
+  n;
+}
+@enddot

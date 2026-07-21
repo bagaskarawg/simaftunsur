@@ -1,0 +1,11 @@
+' Simbol Class — Agregasi (belah ketupat kosong). UML 2.5.1.
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam classAttributeIconSize 0
+hide circle
+class A
+class B
+A o-- B
+@enduml

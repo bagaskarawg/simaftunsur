@@ -1,0 +1,11 @@
+' Simbol Use Case — <<extend>>. UML 2.5.1.
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam classAttributeIconSize 0
+hide circle
+usecase "Use Case A" as A
+usecase "Use Case B" as B
+A ..> B : <<extend>>
+@enduml

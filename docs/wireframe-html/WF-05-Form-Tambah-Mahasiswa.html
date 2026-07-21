@@ -1,0 +1,76 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><link rel="stylesheet" href="app.css"></head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo">SI</div><div><b>SIMAFTUNSUR</b><small>FT UNSUR</small></div></div>
+    <div class="eyebrow">Utama</div>
+    <nav class="nav">
+      <a><span class="ic ic-home"></span>Beranda</a>
+      <a class="active"><span class="ic ic-user"></span>Data Mahasiswa<span class="caret">▾</span></a>
+      <a><span class="ic ic-cluster"></span>Klasterisasi</a>
+      <a><span class="ic ic-trophy"></span>Prestasi</a>
+      <a><span class="ic ic-cal"></span>Kegiatan &amp; Organisasi</a>
+      <a><span class="ic ic-heart"></span>Pengabdian &amp; Hibah</a>
+      <a><span class="ic ic-route"></span>Tracer Study</a>
+      <a><span class="ic ic-cash"></span>Beasiswa</a>
+      <a><span class="ic ic-map"></span>KKN</a>
+      <a><span class="ic ic-mega"></span>Promosi / PMB</a>
+      <a><span class="ic ic-doc"></span>Laporan</a>
+    </nav>
+    <div class="eyebrow">Administrasi</div>
+    <nav class="nav">
+      <a><span class="ic ic-shield"></span>Pengguna</a>
+      <a><span class="ic ic-cog"></span>Pengaturan Sistem</a>
+      <a><span class="ic ic-clip"></span>Log Aktivitas</a>
+    </nav>
+    <div class="sidefoot">v1.0.0 · 2026.05</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">Data Mahasiswa / <b>Tambah Mahasiswa</b></div>
+      <div class="spacer"></div>
+      <div class="userchip"><div class="avatar">BS</div><div><div class="nm">Budi Santoso</div><div class="rl">Administrator</div></div></div>
+    </header>
+
+    <div class="content">
+      <h1 class="page-h">Tambah Mahasiswa</h1>
+      <p class="page-sub">Data IPK per semester dapat ditambahkan setelah mahasiswa dibuat.</p>
+
+      <div class="grid" style="grid-template-columns:2fr 1fr">
+        <div>
+          <div class="card">
+            <div class="card-h"><h3>Identitas</h3></div>
+            <div class="grid" style="grid-template-columns:1fr 1fr">
+              <div class="field"><label>NPM (11 digit)</label><div class="inp ph">552011xxxxx</div></div>
+              <div class="field"><label>Jenis Kelamin</label>
+                <div style="display:flex;gap:18px;padding-top:8px;font-size:13.5px;color:var(--ink-2)"><span><span style="display:inline-block;width:15px;height:15px;border:1px solid var(--line);border-radius:50%;vertical-align:middle;margin-right:6px"></span>Laki-laki</span><span><span style="display:inline-block;width:15px;height:15px;border:1px solid var(--line);border-radius:50%;vertical-align:middle;margin-right:6px"></span>Perempuan</span></div>
+              </div>
+            </div>
+            <div class="field mt"><label>Nama Lengkap</label><div class="inp ph">Nama lengkap mahasiswa</div></div>
+          </div>
+
+          <div class="card mt">
+            <div class="card-h"><h3>Akademik</h3></div>
+            <div class="field"><label>Program Studi</label><div class="sel">Pilih program studi</div></div>
+            <div class="grid mt" style="grid-template-columns:1fr 1fr 1fr">
+              <div class="field"><label>Angkatan</label><div class="inp ph">2022</div></div>
+              <div class="field"><label>Semester Aktif</label><div class="inp ph">1</div></div>
+              <div class="field"><label>Status</label><div class="sel">aktif</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-h"><h3>Kontak</h3><span class="sub">opsional</span></div>
+            <div class="field"><label>Email</label><div class="inp ph">email@student.unsur.ac.id</div></div>
+            <div class="field mt"><label>Nomor Telepon</label><div class="inp ph">0812-xxxx-xxxx</div></div>
+          </div>
+          <div class="row mt" style="justify-content:flex-end"><button class="btn btn-ghost">Batal</button><button class="btn btn-primary">Simpan</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

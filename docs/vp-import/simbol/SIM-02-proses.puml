@@ -1,0 +1,8 @@
+' Simbol Flowchart — Process (langkah proses/komputasi). ISO 5807:1985.
+@startdot
+digraph SIM02 {
+  bgcolor="white"; margin=0;
+  node [fontname="Segoe UI", color="#333333", penwidth=1.4, style=filled];
+  n [shape=box, fillcolor="white", width=1.9, height=0.8, fixedsize=true, label=""];
+}
+@enddot

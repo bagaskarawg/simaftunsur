@@ -1,0 +1,11 @@
+' Simbol Use Case — Generalisasi (segitiga kosong). UML 2.5.1.
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam classAttributeIconSize 0
+hide circle
+actor "Aktor Umum" as G
+actor "Aktor Khusus" as S
+S --|> G
+@enduml

@@ -17,7 +17,7 @@ CREATE TABLE pengguna (
     nama                      VARCHAR(255) NOT NULL,
     email                     VARCHAR(255) NULL,
     kata_sandi                VARCHAR(255) NOT NULL,
-    peran                     VARCHAR(32)  NOT NULL DEFAULT 'staf' COMMENT 'admin|dekan|wd3|kaprodi|staf|dosen',
+    peran                     VARCHAR(32)  NOT NULL DEFAULT 'staf_prodi' COMMENT 'admin|wd3|staf_wd3|kaprodi|staf_prodi',
     email_terverifikasi_pada  TIMESTAMP NULL,
     remember_token            VARCHAR(100) NULL,
     created_at                TIMESTAMP NULL,
@@ -140,6 +140,10 @@ CREATE TABLE klasterisasi_klaster (
     jumlah_anggota    INT UNSIGNED NOT NULL DEFAULT 0,
     centroid          JSON NOT NULL COMMENT 'nilai centroid dalam satuan asli',
     centroid_terskala JSON NULL,
+    skor_akademik     DOUBLE NULL COMMENT 'skor komponen akademik (F1-F4)',
+    skor_non_akademik DOUBLE NULL COMMENT 'skor komponen non-akademik (F5-F7)',
+    skor_komposit     DOUBLE NULL COMMENT 'dasar peringkat penamaan klaster',
+    ringkasan_profil  TEXT NULL COMMENT 'alasan penamaan (transparansi label)',
     interpretasi      TEXT NULL,
     created_at        TIMESTAMP NULL,
     updated_at        TIMESTAMP NULL,
@@ -147,6 +151,27 @@ CREATE TABLE klasterisasi_klaster (
     UNIQUE KEY uq_klaster_eksekusi_cluster (eksekusi_id, cluster),
     CONSTRAINT fk_klaster_eksekusi FOREIGN KEY (eksekusi_id)
         REFERENCES klasterisasi_eksekusi (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Master katalog nama/label klaster. Dipetakan ke klaster hasil K-Means
+-- berdasarkan PERINGKAT skor komposit; jumlah klaster tetap dinamis dari
+-- algoritma. Tidak diikat foreign key ke klasterisasi_klaster karena
+-- katalog dikirim ke service Python sebagai konfigurasi saat eksekusi.
+CREATE TABLE klasterisasi_kategori (
+    id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    nama        VARCHAR(255) NOT NULL,
+    urutan      TINYINT UNSIGNED NOT NULL DEFAULT 1
+                COMMENT 'peringkat skor komposit: 1 = tertinggi',
+    deskripsi   TEXT NULL,
+    rekomendasi TEXT NULL COMMENT 'rekomendasi pembinaan untuk kategori ini',
+    warna       VARCHAR(16) NULL COMMENT 'token warna dashboard, mis. cluster-1',
+    aktif       BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at  TIMESTAMP NULL,
+    updated_at  TIMESTAMP NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_kategori_nama (nama),
+    KEY idx_kategori_urutan (urutan),
+    KEY idx_kategori_aktif (aktif)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE klasterisasi_anggota (

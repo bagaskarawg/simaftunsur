@@ -1,0 +1,354 @@
+' =====================================================================
+' SIMAFTUNSUR — ERD LENGKAP (satu gambar utuh, 22 entitas)
+' Notasi: crow's foot (Information Engineering), model logis MySQL 8.x.
+'
+' Tujuan penyajian (permintaan pembimbing): SELURUH entitas & relasi
+' tampil dalam SATU gambar, dicetak di kertas A4 ORIENTASI LANDSCAPE
+' sehingga seluruh relasi terlihat dalam 1 halaman.
+'
+' Keputusan penyajian agar muat & tetap terbaca:
+' - Ditampilkan NAMA KOLOM saja (tanpa tipe data). Menyertakan tipe data
+'   membuat gambar berasio 1.87 -> teks tercetak hanya ~5,6 pt (tak
+'   terbaca). Tanpa tipe data: rasio ~1.44 (mendekati A4 landscape) dan
+'   teks tercetak ~7 pt.
+' - Tipe data lengkap ada di: simaftunsur-erd.sql, tabel struktur data
+'   (kamus data) pada naskah, dan ERD terpecah simaftunsur-erd.puml.
+' - Kolom created_at & updated_at ada di semua tabel (kecuali
+'   klasterisasi_anggota) — tidak digambar; sebutkan di keterangan gambar.
+' - Tabel sistem Laravel (migrations, cache, jobs, sessions) tidak
+'   dimasukkan karena bukan tabel bisnis.
+' - Nama constraint FK (fk_*) tidak dilabelkan pada garis agar tidak
+'   mengaburkan gambar; daftarnya ada di simaftunsur-erd.sql.
+'
+' Sumber kebenaran kolom: database/migrations/
+' =====================================================================
+
+@startuml ERD-Lengkap
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam nodesep 28
+skinparam ranksep 46
+skinparam linetype ortho
+skinparam entity {
+  BackgroundColor #FFFFFF
+  BorderColor #333333
+  FontStyle bold
+}
+skinparam ArrowColor #333333
+hide circle
+
+' ---------- Master & akademik inti ----------
+entity program_studi {
+  * id <<PK>>
+  --
+  * kode <<UK>>
+  * nama
+  * jenjang
+}
+
+entity mahasiswa {
+  * id <<PK>>
+  --
+  * npm <<UK>>
+  * nama
+  * program_studi_id <<FK>>
+  * angkatan
+  * semester_aktif
+  * jenis_kelamin
+  * status
+  status_akhir <<lanjutan>>
+  email
+  nomor_telepon
+}
+
+entity nilai_ipk_semester {
+  * id <<PK>>
+  --
+  * mahasiswa_id <<FK>>
+  * semester
+  * tahun_akademik
+  * semester_ganjil_genap
+  * ipk
+  * sks_diambil
+  * sks_lulus
+  .. unik: (mahasiswa_id, semester) ..
+}
+
+' ---------- Klasterisasi K-Means (fokus penelitian) ----------
+entity klasterisasi_eksekusi {
+  * id <<PK>>
+  --
+  * k_terpilih
+  * metode_pemilihan_k
+  * fitur_dipakai
+  * skema_penskalaan
+  random_state
+  versi_algoritma
+  kriteria_data
+  * jumlah_data
+  silhouette
+  davies_bouldin
+  inertia
+  * evaluasi_k
+  * profil_klaster
+  peringatan
+  dijalankan_oleh <<FK>>
+}
+
+entity klasterisasi_klaster {
+  * id <<PK>>
+  --
+  * eksekusi_id <<FK>>
+  * cluster
+  label_deskriptif
+  * jumlah_anggota
+  * centroid
+  centroid_terskala
+  skor_akademik
+  skor_non_akademik
+  skor_komposit
+  ringkasan_profil
+  interpretasi
+  .. unik: (eksekusi_id, cluster) ..
+}
+
+entity klasterisasi_anggota {
+  * id <<PK>>
+  --
+  * eksekusi_id <<FK>>
+  klaster_id <<FK>>
+  * mahasiswa_id <<FK>>
+  * cluster
+  fitur_nilai <<snapshot>>
+  fitur_terskala
+  jarak_ke_centroid
+  * pca_x
+  * pca_y
+  .. unik: (eksekusi_id, mahasiswa_id) ..
+}
+
+entity klasterisasi_kategori {
+  * id <<PK>>
+  --
+  * nama <<UK>>
+  * urutan
+  deskripsi
+  rekomendasi
+  warna
+  * aktif
+}
+
+' ---------- Prestasi & komponen skor SKKM ----------
+entity prestasi {
+  * id <<PK>>
+  --
+  * mahasiswa_id <<FK>>
+  * judul
+  * jenis
+  * tingkat
+  capaian
+  peringkat
+  penyelenggara
+  tanggal
+  url_bukti
+  berkas_bukti
+}
+
+entity kegiatan_kemahasiswaan {
+  * id <<PK>>
+  --
+  * mahasiswa_id <<FK>>
+  * jenis
+  * peran
+  * nama_kegiatan
+  penyelenggara
+  periode
+  tanggal
+  url_bukti
+  keterangan
+}
+
+entity pengabdian_hibah {
+  * id <<PK>>
+  --
+  * mahasiswa_id <<FK>>
+  * jenis
+  * peran
+  * judul
+  sumber_dana
+  tahun
+  url_bukti
+  keterangan
+}
+
+' ---------- Beasiswa (modul pendukung) ----------
+entity beasiswa_kategori {
+  * id <<PK>>
+  --
+  * kode <<UK>>
+  * nama
+  * jenis_bantuan
+  * sumber_dana
+  * aktif
+  keterangan
+}
+
+entity beasiswa_penerima {
+  * id <<PK>>
+  --
+  * mahasiswa_id <<FK>>
+  * beasiswa_kategori_id <<FK>>
+  * tahun_akademik
+  * semester
+  * status
+  nominal
+  no_sk
+  tanggal_sk
+  sumber_usulan
+}
+
+' ---------- KKN (modul pendukung) ----------
+entity kkn_lokasi {
+  * id <<PK>>
+  --
+  * nama
+  kecamatan
+  kabupaten
+  * tahun_akademik
+  kuota
+  mitra
+  * aktif
+}
+
+entity kkn_dpl {
+  * id <<PK>>
+  --
+  * nama
+  nip
+  nomor_telepon
+  bidang_keahlian
+  * aktif
+}
+
+entity kkn_kelompok {
+  * id <<PK>>
+  --
+  * nama_kelompok
+  * kkn_lokasi_id <<FK>>
+  kkn_dpl_id <<FK>>
+  * tahun_akademik
+  * status
+}
+
+entity kkn_peserta {
+  * id <<PK>>
+  --
+  * kkn_kelompok_id <<FK>>
+  * mahasiswa_id <<FK>>
+  * jabatan
+  * status
+  nilai_akhir
+  nilai_huruf
+  .. unik: (kkn_kelompok_id, mahasiswa_id) ..
+}
+
+' ---------- Tracer study, promosi, sistem ----------
+entity tracer_study {
+  * id <<PK>>
+  --
+  * mahasiswa_id <<FK>>
+  tahun_lulus
+  * status_pekerjaan
+  masa_tunggu_bulan
+  nama_instansi
+  relevansi
+  rentang_gaji
+  tanggal_isi
+}
+
+entity kegiatan_promosi {
+  * id <<PK>>
+  --
+  * nama_kegiatan
+  * sekolah_target
+  kota
+  tanggal
+  petugas
+  jumlah_peminat
+  catatan
+}
+
+entity sekolah {
+  * id <<PK>>
+  --
+  * nama
+  * jenjang
+  kota
+  alamat
+  kontak
+}
+
+entity pengguna {
+  * id <<PK>>
+  --
+  * nip <<UK>>
+  * nama
+  email <<UK>>
+  * kata_sandi
+  * peran
+  email_terverifikasi_pada
+}
+
+entity log_aktivitas {
+  * id <<PK>>
+  --
+  pengguna_id <<FK>>
+  * aksi
+  model
+  deskripsi
+  ip
+}
+
+entity pengaturan {
+  * id <<PK>>
+  --
+  * kunci <<UK>>
+  nilai
+}
+
+' =====================================================================
+' RELASI — 18 foreign key + 1 pemetaan non-FK
+' =====================================================================
+program_studi         ||--o{ mahasiswa
+mahasiswa             ||--o{ nilai_ipk_semester
+mahasiswa             ||--o{ prestasi
+mahasiswa             ||--o{ kegiatan_kemahasiswaan
+mahasiswa             ||--o{ pengabdian_hibah
+mahasiswa             ||--o{ tracer_study
+mahasiswa             ||--o{ beasiswa_penerima
+mahasiswa             ||--o{ kkn_peserta
+mahasiswa             ||--o{ klasterisasi_anggota
+
+beasiswa_kategori     ||--o{ beasiswa_penerima
+kkn_lokasi            ||--o{ kkn_kelompok
+kkn_dpl               |o--o{ kkn_kelompok
+kkn_kelompok          ||--o{ kkn_peserta
+
+pengguna              |o--o{ klasterisasi_eksekusi
+pengguna              |o--o{ log_aktivitas
+klasterisasi_eksekusi ||--o{ klasterisasi_klaster
+klasterisasi_eksekusi ||--o{ klasterisasi_anggota
+klasterisasi_klaster  |o--o{ klasterisasi_anggota
+
+' Pemetaan label klaster mengikuti peringkat skor komposit; katalog
+' dikirim ke service Python saat eksekusi — BUKAN foreign key.
+klasterisasi_kategori .. klasterisasi_klaster : pemetaan label
+
+' Catatan: legenda SENGAJA tidak dipasang di dalam gambar. Tinggi gambar
+' adalah faktor pembatas saat dicetak A4 landscape; legenda menambah
+' ~165 px tinggi dan menurunkan ukuran teks cetak dari ~7 pt ke ~6,1 pt.
+' Legenda ditulis sebagai KETERANGAN GAMBAR di naskah (lihat
+' docs/daftar-simbol.md, tabel A.2 Simbol ERD).
+@enduml

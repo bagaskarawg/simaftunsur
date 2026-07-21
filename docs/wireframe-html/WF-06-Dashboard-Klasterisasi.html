@@ -1,0 +1,125 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><link rel="stylesheet" href="app.css"></head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo">SI</div><div><b>SIMAFTUNSUR</b><small>FT UNSUR</small></div></div>
+    <div class="eyebrow">Utama</div>
+    <nav class="nav">
+      <a><span class="ic ic-home"></span>Beranda</a>
+      <a><span class="ic ic-user"></span>Data Mahasiswa<span class="caret">▾</span></a>
+      <a class="active"><span class="ic ic-cluster"></span>Klasterisasi</a>
+      <a><span class="ic ic-trophy"></span>Prestasi</a>
+      <a><span class="ic ic-cal"></span>Kegiatan &amp; Organisasi</a>
+      <a><span class="ic ic-heart"></span>Pengabdian &amp; Hibah</a>
+      <a><span class="ic ic-route"></span>Tracer Study</a>
+      <a><span class="ic ic-cash"></span>Beasiswa</a>
+      <a><span class="ic ic-map"></span>KKN</a>
+      <a><span class="ic ic-mega"></span>Promosi / PMB</a>
+      <a><span class="ic ic-doc"></span>Laporan</a>
+    </nav>
+    <div class="eyebrow">Administrasi</div>
+    <nav class="nav">
+      <a><span class="ic ic-shield"></span>Pengguna</a>
+      <a><span class="ic ic-cog"></span>Pengaturan Sistem</a>
+      <a><span class="ic ic-clip"></span>Log Aktivitas</a>
+    </nav>
+    <div class="sidefoot">v1.0.0 · 2026.05</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">SIMAFTUNSUR / <b>Klasterisasi</b></div>
+      <div class="spacer"></div>
+      <div class="userchip"><div class="avatar">BS</div><div><div class="nm">Budi Santoso</div><div class="rl">Administrator</div></div></div>
+    </header>
+
+    <div class="content">
+      <h1 class="page-h">Klasterisasi Profil Mahasiswa</h1>
+      <p class="page-sub">Pengelompokan K-Means; jumlah klaster (k) ditentukan otomatis dari data (Elbow + Silhouette), tidak ditetapkan manual.</p>
+
+      <!-- Kesiapan data -->
+      <div class="card">
+        <div class="card-h"><h3>Kesiapan Data Klasterisasi</h3><div class="act"><span class="badge strong">Siap</span></div></div>
+        <div class="row" style="align-items:center;gap:24px">
+          <div style="flex:1">
+            <div class="prog"><span style="width:100%"></span></div>
+            <div style="font-size:12px;color:var(--ink-2);margin-top:6px">100% dari ambang ideal (100 mahasiswa)</div>
+          </div>
+          <div style="font-size:20px;font-weight:750;white-space:nowrap">265 / 100 <span style="font-size:13px;font-weight:500;color:var(--ink-2)">mahasiswa layak</span></div>
+        </div>
+        <div class="grid mt" style="grid-template-columns:repeat(4,1fr)">
+          <div class="kpi" style="padding:10px 14px"><div class="lbl">Total</div><div class="val" style="font-size:20px">320</div></div>
+          <div class="kpi" style="padding:10px 14px"><div class="lbl">Aktif</div><div class="val" style="font-size:20px">290</div></div>
+          <div class="kpi" style="padding:10px 14px"><div class="lbl">Layak</div><div class="val" style="font-size:20px">265</div></div>
+          <div class="kpi" style="padding:10px 14px"><div class="lbl">Aktif, IPK kurang</div><div class="val" style="font-size:20px">25</div></div>
+        </div>
+      </div>
+
+      <!-- Jalankan -->
+      <div class="card mt">
+        <div class="row" style="align-items:center;gap:16px">
+          <div style="flex:1">
+            <h3 style="font-size:15px;margin:0 0 6px">Jalankan Klasterisasi</h3>
+            <div style="color:var(--ink-2);font-size:13px;line-height:1.6">
+              Memakai 7 fitur SKKM: IPK rata-rata, IPK terakhir, tren, konsistensi (F1–F4),
+              serta skor prestasi, kegiatan, dan pengabdian (F5–F7).<br>
+              Jumlah klaster (k) ditentukan dari data melalui Elbow Method dan Silhouette Coefficient;
+              penskalaan fitur memakai StandardScaler. <b>Tidak ada parameter yang perlu dipilih.</b>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="height:39px;flex:none">Jalankan Klasterisasi</button>
+        </div>
+      </div>
+
+      <!-- KPI hasil -->
+      <div class="grid mt" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi acc"><div class="lbl">Jumlah Klaster (k)</div><div class="val">2</div><div class="hint">otomatis dari data</div></div>
+        <div class="kpi"><div class="lbl">Silhouette</div><div class="val">0.54</div></div>
+        <div class="kpi"><div class="lbl">Davies-Bouldin</div><div class="val">0.71</div></div>
+        <div class="kpi"><div class="lbl">Mahasiswa</div><div class="val">265</div></div>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid mt" style="grid-template-columns:1fr 1fr">
+        <div class="card">
+          <div class="card-h"><h3>Sebaran Klaster (proyeksi PCA 2D)</h3></div>
+          <div class="ph-box" style="height:230px"><div class="ph-ic ph-scatter"></div><div class="cap">Scatter plot — titik per mahasiswa, warna per klaster</div></div>
+          <div class="legend"><span><span class="dot d1">1</span>Berprestasi (150)</span><span><span class="dot d2">2</span>Perlu Bimbingan (115)</span></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3>Evaluasi Jumlah Klaster</h3></div>
+          <div class="ph-box" style="height:105px;margin-bottom:12px"><div class="ph-ic ph-line" style="width:24px;height:24px"></div><div class="cap">Elbow Method — WCSS / inertia per k</div></div>
+          <div class="ph-box" style="height:105px"><div class="ph-ic ph-line" style="width:24px;height:24px"></div><div class="cap">Silhouette per k (k terpilih ditandai)</div></div>
+        </div>
+      </div>
+
+      <!-- Radar -->
+      <div class="card mt">
+        <div class="card-h"><h3>Perbandingan Profil Antar-Klaster</h3></div>
+        <div class="ph-box" style="height:200px"><div class="ph-ic ph-radar"></div><div class="cap">Radar — IPK Rata · IPK Akhir · Tren · Konsistensi · Semester</div></div>
+      </div>
+
+      <!-- Profil & rekomendasi -->
+      <h3 style="font-size:15px;margin:22px 0 12px">Profil &amp; Rekomendasi Pembinaan per Klaster</h3>
+      <div class="grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="card"><div style="font-weight:700"><span class="dot d1">1</span>Klaster 1 — Berprestasi</div><div style="color:var(--ink-2);font-size:13px;margin:6px 0">150 mahasiswa · IPK 3.55 · Tren + · Prestasi tinggi</div><div style="font-size:12.5px"><b>Rekomendasi:</b> pertahankan capaian, dorong lomba nasional &amp; peran mentor.</div><div style="margin-top:10px;font-size:12.5px;text-decoration:underline;color:var(--ink-2)">Lihat detail &amp; dasar penempatan →</div></div>
+        <div class="card"><div style="font-weight:700"><span class="dot d2">2</span>Klaster 2 — Perlu Bimbingan</div><div style="color:var(--ink-2);font-size:13px;margin:6px 0">115 mahasiswa · IPK 2.68 · Tren − · Aktivitas rendah</div><div style="font-size:12.5px"><b>Rekomendasi:</b> pendampingan akademik &amp; dorong keterlibatan kegiatan.</div><div style="margin-top:10px;font-size:12.5px;text-decoration:underline;color:var(--ink-2)">Lihat detail &amp; dasar penempatan →</div></div>
+      </div>
+
+      <!-- Anggota -->
+      <div class="card mt">
+        <div class="card-h"><h3><span class="dot d1">1</span>Daftar Anggota — Klaster 1 Berprestasi (150)</h3><div class="act"><span style="font-size:12.5px;text-decoration:underline;color:var(--ink-2)">Detail klaster →</span></div></div>
+        <table>
+          <thead><tr><th>NPM</th><th>Nama</th><th>Prodi</th><th class="r">IPK Rata</th><th class="r">Semester</th></tr></thead>
+          <tbody>
+            <tr><td>5520119124</td><td>Budi Santoso</td><td>TIF</td><td class="r">3.72</td><td class="r">5</td></tr>
+            <tr><td>5520120017</td><td>Siti Aminah</td><td>TSI</td><td class="r">3.65</td><td class="r">7</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:14px;font-size:12px;color:var(--ink-3)">Eksekusi terakhir 30/06/2026 10:14 · oleh Staf WD III · penskalaan StandardScaler · 7 fitur</div>
+    </div>
+  </div>
+</div>
+</body></html>

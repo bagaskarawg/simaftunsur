@@ -6,11 +6,14 @@
 > Diselaraskan dengan implementasi nyata `ml/pipeline/` (orchestrator, train,
 > evaluate, interpret) per 2026-07-02.
 >
-> **Render:** salin blok ```mermaid``` ke <https://mermaid.live> → ekspor PNG.
-> ⚠️ Saat ekspor, pilih **latar putih** (nonaktifkan *transparent background*)
-> sesuai permintaan dosen. Untuk Visual Paradigm, gambar ulang memakai palet
-> **Flowchart** VP mengikuti sumber teks ini (notasi: oval = mulai/selesai,
-> jajar genjang = input/output, persegi = proses, belah ketupat = keputusan).
+> **Render:** cara termudah — jalankan `tools\render-gambar.ps1`; kelima
+> flowchart otomatis jadi PNG latar putih di `docs\gambar\` (FC-01..FC-05)
+> lewat sumber PlantUML `docs/vp-import/simaftunsur-flowchart.puml` (java-only).
+> Blok ```mermaid``` di bawah tetap disediakan untuk pratinjau cepat di
+> <https://mermaid.live> (bila ekspor dari sana, pilih **latar putih**, bukan
+> transparan). Untuk Visual Paradigm, gambar ulang memakai palet **Flowchart**
+> VP mengikuti sumber teks ini (oval = mulai/selesai, jajar genjang =
+> input/output, persegi = proses, belah ketupat = keputusan).
 
 ---
 

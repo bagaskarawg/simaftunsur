@@ -1,0 +1,8 @@
+' Simbol Activity — Swimlane / Activity Partition (jalur pelaku). UML 2.5.1.
+@startdot
+digraph AD07 {
+  bgcolor="white"; margin=0;
+  node [shape=record, fontname="Segoe UI", fontsize=11, color="#333333", penwidth=1.4, fixedsize=true, width=1.5, height=2.0];
+  n [label="{ Partisi (Swimlane) |  \n \n  }"];
+}
+@enddot

@@ -1,0 +1,73 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><link rel="stylesheet" href="app.css"></head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo">SI</div><div><b>SIMAFTUNSUR</b><small>FT UNSUR</small></div></div>
+    <div class="eyebrow">Utama</div>
+    <nav class="nav">
+      <a><span class="ic ic-home"></span>Beranda</a>
+      <a class="active"><span class="ic ic-user"></span>Data Mahasiswa<span class="caret">▴</span></a>
+      <div class="sub"><a>Impor Mahasiswa</a><a>Impor IPK</a></div>
+      <a><span class="ic ic-cluster"></span>Klasterisasi</a>
+      <a><span class="ic ic-trophy"></span>Prestasi</a>
+      <a><span class="ic ic-cal"></span>Kegiatan &amp; Organisasi</a>
+      <a><span class="ic ic-heart"></span>Pengabdian &amp; Hibah</a>
+      <a><span class="ic ic-route"></span>Tracer Study</a>
+      <a><span class="ic ic-cash"></span>Beasiswa</a>
+      <a><span class="ic ic-map"></span>KKN</a>
+      <a><span class="ic ic-mega"></span>Promosi / PMB</a>
+      <a><span class="ic ic-doc"></span>Laporan</a>
+    </nav>
+    <div class="eyebrow">Administrasi</div>
+    <nav class="nav">
+      <a><span class="ic ic-shield"></span>Pengguna</a>
+      <a><span class="ic ic-cog"></span>Pengaturan Sistem</a>
+      <a><span class="ic ic-clip"></span>Log Aktivitas</a>
+    </nav>
+    <div class="sidefoot">v1.0.0 · 2026.05</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">SIMAFTUNSUR / <b>Data Mahasiswa</b></div>
+      <div class="spacer"></div>
+      <div class="userchip"><div class="avatar">BS</div><div><div class="nm">Budi Santoso</div><div class="rl">Administrator</div></div></div>
+    </header>
+
+    <div class="content">
+      <h1 class="page-h">Data Mahasiswa</h1>
+      <p class="page-sub">Kelola &amp; saring data mahasiswa FT UNSUR.</p>
+
+      <div class="card">
+        <div class="row" style="align-items:center">
+          <div class="search" style="width:320px"><div class="inp">Cari NPM atau nama</div></div>
+          <div class="spacer"></div>
+          <button class="btn btn-ghost">Reset</button>
+          <button class="btn btn-primary">+ Tambah Mahasiswa</button>
+        </div>
+        <div class="grid mt" style="grid-template-columns:repeat(3,1fr)">
+          <div class="sel">Semua Prodi</div><div class="sel">Semua Angkatan</div><div class="sel">Semua Status</div>
+        </div>
+        <div class="grid mt" style="grid-template-columns:repeat(3,1fr)">
+          <div class="sel">Semua Jenis Kelamin</div><div class="inp ph">IPK rata min</div><div class="inp ph">IPK rata maks</div>
+        </div>
+
+        <table class="mt">
+          <thead><tr><th style="width:34px"><span class="checkbox"></span></th><th>NPM</th><th>Nama</th><th>Prodi</th><th class="c">Angkatan</th><th class="c">Smt</th><th>Status</th><th class="r">IPK Rata-rata</th></tr></thead>
+          <tbody>
+            <tr><td><span class="checkbox"></span></td><td>5520119124</td><td>Budi Santoso<div class="npm">Laki-laki</div></td><td>TIF</td><td class="c">2022</td><td class="c">5</td><td><span class="badge">aktif</span></td><td class="r">3.45</td></tr>
+            <tr><td><span class="checkbox"></span></td><td>5520120017</td><td>Siti Aminah<div class="npm">Perempuan</div></td><td>TSI</td><td class="c">2021</td><td class="c">7</td><td><span class="badge">aktif</span></td><td class="r">3.60</td></tr>
+            <tr><td><span class="checkbox"></span></td><td>5520123091</td><td>Andi Pratama<div class="npm">Laki-laki</div></td><td>TMI</td><td class="c">2023</td><td class="c">3</td><td><span class="badge">cuti</span></td><td class="r">2.90</td></tr>
+            <tr><td><span class="checkbox"></span></td><td>5520121045</td><td>Rina Wijaya<div class="npm">Perempuan</div></td><td>TID</td><td class="c">2022</td><td class="c">5</td><td><span class="badge">aktif</span></td><td class="r">3.15</td></tr>
+            <tr><td><span class="checkbox"></span></td><td>5520119088</td><td>Dedi Kurnia<div class="npm">Laki-laki</div></td><td>TIF</td><td class="c">2022</td><td class="c">5</td><td><span class="badge">aktif</span></td><td class="r">3.28</td></tr>
+          </tbody>
+        </table>
+        <div class="row" style="align-items:center;margin-top:14px;color:var(--ink-2);font-size:12.5px">
+          <span>Menampilkan 1–10 dari 320 mahasiswa</span><div class="spacer"></div>
+          <span class="chip">‹</span><span class="chip strong" style="background:var(--fill-3)">1</span><span class="chip">2</span><span class="chip">3</span><span class="chip">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,275 @@
+' =====================================================================
+' SIMAFTUNSUR — Class Diagram (PlantUML)
+' Sumber render cepat; padanan model VP: simaftunsur-class.xmi.
+' Dua diagram: (1) kelas fokus penelitian, (2) modul pendukung.
+' =====================================================================
+
+@startuml Class-Fokus
+skinparam backgroundColor #FFFFFF
+skinparam classAttributeIconSize 0
+hide empty members
+
+class Pengguna {
+  +id : Integer
+  +nip : String
+  +nama : String
+  +email : String
+  -kata_sandi : String
+  +peran : String
+  +punyaIzin(kode : String) : Boolean
+  +punyaPeran(peran : String) : Boolean
+  +semuaIzin() : Array
+  +labelPeran() : String
+}
+
+class ProgramStudi {
+  +id : Integer
+  +kode : String
+  +nama : String
+  +jenjang : String
+}
+
+class Mahasiswa {
+  +id : Integer
+  +npm : String
+  +nama : String
+  +program_studi_id : Integer
+  +angkatan : Integer
+  +semester_aktif : Integer
+  +jenis_kelamin : String
+  +status : String
+  +status_akhir : String
+  +ipkRataRata() : Float
+  +ipkTerakhir() : Float
+  +tren() : Float
+  +konsistensi() : Float
+  +skorPrestasi() : Integer
+  +skorKegiatan() : Integer
+  +skorPengabdian() : Integer
+}
+
+class NilaiIpkSemester {
+  +id : Integer
+  +mahasiswa_id : Integer
+  +semester : Integer
+  +tahun_akademik : String
+  +semester_ganjil_genap : String
+  +ipk : Float
+  +sks_diambil : Integer
+  +sks_lulus : Integer
+}
+
+class KlasterisasiEksekusi {
+  +id : Integer
+  +k_terpilih : Integer
+  +metode_pemilihan_k : String
+  +fitur_dipakai : JSON
+  +skema_penskalaan : String
+  +random_state : Integer
+  +jumlah_data : Integer
+  +silhouette : Float
+  +davies_bouldin : Float
+  +inertia : Float
+  +evaluasi_k : JSON
+  +profil_klaster : JSON
+  +peringatan : JSON
+  +dijalankan_oleh : Integer
+}
+
+class KlasterisasiKlaster {
+  +id : Integer
+  +eksekusi_id : Integer
+  +cluster : Integer
+  +label_deskriptif : String
+  +jumlah_anggota : Integer
+  +centroid : JSON
+  +centroid_terskala : JSON
+  +interpretasi : String
+}
+
+class KlasterisasiAnggota {
+  +id : Integer
+  +eksekusi_id : Integer
+  +klaster_id : Integer
+  +mahasiswa_id : Integer
+  +cluster : Integer
+  +fitur_nilai : JSON
+  +fitur_terskala : JSON
+  +jarak_ke_centroid : Float
+  +pca_x : Float
+  +pca_y : Float
+}
+
+class KlasterisasiService <<service>> {
+  +{static} MIN_CATATAN_IPK : Integer
+  +{static} VOLUME_IDEAL_MIN : Integer
+  +kesiapan() : Array
+  +sehat() : Boolean
+  +jalankan(opsi : Array)
+  #ambilMahasiswaLayak()
+  #snapshotFitur() : Array
+  #simpan()
+}
+
+ProgramStudi "1" -- "0..*" Mahasiswa : memiliki >
+Mahasiswa "1" -- "0..*" NilaiIpkSemester : mencatat >
+Mahasiswa "1" -- "0..*" KlasterisasiAnggota : dikelompokkan >
+KlasterisasiEksekusi "1" -- "0..*" KlasterisasiKlaster : menghasilkan >
+KlasterisasiEksekusi "1" -- "0..*" KlasterisasiAnggota : mencakup >
+KlasterisasiKlaster "0..1" -- "0..*" KlasterisasiAnggota : mengelompokkan >
+Pengguna "0..1" -- "0..*" KlasterisasiEksekusi : menjalankan >
+
+KlasterisasiService ..> Mahasiswa : <<use>>
+KlasterisasiService ..> KlasterisasiEksekusi : <<use>>
+KlasterisasiService ..> KlasterisasiKlaster : <<use>>
+KlasterisasiService ..> KlasterisasiAnggota : <<use>>
+@enduml
+
+@startuml Class-Pendukung
+skinparam backgroundColor #FFFFFF
+skinparam classAttributeIconSize 0
+hide empty members
+
+class Mahasiswa {
+  +id : Integer
+  +npm : String
+  +nama : String
+}
+
+class Pengguna {
+  +id : Integer
+  +nip : String
+  +nama : String
+  +peran : String
+}
+
+class Prestasi {
+  +id : Integer
+  +mahasiswa_id : Integer
+  +judul : String
+  +jenis : String
+  +tingkat : String
+  +capaian : String
+  +tanggal : Date
+  +poin() : Integer
+}
+
+class KegiatanKemahasiswaan {
+  +id : Integer
+  +mahasiswa_id : Integer
+  +jenis : String
+  +peran : String
+  +nama_kegiatan : String
+  +poin() : Integer
+}
+
+class PengabdianHibah {
+  +id : Integer
+  +mahasiswa_id : Integer
+  +jenis : String
+  +peran : String
+  +judul : String
+  +tahun : Integer
+  +poin() : Integer
+}
+
+class TracerStudy {
+  +id : Integer
+  +mahasiswa_id : Integer
+  +tahun_lulus : Integer
+  +status_pekerjaan : String
+  +masa_tunggu_bulan : Integer
+  +relevansi : String
+}
+
+class BeasiswaKategori {
+  +id : Integer
+  +kode : String
+  +nama : String
+  +jenis_bantuan : String
+  +sumber_dana : String
+  +aktif : Boolean
+}
+
+class BeasiswaPenerima {
+  +id : Integer
+  +mahasiswa_id : Integer
+  +beasiswa_kategori_id : Integer
+  +tahun_akademik : String
+  +status : String
+  +nominal : Float
+}
+
+class KknLokasi {
+  +id : Integer
+  +nama : String
+  +tahun_akademik : String
+  +kuota : Integer
+}
+
+class KknDpl {
+  +id : Integer
+  +nama : String
+  +nip : String
+  +bidang_keahlian : String
+}
+
+class KknKelompok {
+  +id : Integer
+  +nama_kelompok : String
+  +kkn_lokasi_id : Integer
+  +kkn_dpl_id : Integer
+  +status : String
+}
+
+class KknPeserta {
+  +id : Integer
+  +kkn_kelompok_id : Integer
+  +mahasiswa_id : Integer
+  +jabatan : String
+  +nilai_akhir : Float
+}
+
+class KegiatanPromosi {
+  +id : Integer
+  +nama_kegiatan : String
+  +sekolah_target : String
+  +tanggal : Date
+  +jumlah_peminat : Integer
+}
+
+class Sekolah {
+  +id : Integer
+  +nama : String
+  +jenjang : String
+  +kota : String
+}
+
+class LogAktivitas {
+  +id : Integer
+  +pengguna_id : Integer
+  +aksi : String
+  +model : String
+  +{static} catat()
+}
+
+class Pengaturan {
+  +id : Integer
+  +kunci : String
+  +nilai : String
+  +{static} ambil()
+  +{static} simpan()
+}
+
+Mahasiswa "1" -- "0..*" Prestasi : meraih >
+Mahasiswa "1" -- "0..*" KegiatanKemahasiswaan : melakukan >
+Mahasiswa "1" -- "0..*" PengabdianHibah : menjalankan >
+Mahasiswa "1" -- "0..*" TracerStudy : mengisi >
+Mahasiswa "1" -- "0..*" BeasiswaPenerima : menerima >
+Mahasiswa "1" -- "0..*" KknPeserta : mengikuti >
+BeasiswaKategori "1" -- "0..*" BeasiswaPenerima : mengkategorikan >
+KknLokasi "1" -- "0..*" KknKelompok : menampung >
+KknDpl "0..1" -- "0..*" KknKelompok : membimbing >
+KknKelompok "1" -- "0..*" KknPeserta : beranggotakan >
+Pengguna "0..1" -- "0..*" LogAktivitas : tercatat >
+@enduml

@@ -1,0 +1,8 @@
+' Simbol ERD — Entitas (kotak: nama + atribut, penanda PK/FK). Crow's foot.
+@startdot
+digraph ERD01 {
+  bgcolor="white"; margin=0;
+  node [shape=record, fontname="Segoe UI", fontsize=11, color="#333333", penwidth=1.4];
+  e [label="{ mahasiswa | PK  id\l npm\l nama\l FK  program_studi_id\l }"];
+}
+@enddot

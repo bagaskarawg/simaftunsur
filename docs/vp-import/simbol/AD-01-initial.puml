@@ -1,0 +1,8 @@
+' Simbol Activity — Initial node (lingkaran terisi). UML 2.5.1.
+@startdot
+digraph AD01 {
+  bgcolor="white"; margin=0;
+  node [shape=circle, style=filled, fillcolor=black, color=black, fixedsize=true, width=0.38, height=0.38, label=""];
+  n;
+}
+@enddot

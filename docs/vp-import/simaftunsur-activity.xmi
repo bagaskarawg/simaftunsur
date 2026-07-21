@@ -156,7 +156,7 @@
          Layanan Klasterisasi (Python/scikit-learn).
          ================================================================ -->
     <packagedElement xmi:type="uml:Activity" xmi:id="act_kmeans" name="AD-04 Menjalankan Klasterisasi K-Means">
-      <group xmi:type="uml:ActivityPartition" xmi:id="act_km_pu" name="Pengguna (WD III / Administrator)"
+      <group xmi:type="uml:ActivityPartition" xmi:id="act_km_pu" name="Pengguna (Staf WD III / WD III)"
              node="k_ini k_a1 k_a3 k_a19 k_fin"/>
       <group xmi:type="uml:ActivityPartition" xmi:id="act_km_pl" name="SIMAFTUNSUR (Laravel)"
              node="k_a2 k_a4 k_d1 k_a5 k_a6 k_a7 k_d2 k_a8 k_a17 k_a18"/>
