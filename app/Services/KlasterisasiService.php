@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\KlasterisasiAnggota;
 use App\Models\KlasterisasiEksekusi;
+use App\Models\KlasterisasiKategori;
 use App\Models\KlasterisasiKlaster;
 use App\Models\Mahasiswa;
 use Illuminate\Support\Collection;
@@ -53,15 +54,15 @@ class KlasterisasiService
         $persen = (int) min(100, round($layak / self::VOLUME_IDEAL_MIN * 100));
 
         return [
-            'total'             => $total,
-            'aktif'             => $aktif,
-            'layak'             => $layak,
-            'aktif_kurang_ipk'  => max(0, $aktif - $layak),
-            'ambang'            => self::VOLUME_IDEAL_MIN,
-            'min_catatan'       => self::MIN_CATATAN_IPK,
-            'kurang'            => max(0, self::VOLUME_IDEAL_MIN - $layak),
-            'persen'            => $persen,
-            'siap'              => $layak >= self::VOLUME_IDEAL_MIN,
+            'total' => $total,
+            'aktif' => $aktif,
+            'layak' => $layak,
+            'aktif_kurang_ipk' => max(0, $aktif - $layak),
+            'ambang' => self::VOLUME_IDEAL_MIN,
+            'min_catatan' => self::MIN_CATATAN_IPK,
+            'kurang' => max(0, self::VOLUME_IDEAL_MIN - $layak),
+            'persen' => $persen,
+            'siap' => $layak >= self::VOLUME_IDEAL_MIN,
             'cukup_untuk_jalan' => $layak >= 3,
         ];
     }
@@ -100,12 +101,13 @@ class KlasterisasiService
         }
 
         $muatan = [
-            'data'             => $mahasiswa->map(fn (Mahasiswa $m) => $this->petakanFitur($m))->values()->all(),
-            'fitur'            => $opsi['fitur'] ?? null,
-            'k'                => $opsi['k'] ?? null,
-            'k_min'            => $opsi['k_min'] ?? 2,
-            'k_max'            => $opsi['k_max'] ?? 8,
+            'data' => $mahasiswa->map(fn (Mahasiswa $m) => $this->petakanFitur($m))->values()->all(),
+            'fitur' => $opsi['fitur'] ?? null,
+            'k' => $opsi['k'] ?? null,
+            'k_min' => $opsi['k_min'] ?? 2,
+            'k_max' => $opsi['k_max'] ?? 8,
             'skema_penskalaan' => $opsi['skema_penskalaan'] ?? 'standard',
+            'konfigurasi_label' => $this->konfigurasiLabel(),
         ];
 
         try {
@@ -159,8 +161,8 @@ class KlasterisasiService
     protected function petakanFitur(Mahasiswa $mahasiswa): array
     {
         return [
-            'id'   => $mahasiswa->id,
-            'npm'  => $mahasiswa->npm,
+            'id' => $mahasiswa->id,
+            'npm' => $mahasiswa->npm,
             'nama' => $mahasiswa->nama,
             ...$this->snapshotFitur($mahasiswa),
         ];
@@ -177,18 +179,37 @@ class KlasterisasiService
     {
         return [
             // Blok akademik (F1–F4)
-            'ipk_rata_rata'  => $mahasiswa->ipkRataRata(),
-            'ipk_terakhir'   => $mahasiswa->ipkTerakhir() ?? 0.0,
-            'tren'           => $mahasiswa->tren(),
-            'konsistensi'    => $mahasiswa->konsistensi(),
+            'ipk_rata_rata' => $mahasiswa->ipkRataRata(),
+            'ipk_terakhir' => $mahasiswa->ipkTerakhir() ?? 0.0,
+            'tren' => $mahasiswa->tren(),
+            'konsistensi' => $mahasiswa->konsistensi(),
             // Blok non-akademik SKKM (F5–F7)
-            'skor_prestasi'   => $mahasiswa->skorPrestasi(),
-            'skor_kegiatan'   => $mahasiswa->skorKegiatan(),
+            'skor_prestasi' => $mahasiswa->skorPrestasi(),
+            'skor_kegiatan' => $mahasiswa->skorKegiatan(),
             'skor_pengabdian' => $mahasiswa->skorPengabdian(),
             // Konteks (bukan bagian 7 fitur inti, disertakan untuk analisis)
             'semester_aktif' => $mahasiswa->semester_aktif,
-            'program_studi'  => $mahasiswa->programStudi?->kode,
+            'program_studi' => $mahasiswa->programStudi?->kode,
         ];
+    }
+
+    /**
+     * Susun konfigurasi pelabelan yang dikirim ke service Python: bobot & arah
+     * fitur dari config, katalog nama dari master KlasterisasiKategori. Bila
+     * katalog kosong, service memakai katalog default bawaannya.
+     *
+     * @return array<string, mixed>
+     */
+    protected function konfigurasiLabel(): array
+    {
+        $konfig = (array) config('klasterisasi.label', []);
+
+        $katalog = KlasterisasiKategori::katalogAktif();
+        if ($katalog !== []) {
+            $konfig['katalog'] = $katalog;
+        }
+
+        return $konfig;
     }
 
     /**
@@ -199,41 +220,57 @@ class KlasterisasiService
      */
     protected function simpan(array $hasil, Collection $mahasiswa): KlasterisasiEksekusi
     {
+        // Rekomendasi pembinaan per label (dari master Kategori Klaster).
+        $rekomendasiPerNama = KlasterisasiKategori::query()
+            ->pluck('rekomendasi', 'nama');
+
         // Peta mahasiswa per-id untuk snapshot fitur; hanya id di set yang
         // dikirim yang disimpan (pengaman bila service kembalikan id asing).
         $mahasiswaPerId = $mahasiswa->keyBy('id');
 
-        return DB::transaction(function () use ($hasil, $mahasiswaPerId) {
+        return DB::transaction(function () use ($hasil, $mahasiswaPerId, $rekomendasiPerNama) {
             $eksekusi = KlasterisasiEksekusi::create([
-                'k_terpilih'         => $hasil['k_terpilih'],
+                'k_terpilih' => $hasil['k_terpilih'],
                 'metode_pemilihan_k' => $hasil['metode_pemilihan_k'],
-                'fitur_dipakai'      => $hasil['fitur_dipakai'],
-                'skema_penskalaan'   => $hasil['skema_penskalaan'],
-                'random_state'       => $hasil['random_state'] ?? null,
-                'versi_algoritma'    => $hasil['versi_algoritma'] ?? null,
-                'kriteria_data'      => $hasil['kriteria_data']
+                'fitur_dipakai' => $hasil['fitur_dipakai'],
+                'skema_penskalaan' => $hasil['skema_penskalaan'],
+                'random_state' => $hasil['random_state'] ?? null,
+                'versi_algoritma' => $hasil['versi_algoritma'] ?? null,
+                'kriteria_data' => $hasil['kriteria_data']
                     ?? ('mahasiswa aktif dengan >='.self::MIN_CATATAN_IPK.' catatan IPK'),
-                'jumlah_data'        => $hasil['jumlah_data'],
-                'silhouette'         => $hasil['metrik']['silhouette'] ?? null,
-                'davies_bouldin'     => $hasil['metrik']['davies_bouldin'] ?? null,
-                'inertia'            => $hasil['metrik']['inertia'] ?? null,
-                'evaluasi_k'         => $hasil['evaluasi_k'],
-                'profil_klaster'     => $hasil['profil_klaster'],
-                'peringatan'         => $hasil['peringatan'] ?? [],
-                'dijalankan_oleh'    => auth()->id(),
+                'jumlah_data' => $hasil['jumlah_data'],
+                'silhouette' => $hasil['metrik']['silhouette'] ?? null,
+                'davies_bouldin' => $hasil['metrik']['davies_bouldin'] ?? null,
+                'inertia' => $hasil['metrik']['inertia'] ?? null,
+                'evaluasi_k' => $hasil['evaluasi_k'],
+                'profil_klaster' => $hasil['profil_klaster'],
+                // Validasi lanjutan (pelengkap) — null bila service tak mengirim.
+                'stabilitas' => $hasil['stabilitas'] ?? null,
+                'stabilitas_rata' => $hasil['stabilitas']['rata_rata'] ?? null,
+                'uji_beda' => $hasil['uji_beda'] ?? null,
+                'peringatan' => $hasil['peringatan'] ?? [],
+                'dijalankan_oleh' => auth()->id(),
             ]);
 
             // Simpan profil tiap klaster (ternormalisasi) & petakan cluster→id.
             $petaKlaster = [];
             foreach ($hasil['profil_klaster'] ?? [] as $profil) {
+                $label = $profil['label_deskriptif'] ?? null;
                 $klaster = KlasterisasiKlaster::create([
-                    'eksekusi_id'       => $eksekusi->id,
-                    'cluster'           => $profil['cluster'],
-                    'label_deskriptif'  => $profil['label_deskriptif'] ?? null,
-                    'jumlah_anggota'    => $profil['jumlah'] ?? $profil['jumlah_anggota'] ?? 0,
-                    'centroid'          => $profil['centroid'] ?? [],
+                    'eksekusi_id' => $eksekusi->id,
+                    'cluster' => $profil['cluster'],
+                    'label_deskriptif' => $label,
+                    'jumlah_anggota' => $profil['jumlah'] ?? $profil['jumlah_anggota'] ?? 0,
+                    'centroid' => $profil['centroid'] ?? [],
                     'centroid_terskala' => $profil['centroid_terskala'] ?? null,
-                    'interpretasi'      => $profil['interpretasi'] ?? null,
+                    // Skor komposit multi-fitur = dasar penentuan label (transparansi).
+                    'skor_akademik' => $profil['skor_akademik'] ?? null,
+                    'skor_non_akademik' => $profil['skor_non_akademik'] ?? null,
+                    'skor_komposit' => $profil['skor_komposit'] ?? null,
+                    'ringkasan_profil' => $profil['ringkasan_profil'] ?? null,
+                    // Interpretasi = rekomendasi pembinaan dari master Kategori Klaster
+                    // (dipetakan lewat nama label), fallback ke keluaran service.
+                    'interpretasi' => $rekomendasiPerNama[$label] ?? ($profil['interpretasi'] ?? null),
                 ]);
                 $petaKlaster[$profil['cluster']] = $klaster->id;
             }
@@ -247,15 +284,15 @@ class KlasterisasiService
                     continue;
                 }
                 $baris[] = [
-                    'eksekusi_id'       => $eksekusi->id,
-                    'klaster_id'        => $petaKlaster[$titik['cluster']] ?? null,
-                    'mahasiswa_id'      => $titik['id'],
-                    'cluster'           => $titik['cluster'],
-                    'fitur_nilai'       => json_encode($this->snapshotFitur($mahasiswaTitik)),
-                    'fitur_terskala'    => isset($titik['fitur_terskala']) ? json_encode($titik['fitur_terskala']) : null,
+                    'eksekusi_id' => $eksekusi->id,
+                    'klaster_id' => $petaKlaster[$titik['cluster']] ?? null,
+                    'mahasiswa_id' => $titik['id'],
+                    'cluster' => $titik['cluster'],
+                    'fitur_nilai' => json_encode($this->snapshotFitur($mahasiswaTitik)),
+                    'fitur_terskala' => isset($titik['fitur_terskala']) ? json_encode($titik['fitur_terskala']) : null,
                     'jarak_ke_centroid' => $titik['jarak_ke_centroid'] ?? null,
-                    'pca_x'             => $titik['pca_x'],
-                    'pca_y'             => $titik['pca_y'],
+                    'pca_x' => $titik['pca_x'],
+                    'pca_y' => $titik['pca_y'],
                 ];
             }
 

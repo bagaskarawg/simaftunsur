@@ -11,13 +11,13 @@ new
 #[Layout('layouts.app')]
 #[Title('Klasterisasi K-Means')]
 class extends Component {
-    /** Mode penentuan k: 'auto' (Silhouette) atau 'manual'. */
-    public string $modeK = 'auto';
-
-    public ?int $k = 3;
-    public int $kMin = 2;
-    public int $kMax = 6;
-    public string $skemaPenskalaan = 'standard';
+    /*
+     * Tidak ada parameter yang dapat dipilih operator. Jumlah klaster (k)
+     * ditentukan dari data melalui Elbow + Silhouette, dan penskalaan fitur
+     * mengikuti ketetapan metode (StandardScaler). Nilai bawaannya dipegang
+     * KlasterisasiService agar hasil klasterisasi tidak bergantung pada
+     * pilihan subjektif pengguna.
+     */
 
     /** Pesan hasil aksi (ditampilkan sebagai banner). */
     public ?string $pesan = null;
@@ -87,12 +87,7 @@ class extends Component {
         }
 
         try {
-            $eksekusi = $service->jalankan([
-                'k'                => $this->modeK === 'manual' ? $this->k : null,
-                'k_min'            => $this->kMin,
-                'k_max'            => $this->kMax,
-                'skema_penskalaan' => $this->skemaPenskalaan,
-            ]);
+            $eksekusi = $service->jalankan();
 
             unset($this->eksekusi, $this->kelompok);
 
@@ -111,12 +106,18 @@ class extends Component {
     // Palet warna klaster (selaras komponen cluster-badge), dipakai SVG & legenda.
     $paletKlaster = ['#2563eb', '#16a34a', '#d97706', '#7c3aed', '#dc2626', '#0891b2', '#db2777', '#65a30d'];
 
-    // Rekomendasi strategi pembinaan per label klaster (output SPK untuk WD III).
-    $rekomendasi = function (string $label): string {
+    // Rekomendasi per label — utamakan master Kategori Klaster (dikelola WD III),
+    // dengan teks bawaan sebagai cadangan untuk label di luar katalog / eksekusi lama.
+    $rekomendasiPeta = \App\Models\KlasterisasiKategori::pluck('rekomendasi', 'nama');
+    $rekomendasi = function (?string $label) use ($rekomendasiPeta): string {
+        $label = (string) $label;
+        if (! empty($rekomendasiPeta[$label])) {
+            return $rekomendasiPeta[$label];
+        }
         if (str_contains($label, 'Berprestasi')) {
             return 'Tawarkan pengayaan: lomba, riset, beasiswa prestasi, jalur cepat studi.';
         }
-        if (str_contains($label, 'Perlu Pembinaan')) {
+        if (str_contains($label, 'Perlu')) {
             return 'Prioritaskan pendampingan: konseling akademik, mentoring, kelas remedial.';
         }
         if (str_contains($label, 'Menengah')) {
@@ -151,61 +152,24 @@ class extends Component {
     {{-- Panel jalankan --}}
     @can('klasterisasi.jalankan')
         <x-card class="mb-6">
-            <h2 class="text-base font-semibold text-slate-900">Jalankan Klasterisasi</h2>
-            <p class="mt-1 text-sm text-slate-500">
-                Tujuh fitur (SKKM): IPK rata-rata, IPK terakhir, tren, konsistensi (F1–F4),
-                serta skor prestasi, skor kegiatan/organisasi, dan skor pengabdian/hibah (F5–F7).
-            </p>
-
-            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {{-- Mode k --}}
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Penentuan jumlah klaster (k)</label>
-                    <select wire:model.live="modeK"
-                            class="w-full rounded-md border-slate-300 text-sm focus:border-primary-500 focus:ring-primary-500">
-                        <option value="auto">Otomatis (Silhouette tertinggi)</option>
-                        <option value="manual">Manual (tentukan k)</option>
-                    </select>
+                    <h2 class="text-base font-semibold text-slate-900">Jalankan Klasterisasi</h2>
+                    <p class="mt-1 text-sm text-slate-500">
+                        Tujuh fitur (SKKM): IPK rata-rata, IPK terakhir, tren, konsistensi (F1–F4),
+                        serta skor prestasi, skor kegiatan/organisasi, dan skor pengabdian/hibah (F5–F7).
+                    </p>
+                    <p class="mt-2 text-sm text-slate-500">
+                        Jumlah klaster (k) ditentukan dari data melalui Elbow Method dan Silhouette
+                        Coefficient; penskalaan fitur memakai StandardScaler. Tidak ada parameter
+                        yang perlu dipilih.
+                    </p>
                 </div>
 
-                @if ($modeK === 'manual')
-                    <div>
-                        <label class="block text-xs font-medium text-slate-600 mb-1">Nilai k</label>
-                        <input type="number" min="2" max="10" wire:model="k"
-                               class="w-full rounded-md border-slate-300 text-sm focus:border-primary-500 focus:ring-primary-500">
-                    </div>
-                @else
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-600 mb-1">k min</label>
-                            <input type="number" min="2" max="10" wire:model="kMin"
-                                   class="w-full rounded-md border-slate-300 text-sm focus:border-primary-500 focus:ring-primary-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-600 mb-1">k maks</label>
-                            <input type="number" min="2" max="10" wire:model="kMax"
-                                   class="w-full rounded-md border-slate-300 text-sm focus:border-primary-500 focus:ring-primary-500">
-                        </div>
-                    </div>
-                @endif
-
-                {{-- Skema penskalaan --}}
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Penskalaan fitur</label>
-                    <select wire:model="skemaPenskalaan"
-                            class="w-full rounded-md border-slate-300 text-sm focus:border-primary-500 focus:ring-primary-500">
-                        <option value="standard">StandardScaler (z-score)</option>
-                        <option value="minmax">MinMaxScaler (0–1)</option>
-                    </select>
-                </div>
-
-                {{-- Tombol --}}
-                <div class="flex items-end">
-                    <x-button type="button" wire:click="jalankan" wire:target="jalankan" wire:loading.attr="disabled" class="w-full justify-center">
-                        <span wire:loading.remove wire:target="jalankan">Jalankan Klasterisasi</span>
-                        <span wire:loading wire:target="jalankan">Memproses…</span>
-                    </x-button>
-                </div>
+                <x-button type="button" wire:click="jalankan" wire:target="jalankan" wire:loading.attr="disabled" class="justify-center sm:shrink-0">
+                    <span wire:loading.remove wire:target="jalankan">Jalankan Klasterisasi</span>
+                    <span wire:loading wire:target="jalankan">Memproses…</span>
+                </x-button>
             </div>
         </x-card>
     @endcan
@@ -346,6 +310,120 @@ class extends Component {
             </x-card>
         </section>
 
+        {{-- Validasi lanjutan: stabilitas (bootstrap-Jaccard) & uji beda (Kruskal-Wallis).
+             Pelengkap metrik internal — memperkuat argumen kredibilitas klaster. --}}
+        @if ($e->stabilitas || $e->uji_beda)
+            @php
+                $kategoriWarna = [
+                    'stabil'        => 'bg-green-50 text-green-700 border-green-200',
+                    'cukup stabil'  => 'bg-amber-50 text-amber-700 border-amber-200',
+                    'tidak stabil'  => 'bg-red-50 text-red-700 border-red-200',
+                ];
+            @endphp
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+
+                {{-- Uji stabilitas klaster --}}
+                <x-card>
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-900">Uji Stabilitas Klaster</h3>
+                            <p class="mt-0.5 text-xs text-slate-500">
+                                Bootstrap-Jaccard{{ $e->stabilitas['n_bootstrap'] ?? null ? ' · '.$e->stabilitas['n_bootstrap'].' iterasi' : '' }}.
+                                Ambang: &ge;{{ $e->stabilitas['ambang_stabil'] ?? 0.85 }} stabil,
+                                &lt;{{ $e->stabilitas['ambang_minimum'] ?? 0.60 }} tidak dipercaya.
+                            </p>
+                        </div>
+                        @if ($e->stabilitas)
+                            <span class="shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold {{ $kategoriWarna[$e->stabilitas['kategori_keseluruhan']] ?? 'bg-slate-50 text-slate-600 border-slate-200' }}">
+                                {{ ucfirst($e->stabilitas['kategori_keseluruhan']) }}
+                            </span>
+                        @endif
+                    </div>
+
+                    @if ($e->stabilitas)
+                        <div class="mt-3 space-y-2">
+                            @foreach ($e->stabilitas['per_klaster'] as $s)
+                                @php $persen = max(0, min(100, ($s['jaccard'] ?? 0) * 100)); @endphp
+                                <div>
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="inline-flex items-center gap-1.5 font-medium text-slate-700">
+                                            <span class="h-2.5 w-2.5 rounded-full" style="background: {{ $paletKlaster[$s['cluster'] % count($paletKlaster)] }}"></span>
+                                            Klaster {{ $s['cluster'] }}
+                                        </span>
+                                        <span class="flex items-center gap-2">
+                                            <span class="rounded px-1.5 py-0.5 text-[10px] font-semibold border {{ $kategoriWarna[$s['kategori']] ?? 'bg-slate-50 text-slate-600 border-slate-200' }}">{{ $s['kategori'] }}</span>
+                                            <span class="font-mono text-slate-900">{{ number_format($s['jaccard'], 4) }}</span>
+                                        </span>
+                                    </div>
+                                    <div class="relative h-2 rounded-full bg-slate-100">
+                                        <div class="absolute inset-y-0 left-0 rounded-full" style="width: {{ number_format($persen, 2, '.', '') }}%; background: {{ $paletKlaster[$s['cluster'] % count($paletKlaster)] }}"></div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <p class="mt-3 text-[11px] text-slate-500 leading-relaxed">
+                            Skor Jaccard rata-rata <span class="font-mono text-slate-700">{{ number_format($e->stabilitas['rata_rata'], 4) }}</span>
+                            (minimum <span class="font-mono text-slate-700">{{ number_format($e->stabilitas['minimum'], 4) }}</span>).
+                            Makin mendekati 1 makin stabil bila data di-resample.
+                        </p>
+                    @else
+                        <p class="mt-3 text-sm text-slate-500">Uji stabilitas tidak tersedia untuk eksekusi ini.</p>
+                    @endif
+                </x-card>
+
+                {{-- Uji beda antar-klaster --}}
+                <x-card>
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-900">Uji Beda Antar-Klaster</h3>
+                            <p class="mt-0.5 text-xs text-slate-500">
+                                Kruskal-Wallis H (non-parametrik).
+                                p &lt; {{ $e->uji_beda['alpha'] ?? 0.05 }} = fitur berbeda nyata antar-klaster.
+                            </p>
+                        </div>
+                        @if ($e->uji_beda)
+                            <span class="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-semibold text-slate-600">
+                                {{ $e->uji_beda['jumlah_fitur_signifikan'] }}/{{ $e->uji_beda['jumlah_fitur'] }} signifikan
+                            </span>
+                        @endif
+                    </div>
+
+                    @if ($e->uji_beda)
+                        <div class="mt-3 overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="text-left text-xs text-slate-500 border-b border-slate-100">
+                                        <th class="py-1.5 pr-3 font-medium">Fitur</th>
+                                        <th class="py-1.5 pr-3 font-medium text-right">H</th>
+                                        <th class="py-1.5 pr-3 font-medium text-right">p-value</th>
+                                        <th class="py-1.5 pr-3 font-medium text-right">Beda nyata?</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($e->uji_beda['per_fitur'] as $r)
+                                        <tr class="border-b border-slate-50 last:border-0">
+                                            <td class="py-1.5 pr-3 text-slate-700">{{ str_replace('_', ' ', ucfirst($r['fitur'])) }}</td>
+                                            <td class="py-1.5 pr-3 text-right font-mono text-slate-600">{{ number_format($r['statistik_h'], 3) }}</td>
+                                            <td class="py-1.5 pr-3 text-right font-mono text-slate-600">{{ $r['p_value'] < 0.001 ? '<0.001' : number_format($r['p_value'], 4) }}</td>
+                                            <td class="py-1.5 pr-3 text-right">
+                                                @if ($r['signifikan'])
+                                                    <span class="rounded px-1.5 py-0.5 text-[10px] font-semibold border bg-green-50 text-green-700 border-green-200">ya</span>
+                                                @else
+                                                    <span class="rounded px-1.5 py-0.5 text-[10px] font-semibold border bg-slate-50 text-slate-500 border-slate-200">tidak</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="mt-3 text-sm text-slate-500">Uji beda tidak tersedia untuk eksekusi ini.</p>
+                    @endif
+                </x-card>
+            </section>
+        @endif
+
         {{-- Radar perbandingan profil antar-klaster --}}
         <section class="mb-6">
             <x-card title="Perbandingan Profil Antar-Klaster">
@@ -367,6 +445,16 @@ class extends Component {
                             <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{{ $p['label_deskriptif'] }}</span>
                         </div>
                         <p class="mt-1 text-xs text-slate-500">{{ $p['jumlah'] }} mahasiswa</p>
+
+                        @isset($p['skor_komposit'])
+                            <div class="mt-2 flex flex-wrap items-center gap-1.5 text-[11px]">
+                                <span class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-slate-700" title="Skor komposit multi-fitur (dasar label)">komposit {{ number_format($p['skor_komposit'], 2) }}</span>
+                                <span class="text-slate-400">aka {{ number_format($p['skor_akademik'] ?? 0, 2) }} · non-aka {{ number_format($p['skor_non_akademik'] ?? 0, 2) }}</span>
+                            </div>
+                            @if (! empty($p['ringkasan_profil']))
+                                <p class="mt-1 text-[11px] italic text-slate-500 leading-snug">{{ $p['ringkasan_profil'] }}</p>
+                            @endif
+                        @endisset
 
                         <dl class="mt-3 space-y-1 text-xs">
                             @foreach ($p['centroid'] as $namaFitur => $nilai)

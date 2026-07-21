@@ -41,7 +41,7 @@ class extends Component {
         if (str_contains($label, 'Berprestasi')) {
             return 'Tawarkan pengayaan: lomba, riset, beasiswa prestasi, jalur cepat studi.';
         }
-        if (str_contains($label, 'Perlu Pembinaan')) {
+        if (str_contains($label, 'Perlu')) {
             return 'Prioritaskan pendampingan: konseling akademik, mentoring, kelas remedial.';
         }
         if (str_contains($label, 'Menengah')) {
@@ -155,15 +155,29 @@ class extends Component {
 
         {{-- Interpretasi + rekomendasi --}}
         <x-card title="Interpretasi & Rekomendasi">
-            @if ($klaster->interpretasi)
-                <p class="text-sm text-slate-700 leading-relaxed">{{ $klaster->interpretasi }}</p>
+            {{-- Skor komposit multi-fitur = dasar kuantitatif penamaan label --}}
+            @if ($klaster->skor_komposit !== null)
+                <div class="mb-3 rounded-lg bg-slate-50 border border-slate-100 p-3">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-slate-500">Skor komposit</span>
+                        <span class="font-mono font-semibold text-slate-900">{{ number_format($klaster->skor_komposit, 3) }}</span>
+                    </div>
+                    <div class="mt-1 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                        <span>Akademik {{ number_format($klaster->skor_akademik ?? 0, 2) }}</span>
+                        <span>Non-akademik {{ number_format($klaster->skor_non_akademik ?? 0, 2) }}</span>
+                    </div>
+                </div>
+            @endif
+
+            @if ($klaster->ringkasan_profil)
+                <p class="text-sm text-slate-700 leading-relaxed">{{ $klaster->ringkasan_profil }}</p>
             @else
-                <p class="text-sm text-slate-500">Belum ada catatan interpretasi dari service.</p>
+                <p class="text-sm text-slate-500">Interpretasi ringkas belum tersedia untuk klaster ini.</p>
             @endif
 
             <div class="mt-4 pt-4 border-t border-slate-100">
                 <p class="text-[11px] font-semibold uppercase tracking-wide text-primary-700">Rekomendasi Pembinaan</p>
-                <p class="mt-1 text-sm text-slate-600 leading-relaxed">{{ $rekomendasi($klaster->label_deskriptif) }}</p>
+                <p class="mt-1 text-sm text-slate-600 leading-relaxed">{{ $klaster->interpretasi ?: $rekomendasi($klaster->label_deskriptif) }}</p>
             </div>
 
             @if ($e && ! empty($e->peringatan))

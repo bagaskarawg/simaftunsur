@@ -14,6 +14,7 @@ Tahapan (kerangka CRISP-DM yang terintegrasi ke Waterfall):
     train_kmeans          -> pelatihan model (KMeans++)
     evaluate              -> metrik internal (Silhouette, Davies-Bouldin, WCSS)
     interpret_clusters    -> karakteristik centroid + proyeksi PCA 2D
+    validasi              -> uji stabilitas (bootstrap-Jaccard) & beda (Kruskal-Wallis)
 """
 
 from .preprocess import preprocess
@@ -21,6 +22,7 @@ from .feature_engineering import feature_engineering, FITUR_NUMERIK_DEFAULT
 from .train import train_kmeans, pilih_k_optimal
 from .evaluate import evaluate
 from .interpret import interpret_clusters
+from .validasi import stabilitas_bootstrap, uji_beda_kruskal
 from .orchestrator import jalankan_klasterisasi
 
 __all__ = [
@@ -31,5 +33,7 @@ __all__ = [
     "pilih_k_optimal",
     "evaluate",
     "interpret_clusters",
+    "stabilitas_bootstrap",
+    "uji_beda_kruskal",
     "jalankan_klasterisasi",
 ]

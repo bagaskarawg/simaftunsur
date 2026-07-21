@@ -50,6 +50,8 @@ def klasterisasi(permintaan: PermintaanKlasterisasi) -> dict:
             k_min=permintaan.k_min,
             k_max=permintaan.k_max,
             skema_penskalaan=permintaan.skema_penskalaan,
+            konfigurasi_label=permintaan.konfigurasi_label,
+            n_bootstrap=permintaan.n_bootstrap,
         )
     except ValueError as galat:
         raise HTTPException(status_code=422, detail=str(galat)) from galat

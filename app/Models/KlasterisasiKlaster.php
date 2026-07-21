@@ -23,6 +23,10 @@ class KlasterisasiKlaster extends Model
         'centroid',
         'centroid_terskala',
         'interpretasi',
+        'skor_akademik',
+        'skor_non_akademik',
+        'skor_komposit',
+        'ringkasan_profil',
     ];
 
     protected function casts(): array
@@ -32,6 +36,9 @@ class KlasterisasiKlaster extends Model
             'jumlah_anggota'    => 'integer',
             'centroid'          => 'array',
             'centroid_terskala' => 'array',
+            'skor_akademik'     => 'float',
+            'skor_non_akademik' => 'float',
+            'skor_komposit'     => 'float',
         ];
     }
 

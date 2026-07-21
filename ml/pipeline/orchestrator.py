@@ -16,6 +16,11 @@ from .feature_engineering import FITUR_NUMERIK_DEFAULT, feature_engineering
 from .interpret import interpret_clusters
 from .preprocess import preprocess
 from .train import RANDOM_STATE, pilih_k_optimal, train_kmeans
+from .validasi import (
+    N_BOOTSTRAP_DEFAULT,
+    stabilitas_bootstrap,
+    uji_beda_kruskal,
+)
 
 # Ambang volume data minimum sesuai Batasan Masalah (100 mahasiswa aktif
 # >= 3 semester). Di bawah ini hasil tetap dihitung TAPI diberi peringatan
@@ -30,6 +35,8 @@ def jalankan_klasterisasi(
     k_min: int = 2,
     k_max: int = 8,
     skema_penskalaan: str = "standard",
+    konfigurasi_label: dict | None = None,
+    n_bootstrap: int = N_BOOTSTRAP_DEFAULT,
 ) -> dict:
     """
     Jalankan klasterisasi K-Means ujung-ke-ujung.
@@ -47,6 +54,8 @@ def jalankan_klasterisasi(
         Rentang pencarian k saat k otomatis.
     skema_penskalaan : str
         "standard" atau "minmax".
+    n_bootstrap : int
+        Iterasi bootstrap untuk uji stabilitas Jaccard; 0 = lewati.
 
     Mengembalikan
     -------------
@@ -82,7 +91,17 @@ def jalankan_klasterisasi(
 
     # 6) Interpretasi & visualisasi.
     fitur_asli = [f for f in FITUR_NUMERIK_DEFAULT if f in df.columns]
-    profil_klaster, titik = interpret_clusters(model, df, X, fitur_asli, nama_fitur)
+    profil_klaster, titik = interpret_clusters(
+        model, df, X, fitur_asli, nama_fitur, konfigurasi_label
+    )
+
+    # 7) Validasi lanjutan (PELENGKAP): stabilitas bootstrap-Jaccard & uji
+    #    beda antar-klaster Kruskal-Wallis. Bernilai None bila tak terdefinisi
+    #    (mis. hanya 1 klaster / data terlalu sedikit).
+    stabilitas = stabilitas_bootstrap(
+        X, model.labels_, k_terpilih, n_bootstrap=n_bootstrap
+    )
+    uji_beda = uji_beda_kruskal(df, fitur_asli, model.labels_)
 
     return {
         "k_terpilih": int(k_terpilih),
@@ -96,6 +115,8 @@ def jalankan_klasterisasi(
         "evaluasi_k": tabel_evaluasi,
         "profil_klaster": profil_klaster,
         "hasil": titik,
+        "stabilitas": stabilitas,
+        "uji_beda": uji_beda,
         "peringatan": _susun_peringatan(len(df)),
     }
 

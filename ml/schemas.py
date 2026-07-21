@@ -43,6 +43,17 @@ class PermintaanKlasterisasi(BaseModel):
     k_min: int = Field(2, ge=2)
     k_max: int = Field(8, ge=2)
     skema_penskalaan: str = Field("standard", pattern="^(standard|minmax)$")
+    n_bootstrap: int = Field(
+        100,
+        ge=0,
+        le=500,
+        description="Iterasi bootstrap untuk uji stabilitas Jaccard; 0 = lewati.",
+    )
+    konfigurasi_label: dict | None = Field(
+        None,
+        description="Bobot/arah fitur + katalog nama label (dari Laravel). "
+        "None = pakai KONFIG_LABEL_DEFAULT bawaan service.",
+    )
 
 
 class MetrikEvaluasi(BaseModel):
@@ -65,6 +76,11 @@ class ProfilKlaster(BaseModel):
     label_deskriptif: str
     # Centroid pada ruang terskala yang dipakai KMeans (untuk audit/tracing).
     centroid_terskala: dict[str, float] | None = None
+    # Skor komposit multi-fitur (dasar penentuan label) + deskripsi kualitatif.
+    skor_akademik: float | None = None
+    skor_non_akademik: float | None = None
+    skor_komposit: float | None = None
+    ringkasan_profil: str | None = None
 
 
 class TitikHasil(BaseModel):
@@ -75,6 +91,42 @@ class TitikHasil(BaseModel):
     # Data keterlacakan (tracing) — dasar penempatan tiap mahasiswa.
     fitur_terskala: dict[str, float] | None = None
     jarak_ke_centroid: float | None = None
+
+
+class JaccardKlaster(BaseModel):
+    cluster: int
+    jaccard: float
+    kategori: str
+
+
+class HasilStabilitas(BaseModel):
+    """Uji stabilitas klaster via bootstrap-Jaccard (PELENGKAP)."""
+
+    metode: str
+    n_bootstrap: int
+    ambang_stabil: float
+    ambang_minimum: float
+    per_klaster: list[JaccardKlaster]
+    rata_rata: float
+    minimum: float
+    kategori_keseluruhan: str
+
+
+class BarisUjiBeda(BaseModel):
+    fitur: str
+    statistik_h: float
+    p_value: float
+    signifikan: bool
+
+
+class HasilUjiBeda(BaseModel):
+    """Uji beda antar-klaster via Kruskal-Wallis H (PELENGKAP)."""
+
+    metode: str
+    alpha: float
+    per_fitur: list[BarisUjiBeda]
+    jumlah_fitur: int
+    jumlah_fitur_signifikan: int
 
 
 class TanggapanKlasterisasi(BaseModel):
@@ -91,4 +143,7 @@ class TanggapanKlasterisasi(BaseModel):
     evaluasi_k: list[BarisEvaluasiK]
     profil_klaster: list[ProfilKlaster]
     hasil: list[TitikHasil]
+    # Validasi lanjutan (PELENGKAP) — None bila tak terdefinisi (mis. 1 klaster).
+    stabilitas: HasilStabilitas | None = None
+    uji_beda: HasilUjiBeda | None = None
     peringatan: list[str]

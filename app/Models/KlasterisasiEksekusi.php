@@ -27,6 +27,9 @@ class KlasterisasiEksekusi extends Model
         'inertia',
         'evaluasi_k',
         'profil_klaster',
+        'stabilitas',
+        'stabilitas_rata',
+        'uji_beda',
         'peringatan',
         'dijalankan_oleh',
     ];
@@ -34,16 +37,19 @@ class KlasterisasiEksekusi extends Model
     protected function casts(): array
     {
         return [
-            'fitur_dipakai'  => 'array',
-            'evaluasi_k'     => 'array',
+            'fitur_dipakai' => 'array',
+            'evaluasi_k' => 'array',
             'profil_klaster' => 'array',
-            'peringatan'     => 'array',
-            'k_terpilih'     => 'integer',
-            'random_state'   => 'integer',
-            'jumlah_data'    => 'integer',
-            'silhouette'     => 'float',
+            'stabilitas' => 'array',
+            'uji_beda' => 'array',
+            'peringatan' => 'array',
+            'k_terpilih' => 'integer',
+            'random_state' => 'integer',
+            'jumlah_data' => 'integer',
+            'silhouette' => 'float',
             'davies_bouldin' => 'float',
-            'inertia'        => 'float',
+            'inertia' => 'float',
+            'stabilitas_rata' => 'float',
         ];
     }
 

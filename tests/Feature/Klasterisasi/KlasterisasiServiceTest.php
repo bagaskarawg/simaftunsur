@@ -19,8 +19,8 @@ function mahasiswaDenganIpk(ProgramStudi $prodi, int $jumlahIpk): Mahasiswa
 
     for ($semester = 1; $semester <= $jumlahIpk; $semester++) {
         NilaiIpkSemester::factory()->create([
-            'mahasiswa_id'          => $mahasiswa->id,
-            'semester'              => $semester,
+            'mahasiswa_id' => $mahasiswa->id,
+            'semester' => $semester,
             'semester_ganjil_genap' => $semester % 2 === 1 ? 'ganjil' : 'genap',
         ]);
     }
@@ -36,25 +36,48 @@ function mahasiswaDenganIpk(ProgramStudi $prodi, int $jumlahIpk): Mahasiswa
 function tanggapanKlasterTiruan(array $idMahasiswa): array
 {
     return [
-        'k_terpilih'         => 2,
+        'k_terpilih' => 2,
         'metode_pemilihan_k' => 'otomatis (Silhouette tertinggi)',
-        'fitur_dipakai'      => ['ipk_rata_rata', 'ipk_terakhir', 'tren', 'konsistensi', 'semester_aktif'],
-        'skema_penskalaan'   => 'standard',
-        'jumlah_data'        => count($idMahasiswa),
-        'metrik'             => ['inertia' => 12.3, 'silhouette' => 0.55, 'davies_bouldin' => 0.7],
-        'evaluasi_k'         => [
+        'fitur_dipakai' => ['ipk_rata_rata', 'ipk_terakhir', 'tren', 'konsistensi', 'semester_aktif'],
+        'skema_penskalaan' => 'standard',
+        'jumlah_data' => count($idMahasiswa),
+        'metrik' => ['inertia' => 12.3, 'silhouette' => 0.55, 'davies_bouldin' => 0.7],
+        'evaluasi_k' => [
             ['k' => 2, 'inertia' => 12.3, 'silhouette' => 0.55, 'davies_bouldin' => 0.7],
             ['k' => 3, 'inertia' => 9.1, 'silhouette' => 0.41, 'davies_bouldin' => 0.9],
         ],
-        'profil_klaster'     => [
+        'profil_klaster' => [
             ['cluster' => 0, 'jumlah' => count($idMahasiswa), 'centroid' => ['ipk_rata_rata' => 3.5], 'label_deskriptif' => 'Berprestasi'],
         ],
-        'hasil'              => array_map(
+        'hasil' => array_map(
             fn ($id, $i) => ['id' => $id, 'cluster' => $i % 2, 'pca_x' => 0.1 * $i, 'pca_y' => -0.1 * $i],
             $idMahasiswa,
             array_keys($idMahasiswa),
         ),
-        'peringatan'         => ['Volume data di bawah ambang minimum.'],
+        'stabilitas' => [
+            'metode' => 'bootstrap-Jaccard (Hennig)',
+            'n_bootstrap' => 100,
+            'ambang_stabil' => 0.85,
+            'ambang_minimum' => 0.60,
+            'per_klaster' => [
+                ['cluster' => 0, 'jaccard' => 0.91, 'kategori' => 'stabil'],
+                ['cluster' => 1, 'jaccard' => 0.78, 'kategori' => 'cukup stabil'],
+            ],
+            'rata_rata' => 0.845,
+            'minimum' => 0.78,
+            'kategori_keseluruhan' => 'cukup stabil',
+        ],
+        'uji_beda' => [
+            'metode' => 'Kruskal-Wallis H (non-parametrik)',
+            'alpha' => 0.05,
+            'per_fitur' => [
+                ['fitur' => 'ipk_rata_rata', 'statistik_h' => 42.1, 'p_value' => 0.0000001, 'signifikan' => true],
+                ['fitur' => 'tren', 'statistik_h' => 1.2, 'p_value' => 0.27, 'signifikan' => false],
+            ],
+            'jumlah_fitur' => 2,
+            'jumlah_fitur_signifikan' => 1,
+        ],
+        'peringatan' => ['Volume data di bawah ambang minimum.'],
     ];
 }
 
@@ -84,7 +107,7 @@ it('mengirim fitur termetakan ke service dan menyimpan hasil + anggota', functio
     $ids = [$m1->id, $m2->id, $m3->id];
 
     Http::fake([
-        '*/sehat'        => Http::response(['status' => 'ok']),
+        '*/sehat' => Http::response(['status' => 'ok']),
         '*/klasterisasi' => Http::response(tanggapanKlasterTiruan($ids)),
     ]);
 
@@ -96,7 +119,13 @@ it('mengirim fitur termetakan ke service dan menyimpan hasil + anggota', functio
         ->and($eksekusi->silhouette)->toBe(0.55)
         ->and($eksekusi->jumlah_data)->toBe(3)
         ->and($eksekusi->anggota()->count())->toBe(3)
-        ->and($eksekusi->peringatan)->not->toBeEmpty();
+        ->and($eksekusi->peringatan)->not->toBeEmpty()
+        // Validasi lanjutan (stabilitas Jaccard + uji beda Kruskal-Wallis) tersimpan.
+        ->and($eksekusi->stabilitas_rata)->toBe(0.845)
+        ->and($eksekusi->stabilitas['kategori_keseluruhan'])->toBe('cukup stabil')
+        ->and($eksekusi->stabilitas['per_klaster'])->toHaveCount(2)
+        ->and($eksekusi->uji_beda['jumlah_fitur_signifikan'])->toBe(1)
+        ->and($eksekusi->uji_beda['per_fitur'][0]['fitur'])->toBe('ipk_rata_rata');
 
     // Payload yang dikirim memuat fitur termetakan untuk tiap mahasiswa.
     Http::assertSent(function ($request) use ($ids) {
@@ -120,7 +149,7 @@ it('menyimpan jejak lengkap: profil klaster + snapshot fitur per anggota', funct
     $ids = [$m1->id, $m2->id, $m3->id];
 
     Http::fake([
-        '*/sehat'        => Http::response(['status' => 'ok']),
+        '*/sehat' => Http::response(['status' => 'ok']),
         '*/klasterisasi' => Http::response(tanggapanKlasterTiruan($ids)),
     ]);
 

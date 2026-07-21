@@ -79,6 +79,30 @@ def main() -> None:
             f"  k={b['k']}: inertia={b['inertia']:.2f} "
             f"silhouette={b['silhouette']:.4f} DBI={b['davies_bouldin']:.4f}"
         )
+
+    stab = hasil.get("stabilitas")
+    if stab:
+        print(
+            f"\nStabilitas (bootstrap-Jaccard, B={stab['n_bootstrap']}): "
+            f"rata={stab['rata_rata']:.4f} min={stab['minimum']:.4f} "
+            f"-> {stab['kategori_keseluruhan']}"
+        )
+        for pk in stab["per_klaster"]:
+            print(f"  Klaster {pk['cluster']}: {pk['jaccard']:.4f} ({pk['kategori']})")
+
+    beda = hasil.get("uji_beda")
+    if beda:
+        print(
+            f"\nUji beda antar-klaster ({beda['metode']}, alpha={beda['alpha']}): "
+            f"{beda['jumlah_fitur_signifikan']}/{beda['jumlah_fitur']} fitur signifikan"
+        )
+        for r in beda["per_fitur"]:
+            tanda = "signifikan" if r["signifikan"] else "tidak"
+            print(
+                f"  {r['fitur']}: H={r['statistik_h']:.4f} "
+                f"p={r['p_value']:.6f} ({tanda})"
+            )
+
     if hasil["peringatan"]:
         print("\nPeringatan:")
         for w in hasil["peringatan"]:

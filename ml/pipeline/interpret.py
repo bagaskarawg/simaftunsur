@@ -4,13 +4,16 @@ Tahap interpretasi & visualisasi hasil klaster.
 Menghasilkan:
     - Profil tiap klaster: jumlah anggota + rata-rata fitur asli (skala
       sebenarnya, bukan skala standar) per klaster, agar mudah dibaca pimpinan.
-    - Label deskriptif heuristik berdasarkan peringkat rata-rata IPK antar
-      klaster (mis. "Berprestasi", "Menengah", "Perlu Pembinaan").
+    - Label deskriptif dari SKOR KOMPOSIT MULTI-FITUR (gabungan berbobot blok
+      akademik + non-akademik), bukan sekadar peringkat IPK. Lihat modul
+      `pelabelan`. Contoh label: "Berprestasi", "Menengah", "Perlu Bimbingan".
+    - Skor sub-dimensi (akademik & non-akademik) + deskripsi kualitatif tiap
+      klaster, agar dasar penamaan transparan bagi WD III.
     - Koordinat PCA 2D untuk scatter plot pada dashboard.
 
-Catatan kejujuran: label deskriptif hanyalah ALAT BANTU baca berbasis
-peringkat IPK, BUKAN klaim ilmiah. Penamaan akhir tiap klaster sebaiknya
-ditinjau pimpinan/WD III sesuai konteks.
+Catatan kejujuran: label & skor ini alat bantu interpretasi berbasis aturan
+transparan, BUKAN klaim ilmiah. Karakteristik sebenarnya tetap dibaca dari
+centroid tiap fitur; penamaan akhir dapat ditinjau pimpinan/WD III.
 """
 
 from __future__ import annotations
@@ -19,6 +22,13 @@ import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
+
+from .pelabelan import (
+    deskripsi_profil,
+    gabung_konfig,
+    hitung_skor,
+    nama_label,
+)
 
 RANDOM_STATE = 42
 
@@ -29,6 +39,7 @@ def interpret_clusters(
     X: np.ndarray,
     fitur_asli: list[str],
     nama_fitur: list[str] | None = None,
+    konfigurasi_label: dict | None = None,
 ) -> tuple[list[dict], list[dict]]:
     """
     Susun profil tiap klaster dan koordinat PCA 2D per mahasiswa.
@@ -65,17 +76,10 @@ def interpret_clusters(
     jarak_semua = model.transform(X)  # shape (n_sampel, k)
     centers = model.cluster_centers_  # shape (k, n_fitur_terskala)
 
-    # Rata-rata IPK tiap klaster untuk penentuan peringkat label deskriptif.
-    if "ipk_rata_rata" in df.columns:
-        urutan = (
-            df.groupby("cluster")["ipk_rata_rata"].mean().sort_values(ascending=False)
-        )
-        peringkat = {klaster: i for i, klaster in enumerate(urutan.index)}
-    else:
-        peringkat = {k: i for i, k in enumerate(sorted(df["cluster"].unique()))}
+    konfig_label = gabung_konfig(konfigurasi_label)
 
-    jumlah_klaster = len(peringkat)
-
+    # Bangun profil tiap klaster + skor komposit multi-fitur dari centroid
+    # terskala (z-score). Peringkat & label ditentukan SETELAH semua skor ada.
     profil_klaster: list[dict] = []
     for klaster in sorted(df["cluster"].unique()):
         anggota = df[df["cluster"] == klaster]
@@ -89,16 +93,28 @@ def interpret_clusters(
                 nama: round(float(nilai), 4)
                 for nama, nilai in zip(nama_fitur, centers[int(klaster)])
             }
+        skor = hitung_skor(centroid_terskala, konfig_label)
         profil_klaster.append(
             {
                 "cluster": int(klaster),
                 "jumlah": int(len(anggota)),
                 "centroid": centroid,
                 "centroid_terskala": centroid_terskala,
-                "label_deskriptif": _label_deskriptif(
-                    peringkat.get(klaster, 0), jumlah_klaster
-                ),
+                **skor,  # skor_akademik, skor_non_akademik, skor_komposit
             }
+        )
+
+    # Peringkat klaster berdasarkan SKOR KOMPOSIT (0 = tertinggi) → label +
+    # deskripsi kualitatif dua sub-dimensi.
+    urut = sorted(profil_klaster, key=lambda p: p["skor_komposit"], reverse=True)
+    peringkat = {p["cluster"]: i for i, p in enumerate(urut)}
+    jumlah_klaster = len(profil_klaster)
+    for p in profil_klaster:
+        p["label_deskriptif"] = nama_label(
+            peringkat[p["cluster"]], jumlah_klaster, konfig_label
+        )
+        p["ringkasan_profil"] = deskripsi_profil(
+            p["skor_akademik"], p["skor_non_akademik"], konfig_label
         )
 
     # Proyeksi PCA 2D. Bila fitur < 2 dimensi, PCA tak relevan → koordinat 0.
@@ -135,17 +151,3 @@ def _proyeksi_pca(X: np.ndarray) -> np.ndarray:
     return pca.fit_transform(X)
 
 
-def _label_deskriptif(peringkat: int, total: int) -> str:
-    """
-    Beri label heuristik berdasarkan peringkat rata-rata IPK klaster
-    (0 = IPK tertinggi). Hanya alat bantu baca, bukan klaim ilmiah.
-    """
-    if total <= 1:
-        return "Klaster Tunggal"
-    if peringkat == 0:
-        return "Berprestasi"
-    if peringkat == total - 1:
-        return "Perlu Pembinaan"
-    if total == 3:
-        return "Menengah"
-    return f"Menengah (tingkat {peringkat})"
