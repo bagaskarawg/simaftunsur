@@ -1,4 +1,39 @@
+daftar tabel
+[ ] format
+
+daftar gambar
+[ ] format
+
+[x] daftar simbol
+
+bab ii
+[x] enam fase crisp-dm
+[x] k-means++
+[x] evaluasi jaccard coefficient
+[x] Uji Kruskal-Wallis
+[ ] Simulasi Perhitungan
+[ ] standard scaler
+
+bab iii
+
+daftar pustaka
+[ ] cek apakah sudah lengkap
+
+[ ] file presentasi
+
+## 3 Juli 2026
+- Di BAB II tambahkan model pengujian cara validasi/evaluasi hasil dari klasterisasi
+    - model pengujian ini ditujukan untuk menunjukkan bahwa hasil klasterisasi itu kredibel dan dapat dipertanggungjawabkan
+    - cari model pengujian yang cocok dan bisa menunjukkan nilai persentase nya
+- ERD Full secara Landscape
+
 ## 2 Juli 2026
+- Simbol FLowchart disesuaikan
+- Jumlah Klaster Sesuai data:
+    - Berprestasi
+    - Perlu Bimbingan
+- Bisa dinamis
+
 - Jelaskan di tinjauan pustaka bahwa untuk menyelesaikan fitur machine learning nya dengan Python, konsep scikit-learn itu apa? Jelaskan secara detail dan bagaimana cara mengintegrasikan antara Machine Learning dengan sistem yang berjalan
 - Bagaimana hasil dari perhitungan scikit-learn ini (diambil lagi oleh) / (dikirim ke) Sistem Informasi
 - Activity Diagram Proses Klasterisasi pakai Flowchart
