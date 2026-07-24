@@ -31,9 +31,10 @@
   sehingga seluruh mahasiswa dianggap memenuhi; UI menampilkan peringatan.
 - **Mahasiswa belum diklaster** → kriteria `label_klaster` dinilai *tidak lolos*
   dengan keterangan "belum diklaster" (tidak error, tidak diasumsikan lolos).
-- **Mode audit** → toggle "Tampilkan yang belum memenuhi" menampilkan mahasiswa
-  yang memenuhi *minimal satu* syarat wajib (yang 0 disembunyikan), tetap tanpa
-  peringkat kedekatan.
+- **Mode audit** → toggle "Tampilkan yang belum memenuhi" (**aktif secara bawaan**)
+  menampilkan mahasiswa yang memenuhi *minimal satu* syarat wajib (yang 0
+  disembunyikan), tetap tanpa peringkat kedekatan. Dapat dimatikan untuk melihat
+  hanya yang memenuhi seluruh syarat wajib.
 
 ---
 

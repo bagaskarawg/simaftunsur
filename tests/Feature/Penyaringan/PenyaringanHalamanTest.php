@@ -46,17 +46,24 @@ it('menolak akses penyaringan bagi staf_prodi', function () {
     Volt::test('penyaringan.index')->assertStatus(403);
 });
 
-it('menampilkan hanya mahasiswa yang memenuhi syarat wajib secara default', function () {
+it('menampilkan hanya mahasiswa yang memenuhi saat mode audit dimatikan', function () {
     $lolos = kandidatMhs(3.70);
-    $gagal = kandidatMhs(2.80);
+    $gagal = kandidatMhs(2.80); // gagal → hanya tampil di kelompok audit
     $program = programIpkMin(3.00);
 
     $this->actingAs(Pengguna::factory()->create(['peran' => 'wd3']));
 
     Volt::test('penyaringan.index', ['program' => $program->id])
+        ->set('audit', false)
         ->assertOk()
         ->assertSee($lolos->nama)
         ->assertDontSee($gagal->nama);
+});
+
+it('mode audit aktif secara bawaan', function () {
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'wd3']));
+
+    Volt::test('penyaringan.index')->assertSet('audit', true);
 });
 
 it('audit menyembunyikan yang tidak memenuhi satu pun syarat wajib', function () {

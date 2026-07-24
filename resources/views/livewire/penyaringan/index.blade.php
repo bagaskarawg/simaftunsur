@@ -26,8 +26,8 @@ class extends Component {
     #[Url(as: 'angkatan')]
     public ?int $angkatan = null;
 
-    /** Tampilkan juga mahasiswa yang belum memenuhi (untuk audit staf). */
-    public bool $audit = false;
+    /** Tampilkan juga mahasiswa yang belum memenuhi (untuk audit staf). Aktif secara bawaan. */
+    public bool $audit = true;
 
     /** Pengurutan: HANYA satu kolom data mentah (bukan tingkat kecocokan). */
     public string $urut = 'npm';
