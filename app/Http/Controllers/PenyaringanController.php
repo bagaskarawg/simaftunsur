@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KlasterisasiEksekusi;
 use App\Models\Mahasiswa;
 use App\Models\Program;
 use App\Services\EvaluatorKelayakan;
@@ -38,9 +39,17 @@ class PenyaringanController extends Controller
 
         $syaratLabel = $program->syarat->map(fn ($s) => $s->label)->all();
 
+        // Peta [mahasiswa_id => label klaster] dari eksekusi K-Means terbaru,
+        // diambil sekali (hindari query per baris).
+        $eksekusi = KlasterisasiEksekusi::latest()->first();
+        $petaLabelKlaster = $eksekusi
+            ? $eksekusi->anggota()->with('klaster:id,label_deskriptif')->get()
+                ->mapWithKeys(fn ($a) => [$a->mahasiswa_id => $a->klaster?->label_deskriptif])
+            : collect();
+
         $namaFile = 'kandidat-'.str($program->nama)->slug().'.csv';
 
-        return response()->streamDownload(function () use ($hasil, $syaratLabel) {
+        return response()->streamDownload(function () use ($hasil, $syaratLabel, $petaLabelKlaster) {
             $handle = fopen('php://output', 'w');
             fwrite($handle, "\xEF\xBB\xBF"); // BOM UTF-8 untuk Excel Windows.
 
@@ -67,7 +76,7 @@ class PenyaringanController extends Controller
                     $m->skorPrestasi(),
                     $m->skorKegiatan(),
                     $m->skorPengabdian(),
-                    '-', // label klaster diisi manual bila diperlukan; hindari query per baris
+                    $petaLabelKlaster->get($m->id) ?? '-',
                     $h->layak ? 'Ya' : 'Tidak',
                 ], $status));
             }

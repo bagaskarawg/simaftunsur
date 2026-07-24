@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\KlasterisasiAnggota;
+use App\Models\KlasterisasiEksekusi;
+use App\Models\KlasterisasiKlaster;
 use App\Models\Mahasiswa;
 use App\Models\NilaiIpkSemester;
 use App\Models\Pengguna;
@@ -89,4 +92,29 @@ it('ekspor CSV berhasil bagi wd3', function () {
 
     $response->assertOk();
     expect($response->headers->get('content-type'))->toContain('text/csv');
+});
+
+it('ekspor CSV memuat label klaster asli dari eksekusi terbaru', function () {
+    $mhs = kandidatMhs(3.70);
+    $program = programIpkMin(3.00);
+
+    // Eksekusi K-Means terbaru dengan label klaster untuk mahasiswa ini.
+    $eksekusi = KlasterisasiEksekusi::create([
+        'k_terpilih' => 2, 'metode_pemilihan_k' => 'otomatis', 'fitur_dipakai' => ['ipk_rata_rata'],
+        'skema_penskalaan' => 'standard', 'jumlah_data' => 1, 'evaluasi_k' => [], 'profil_klaster' => [],
+    ]);
+    $klaster = KlasterisasiKlaster::create([
+        'eksekusi_id' => $eksekusi->id, 'cluster' => 0, 'label_deskriptif' => 'Berprestasi',
+        'jumlah_anggota' => 1, 'centroid' => [],
+    ]);
+    KlasterisasiAnggota::create([
+        'eksekusi_id' => $eksekusi->id, 'klaster_id' => $klaster->id,
+        'mahasiswa_id' => $mhs->id, 'cluster' => 0,
+    ]);
+
+    $this->actingAs(Pengguna::factory()->create(['peran' => 'wd3']));
+    $response = $this->get(route('penyaringan.ekspor', ['program' => $program->id]));
+
+    $response->assertOk();
+    expect($response->streamedContent())->toContain('Berprestasi');
 });
