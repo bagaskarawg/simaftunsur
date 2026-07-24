@@ -48,7 +48,6 @@ return [
         'mahasiswa.kelola',
         'klasterisasi.lihat',
         'klasterisasi.jalankan',
-        'kandidat.lihat',
         'kategori-klaster.lihat',
         'kategori-klaster.kelola',
         'laporan.lihat',
@@ -76,7 +75,6 @@ return [
         'wd3' => [
             'mahasiswa.lihat',
             'klasterisasi.lihat',
-            'kandidat.lihat',
             'kategori-klaster.lihat',
             'kategori-klaster.kelola',
             'laporan.lihat',
@@ -95,13 +93,11 @@ return [
             'mahasiswa.kelola',
             'klasterisasi.lihat',
             'klasterisasi.jalankan',
-            'kandidat.lihat',
         ],
 
         'kaprodi' => [
             'mahasiswa.lihat',
             'beasiswa.lihat',
-            'kandidat.lihat',
         ],
 
         'staf_prodi' => [

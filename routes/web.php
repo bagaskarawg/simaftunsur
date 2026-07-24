@@ -47,12 +47,6 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/klaster/{klaster}', 'klasterisasi.klaster')->name('klaster');
     });
 
-    // Kandidat Program (SIMKATMAWA) — tindak lanjut hasil klaster: daftar
-    // mahasiswa yang cocok untuk mawapres/beasiswa, diurutkan objektif.
-    Route::prefix('kandidat')->name('kandidat.')->group(function () {
-        Volt::route('/', 'kandidat.index')->name('index');
-    });
-
     // Master Kategori Klaster — katalog label + rekomendasi yang dipetakan ke
     // hasil klaster. Otorisasi (lihat vs kelola) ditangani di dalam komponen.
     Route::prefix('kategori-klaster')->name('kategori-klaster.')->group(function () {
