@@ -48,6 +48,10 @@ return [
         'mahasiswa.kelola',
         'klasterisasi.lihat',
         'klasterisasi.jalankan',
+        'program.lihat',
+        'program.kelola',
+        'program.saring',
+        'program.ekspor',
         'kategori-klaster.lihat',
         'kategori-klaster.kelola',
         'laporan.lihat',
@@ -75,6 +79,10 @@ return [
         'wd3' => [
             'mahasiswa.lihat',
             'klasterisasi.lihat',
+            'program.lihat',
+            'program.kelola',
+            'program.saring',
+            'program.ekspor',
             'kategori-klaster.lihat',
             'kategori-klaster.kelola',
             'laporan.lihat',
@@ -93,11 +101,16 @@ return [
             'mahasiswa.kelola',
             'klasterisasi.lihat',
             'klasterisasi.jalankan',
+            'program.lihat',
+            'program.kelola',
+            'program.saring',
+            'program.ekspor',
         ],
 
         'kaprodi' => [
             'mahasiswa.lihat',
             'beasiswa.lihat',
+            'program.lihat',
         ],
 
         'staf_prodi' => [

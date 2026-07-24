@@ -4,16 +4,16 @@ namespace Database\Seeders;
 
 use App\Models\BeasiswaKategori;
 use App\Models\BeasiswaPenerima;
-use App\Models\KegiatanPromosi;
 use App\Models\KegiatanKemahasiswaan;
+use App\Models\KegiatanPromosi;
 use App\Models\KknDpl;
 use App\Models\KknKelompok;
 use App\Models\KknLokasi;
 use App\Models\KknPeserta;
 use App\Models\KlasterisasiKategori;
-use App\Models\PengabdianHibah;
 use App\Models\Mahasiswa;
 use App\Models\NilaiIpkSemester;
+use App\Models\PengabdianHibah;
 use App\Models\Pengguna;
 use App\Models\Prestasi;
 use App\Models\ProgramStudi;
@@ -44,6 +44,9 @@ class DatabaseSeeder extends Seeder
         $this->seedKkn();
         $this->seedSkkm();
         $this->seedKategoriKlaster();
+
+        // Program contoh untuk demo Penyaringan Kandidat.
+        $this->call(ProgramSeeder::class);
     }
 
     /**
@@ -55,26 +58,26 @@ class DatabaseSeeder extends Seeder
     {
         $definisi = [
             [
-                'nama'        => 'Berprestasi',
-                'urutan'      => 1,
-                'warna'      => 'cluster-1',
-                'deskripsi'   => 'Skor komposit tertinggi: akademik kuat dan/atau aktivitas non-akademik menonjol.',
+                'nama' => 'Berprestasi',
+                'urutan' => 1,
+                'warna' => 'cluster-1',
+                'deskripsi' => 'Skor komposit tertinggi: akademik kuat dan/atau aktivitas non-akademik menonjol.',
                 'rekomendasi' => 'Pertahankan capaian; dorong kompetisi tingkat nasional/internasional, '
                     .'prioritaskan untuk beasiswa prestasi, dan libatkan sebagai mentor bagi klaster lain.',
             ],
             [
-                'nama'        => 'Menengah',
-                'urutan'      => 2,
-                'warna'      => 'cluster-2',
-                'deskripsi'   => 'Skor komposit menengah; potensi berkembang pada salah satu dimensi.',
+                'nama' => 'Menengah',
+                'urutan' => 2,
+                'warna' => 'cluster-2',
+                'deskripsi' => 'Skor komposit menengah; potensi berkembang pada salah satu dimensi.',
                 'rekomendasi' => 'Dorong keterlibatan kegiatan/organisasi dan keikutsertaan lomba agar '
                     .'profil non-akademik meningkat; berikan bimbingan akademik terarah.',
             ],
             [
-                'nama'        => 'Perlu Bimbingan',
-                'urutan'      => 3,
-                'warna'      => 'cluster-3',
-                'deskripsi'   => 'Skor komposit terendah: akademik dan aktivitas non-akademik sama-sama perlu perhatian.',
+                'nama' => 'Perlu Bimbingan',
+                'urutan' => 3,
+                'warna' => 'cluster-3',
+                'deskripsi' => 'Skor komposit terendah: akademik dan aktivitas non-akademik sama-sama perlu perhatian.',
                 'rekomendasi' => 'Pendampingan akademik intensif (perwalian/remedial), dorong keikutsertaan '
                     .'kegiatan dasar, dan pantau perkembangan IPK tiap semester.',
             ],
@@ -91,43 +94,43 @@ class DatabaseSeeder extends Seeder
     protected function seedPengguna(): void
     {
         Pengguna::factory()->create([
-            'nip'        => 'admin',
-            'nama'       => 'Administrator Sistem',
-            'email'      => 'admin@ft.unsur.ac.id',
+            'nip' => 'admin',
+            'nama' => 'Administrator Sistem',
+            'email' => 'admin@ft.unsur.ac.id',
             'kata_sandi' => Hash::make('rahasia123'),
-            'peran'      => 'admin',
+            'peran' => 'admin',
         ]);
 
         Pengguna::factory()->create([
-            'nip'        => '197003051998031001',
-            'nama'       => 'Dr. Ir. Budi Santoso, M.T.',
-            'email'      => 'budi.santoso@ft.unsur.ac.id',
+            'nip' => '197003051998031001',
+            'nama' => 'Dr. Ir. Budi Santoso, M.T.',
+            'email' => 'budi.santoso@ft.unsur.ac.id',
             'kata_sandi' => Hash::make('rahasia123'),
-            'peran'      => 'wd3',
+            'peran' => 'wd3',
         ]);
 
         Pengguna::factory()->create([
-            'nip'        => '198506152012121002',
-            'nama'       => 'Siti Nurhaliza, S.Kom.',
-            'email'      => 'siti@ft.unsur.ac.id',
+            'nip' => '198506152012121002',
+            'nama' => 'Siti Nurhaliza, S.Kom.',
+            'email' => 'siti@ft.unsur.ac.id',
             'kata_sandi' => Hash::make('rahasia123'),
-            'peran'      => 'staf_wd3',
+            'peran' => 'staf_wd3',
         ]);
 
         Pengguna::factory()->create([
-            'nip'        => '197805102003121003',
-            'nama'       => 'Ir. Dedi Kurniawan, M.Kom.',
-            'email'      => 'dedi@ft.unsur.ac.id',
+            'nip' => '197805102003121003',
+            'nama' => 'Ir. Dedi Kurniawan, M.Kom.',
+            'email' => 'dedi@ft.unsur.ac.id',
             'kata_sandi' => Hash::make('rahasia123'),
-            'peran'      => 'kaprodi',
+            'peran' => 'kaprodi',
         ]);
 
         Pengguna::factory()->create([
-            'nip'        => '199103252015042004',
-            'nama'       => 'Rina Marlina, S.T.',
-            'email'      => 'rina@ft.unsur.ac.id',
+            'nip' => '199103252015042004',
+            'nama' => 'Rina Marlina, S.T.',
+            'email' => 'rina@ft.unsur.ac.id',
             'kata_sandi' => Hash::make('rahasia123'),
-            'peran'      => 'staf_prodi',
+            'peran' => 'staf_prodi',
         ]);
     }
 
@@ -165,7 +168,7 @@ class DatabaseSeeder extends Seeder
     protected function seedMahasiswaDanIpk(array $prodi): void
     {
         $daftarProdi = array_values($prodi);
-        $totalProdi  = count($daftarProdi);
+        $totalProdi = count($daftarProdi);
         $jumlahMahasiswa = 30;
 
         for ($i = 0; $i < $jumlahMahasiswa; $i++) {
@@ -194,8 +197,8 @@ class DatabaseSeeder extends Seeder
 
         for ($semester = 1; $semester <= $jumlahCatatan; $semester++) {
             NilaiIpkSemester::factory()->create([
-                'mahasiswa_id'          => $mahasiswa->id,
-                'semester'              => $semester,
+                'mahasiswa_id' => $mahasiswa->id,
+                'semester' => $semester,
                 'semester_ganjil_genap' => $semester % 2 === 1 ? 'ganjil' : 'genap',
             ]);
         }
@@ -231,13 +234,13 @@ class DatabaseSeeder extends Seeder
             $alumni = Mahasiswa::factory()
                 ->untukProdi($daftarProdi[$i % count($daftarProdi)])
                 ->create([
-                    'status'         => 'lulus',
+                    'status' => 'lulus',
                     'semester_aktif' => 8,
                 ]);
 
             TracerStudy::factory()->create([
                 'mahasiswa_id' => $alumni->id,
-                'tahun_lulus'  => (int) $alumni->angkatan + 4,
+                'tahun_lulus' => (int) $alumni->angkatan + 4,
             ]);
         }
     }
@@ -272,7 +275,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($terpilih as $i => $mahasiswa) {
             BeasiswaPenerima::factory()->create([
-                'mahasiswa_id'         => $mahasiswa->id,
+                'mahasiswa_id' => $mahasiswa->id,
                 'beasiswa_kategori_id' => $kategori[$i % count($kategori)]->id,
             ]);
         }
@@ -293,21 +296,21 @@ class DatabaseSeeder extends Seeder
 
         foreach ($potongan as $i => $anggota) {
             $kelompok = KknKelompok::factory()->create([
-                'nama_kelompok'  => 'Kelompok '.($i + 1),
-                'kkn_lokasi_id'  => $lokasi[$i % $lokasi->count()]->id,
-                'kkn_dpl_id'     => $dpl[$i % $dpl->count()]->id,
+                'nama_kelompok' => 'Kelompok '.($i + 1),
+                'kkn_lokasi_id' => $lokasi[$i % $lokasi->count()]->id,
+                'kkn_dpl_id' => $dpl[$i % $dpl->count()]->id,
                 'tahun_akademik' => '2025/2026',
-                'status'         => 'berjalan',
+                'status' => 'berjalan',
             ]);
 
             foreach ($anggota->values() as $j => $mahasiswa) {
                 KknPeserta::factory()->create([
                     'kkn_kelompok_id' => $kelompok->id,
-                    'mahasiswa_id'    => $mahasiswa->id,
-                    'jabatan'         => $j === 0 ? 'ketua' : ($j === 1 ? 'sekretaris' : ($j === 2 ? 'bendahara' : 'anggota')),
-                    'status'          => 'aktif',
-                    'nilai_akhir'     => null,
-                    'nilai_huruf'     => null,
+                    'mahasiswa_id' => $mahasiswa->id,
+                    'jabatan' => $j === 0 ? 'ketua' : ($j === 1 ? 'sekretaris' : ($j === 2 ? 'bendahara' : 'anggota')),
+                    'status' => 'aktif',
+                    'nilai_akhir' => null,
+                    'nilai_huruf' => null,
                 ]);
             }
         }

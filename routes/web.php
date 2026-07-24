@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PenyaringanController;
 use App\Http\Controllers\TemplateIpkController;
 use App\Http\Controllers\TemplateMahasiswaController;
 use App\Http\Controllers\TemplatePenggunaController;
@@ -24,18 +25,18 @@ Route::middleware(['auth'])->group(function () {
     // setidaknya berizin `mahasiswa.lihat`. Otorisasi finer-grained
     // (kelola vs lihat) dilakukan di dalam Volt component lewat Gate.
     Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-        Volt::route('/',           'mahasiswa.index')->name('index');
-        Volt::route('/baru',       'mahasiswa.baru')->name('baru');
+        Volt::route('/', 'mahasiswa.index')->name('index');
+        Volt::route('/baru', 'mahasiswa.baru')->name('baru');
 
         // Halaman impor massal — daftarkan SEBELUM /{mahasiswa}
         // supaya tidak ditangkap sebagai route model binding.
-        Volt::route('/ipk/impor',  'mahasiswa.impor')->name('ipk.impor');
+        Volt::route('/ipk/impor', 'mahasiswa.impor')->name('ipk.impor');
         Route::get('/ipk/template', [TemplateIpkController::class, 'unduh'])->name('ipk.template');
 
-        Volt::route('/impor',  'mahasiswa.impor-data')->name('impor');
+        Volt::route('/impor', 'mahasiswa.impor-data')->name('impor');
         Route::get('/template', [TemplateMahasiswaController::class, 'unduh'])->name('template');
 
-        Volt::route('/{mahasiswa}',      'mahasiswa.detail')->name('detail');
+        Volt::route('/{mahasiswa}', 'mahasiswa.detail')->name('detail');
         Volt::route('/{mahasiswa}/ubah', 'mahasiswa.ubah')->name('ubah');
     });
 
@@ -51,6 +52,16 @@ Route::middleware(['auth'])->group(function () {
     // hasil klaster. Otorisasi (lihat vs kelola) ditangani di dalam komponen.
     Route::prefix('kategori-klaster')->name('kategori-klaster.')->group(function () {
         Volt::route('/', 'kategori-klaster.index')->name('index');
+    });
+
+    // Modul Penyaringan Kandidat berbasis persyaratan program.
+    // CRUD Program + Syarat, halaman penyaringan (boolean), & ekspor daftar.
+    Route::prefix('program')->name('program.')->group(function () {
+        Volt::route('/', 'program.index')->name('index');
+    });
+    Route::prefix('penyaringan')->name('penyaringan.')->group(function () {
+        Volt::route('/', 'penyaringan.index')->name('index');
+        Route::get('/ekspor', [PenyaringanController::class, 'ekspor'])->name('ekspor');
     });
 
     // Modul Pengguna — manajemen akun & peran, khusus Administrator.
