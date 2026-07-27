@@ -47,13 +47,13 @@ Kode M-xx dipetakan ke berkas uji modul yang sudah ada (CRUD, validasi, alur).
 
 | Kode | Modul / Skenario | Hasil | Berkas |
 |------|------------------|-------|--------|
-| M-01 | Data Mahasiswa (CRUD, validasi, filter) | Lolos | `tests/Feature/Mahasiswa/*` |
-| M-02 | Impor IPK & Mahasiswa (berkas valid & rusak) | Lolos | `tests/Feature/Imports/*` |
-| M-03 | Klasterisasi (kesiapan, jalankan, halaman, detail) | Lolos | `tests/Feature/Klasterisasi/*` |
-| M-04 | Kategori Klaster (katalog label + sisip level) | Lolos | `tests/Feature/Klasterisasi/KategoriKlasterTest.php` |
-| M-05 | Pengguna & RBAC (peran, izin) | Lolos | `tests/Feature/Pengguna/*`, `tests/Feature/Rbac/*` |
-| M-06 | Penyaringan Kandidat (program, syarat, evaluator) | Lolos | `tests/Feature/Penyaringan/*` |
-| M-07 | Laporan, Prestasi, Kegiatan/SKKM, Beranda, dll | Lolos | `tests/Feature/{Laporan,Prestasi,Skkm,Beranda,...}/*` |
+| M-01 | Data Mahasiswa (CRUD, validasi, filter) | Lolos | `tests/Feature/Modul/Mahasiswa/*` |
+| M-02 | Impor IPK & Mahasiswa (berkas valid & rusak) | Lolos | `tests/Feature/Modul/Imports/*` |
+| M-03 | Klasterisasi (kesiapan, jalankan, halaman, detail) | Lolos | `tests/Feature/Modul/Klasterisasi/*` |
+| M-04 | Kategori Klaster (katalog label + sisip level) | Lolos | `tests/Feature/Modul/Klasterisasi/KategoriKlasterTest.php` |
+| M-05 | Pengguna & RBAC (peran, izin) | Lolos | `tests/Feature/Modul/Pengguna/*`, `tests/Feature/Sistem/Rbac/*` |
+| M-06 | Penyaringan Kandidat (program, syarat, evaluator) | Lolos | `tests/Feature/Modul/Penyaringan/*` |
+| M-07 | Laporan, Prestasi, Kegiatan/SKKM, Beranda, dll | Lolos | `tests/Feature/Modul/{Laporan,Prestasi,Skkm,Beranda,...}/*` |
 
 ## Tabel 4.8 — T4 Sistem (blackbox)
 
@@ -64,9 +64,9 @@ Kode M-xx dipetakan ke berkas uji modul yang sudah ada (CRUD, validasi, alur).
 | KF-01 | Login valid berhasil; login salah ditolak | Lolos | `tests/Feature/Sistem/FungsionalTest.php` |
 | KF-02 | Akses menu sesuai peran | Lolos | admin/wd3/staf_prodi |
 | KF-03 | Tambah data mahasiswa (CRUD) | Lolos | |
-| KF-04 | Impor massal (valid & rusak) | Lolos | dipetakan ke `tests/Feature/Imports/*` |
+| KF-04 | Impor massal (valid & rusak) | Lolos | dipetakan ke `tests/Feature/Modul/Imports/*` |
 | KF-05 | Jalankan klasterisasi data layak → hasil tersimpan | Lolos | service ditiru |
-| KF-06 | Tampil hasil & riwayat klaster | Lolos | dipetakan ke `KlasterisasiHalamanTest` |
+| KF-06 | Tampil hasil & riwayat klaster | Lolos | dipetakan ke `Modul/Klasterisasi/KlasterisasiHalamanTest` |
 | KF-07 | Dashboard WD III tampil | Lolos | |
 | KF-08 | Unduh laporan (CSV) | Lolos | |
 
