@@ -27,9 +27,9 @@
                     {{ $d['siap'] ? 'Siap' : 'Belum memadai' }}
                 </span>
             </div>
-            <p class="mt-1 text-sm text-slate-500">
+            {{-- <p class="mt-1 text-sm text-slate-500">
                 Ambang ideal: {{ $d['ambang'] }} mahasiswa aktif dengan ≥{{ $d['min_catatan'] }} catatan IPK.
-            </p>
+            </p> --}}
         </div>
         <div class="text-right">
             <p class="text-2xl font-bold text-slate-900 tabular-nums">
@@ -66,7 +66,7 @@
         </div>
     </dl>
 
-    {{-- Panduan tindak lanjut --}}
+    {{-- Panduan tindak lanjut
     @unless ($d['siap'])
         <div class="mt-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-800">
             Masih perlu <strong>{{ number_format($d['kurang']) }}</strong> mahasiswa layak lagi untuk mencapai ambang ideal.
@@ -78,4 +78,5 @@
             Klasterisasi tetap dapat dijalankan, tetapi hasilnya ditandai <em>indikatif</em> hingga ambang tercapai.
         </div>
     @endunless
+     --}}
 </section>

@@ -215,10 +215,6 @@ class extends Component
                     </tbody>
                 </table>
             </div>
-            <p class="mt-4 text-xs text-slate-500">
-                Bobot fitur penentu skor komposit diatur di <code class="text-slate-600">config/klasterisasi.php</code>
-                (lihat <code class="text-slate-600">docs/pelabelan-klaster.md</code>).
-            </p>
         @endif
     </x-card>
 

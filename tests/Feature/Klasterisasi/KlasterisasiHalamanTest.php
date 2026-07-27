@@ -74,7 +74,6 @@ it('merender dashboard lengkap dengan hasil eksekusi', function () {
         ->assertSee('Sebaran Klaster')
         ->assertSee('Berprestasi')
         ->assertSee('Rekomendasi')
-        ->assertSee('Catatan validitas')
         ->assertSee('Perbandingan Profil Antar-Klaster') // kartu radar
         ->assertSee('IPK Rata');                          // label sumbu radar
 });

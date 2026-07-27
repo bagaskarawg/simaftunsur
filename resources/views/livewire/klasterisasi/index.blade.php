@@ -161,8 +161,7 @@ class extends Component {
                     </p>
                     <p class="mt-2 text-sm text-slate-500">
                         Jumlah klaster (k) ditentukan dari data melalui Elbow Method dan Silhouette
-                        Coefficient; penskalaan fitur memakai StandardScaler. Tidak ada parameter
-                        yang perlu dipilih.
+                        Coefficient; penskalaan fitur memakai StandardScaler.
                     </p>
                 </div>
 
@@ -196,7 +195,7 @@ class extends Component {
     @else
         @php $e = $this->eksekusi; @endphp
 
-        {{-- Peringatan kejujuran data --}}
+        {{-- Peringatan kejujuran data
         @if (! empty($e->peringatan))
             <div class="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
                 <p class="font-semibold">Catatan validitas:</p>
@@ -207,6 +206,7 @@ class extends Component {
                 </ul>
             </div>
         @endif
+         --}}
 
         {{-- KPI metrik --}}
         <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
