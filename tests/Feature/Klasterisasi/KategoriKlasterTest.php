@@ -82,6 +82,29 @@ it('mengubah dan menghapus kategori klaster', function () {
     expect(KlasterisasiKategori::whereKey($kat->id)->exists())->toBeFalse();
 });
 
+it('kategori baru disisipkan sebagai level tengah, anchor terbawah tetap terakhir', function () {
+    // Katalog awal: Berprestasi(1), Menengah(2), Perlu Bimbingan(3).
+    KlasterisasiKategori::factory()->create(['nama' => 'Berprestasi', 'urutan' => 1, 'aktif' => true]);
+    KlasterisasiKategori::factory()->create(['nama' => 'Menengah', 'urutan' => 2, 'aktif' => true]);
+    KlasterisasiKategori::factory()->create(['nama' => 'Perlu Bimbingan', 'urutan' => 3, 'aktif' => true]);
+
+    $this->actingAs($this->pengelola);
+
+    // Tambah "Percobaan" tanpa mengubah urutan default (harus jadi level tengah).
+    $komponen = Volt::test('kategori-klaster.index')->call('bukaTambah');
+    $komponen->assertSet('urutan', 3) // default = tepat sebelum anchor terbawah
+        ->set('nama', 'Percobaan')
+        ->call('simpan')
+        ->assertHasNoErrors();
+
+    // Perlu Bimbingan tetap entri TERAKHIR (urutan terbesar) → tetap jadi label
+    // klaster terendah untuk k berapa pun.
+    expect(KlasterisasiKategori::katalogAktif())
+        ->toBe(['Berprestasi', 'Menengah', 'Percobaan', 'Perlu Bimbingan']);
+
+    expect(KlasterisasiKategori::where('nama', 'Perlu Bimbingan')->value('urutan'))->toBe(4);
+});
+
 it('katalogAktif mengembalikan nama terurut peringkat', function () {
     KlasterisasiKategori::factory()->create(['nama' => 'Perlu Bimbingan', 'urutan' => 3, 'aktif' => true]);
     KlasterisasiKategori::factory()->create(['nama' => 'Berprestasi', 'urutan' => 1, 'aktif' => true]);

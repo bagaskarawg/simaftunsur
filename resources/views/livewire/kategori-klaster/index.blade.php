@@ -10,17 +10,24 @@ use Livewire\Volt\Component;
 new
 #[Layout('layouts.app')]
 #[Title('Kategori Klaster')]
-class extends Component {
+class extends Component
+{
     /** Mode form modal: 'tutup' | 'tambah' | 'edit'. */
     public string $modeForm = 'tutup';
+
     public ?int $idEdit = null;
 
     // Field form
     public string $nama = '';
+
     public int $urutan = 1;
+
     public string $deskripsi = '';
+
     public string $rekomendasi = '';
+
     public string $warna = 'cluster-1';
+
     public bool $aktif = true;
 
     public function mount(): void
@@ -40,8 +47,13 @@ class extends Component {
         abort_unless(auth()->user()?->can('kategori-klaster.kelola'), 403);
 
         $this->reset(['nama', 'deskripsi', 'rekomendasi', 'idEdit']);
-        $this->urutan = (int) (KlasterisasiKategori::max('urutan') ?? 0) + 1;
-        $this->warna = 'cluster-'.min(5, $this->urutan);
+        // Kategori baru default sebagai LEVEL TENGAH: disisipkan tepat sebelum
+        // anchor terbawah (urutan terbesar), agar entri pertama (klaster
+        // tertinggi) & terakhir (klaster terendah) tidak pernah tergeser hanya
+        // karena menambah kategori. Bila katalog masih kosong, mulai dari 1.
+        $maks = (int) (KlasterisasiKategori::max('urutan') ?? 0);
+        $this->urutan = max(1, $maks);
+        $this->warna = 'cluster-'.min(5, max(1, $this->urutan));
         $this->aktif = true;
         $this->resetValidation();
         $this->modeForm = 'tambah';
@@ -73,27 +85,31 @@ class extends Component {
         abort_unless(auth()->user()?->can('kategori-klaster.kelola'), 403);
 
         $data = $this->validate([
-            'nama'        => ['required', 'string', 'max:255', Rule::unique('klasterisasi_kategori', 'nama')->ignore($this->idEdit)],
-            'urutan'      => ['required', 'integer', 'min:1', 'max:20'],
-            'deskripsi'   => ['nullable', 'string', 'max:1000'],
+            'nama' => ['required', 'string', 'max:255', Rule::unique('klasterisasi_kategori', 'nama')->ignore($this->idEdit)],
+            'urutan' => ['required', 'integer', 'min:1', 'max:20'],
+            'deskripsi' => ['nullable', 'string', 'max:1000'],
             'rekomendasi' => ['nullable', 'string', 'max:1000'],
-            'warna'       => ['required', Rule::in(['cluster-1', 'cluster-2', 'cluster-3', 'cluster-4', 'cluster-5'])],
-            'aktif'       => ['boolean'],
+            'warna' => ['required', Rule::in(['cluster-1', 'cluster-2', 'cluster-3', 'cluster-4', 'cluster-5'])],
+            'aktif' => ['boolean'],
         ]);
 
         $atribut = [
-            'nama'        => $data['nama'],
-            'urutan'      => $data['urutan'],
-            'deskripsi'   => $data['deskripsi'] ?: null,
+            'nama' => $data['nama'],
+            'urutan' => $data['urutan'],
+            'deskripsi' => $data['deskripsi'] ?: null,
             'rekomendasi' => $data['rekomendasi'] ?: null,
-            'warna'       => $data['warna'],
-            'aktif'       => $data['aktif'],
+            'warna' => $data['warna'],
+            'aktif' => $data['aktif'],
         ];
 
         if ($this->modeForm === 'edit' && $this->idEdit) {
             KlasterisasiKategori::whereKey($this->idEdit)->firstOrFail()->update($atribut);
             session()->flash('sukses', 'Kategori klaster berhasil diperbarui.');
         } else {
+            // Sisip-dan-geser: kategori dengan urutan >= posisi baru digeser
+            // turun satu, sehingga kategori baru menempati posisi yang diminta
+            // dan anchor terbawah (mis. Perlu Bimbingan) tetap paling akhir.
+            KlasterisasiKategori::where('urutan', '>=', $data['urutan'])->increment('urutan');
             KlasterisasiKategori::create($atribut);
             session()->flash('sukses', 'Kategori klaster berhasil ditambahkan.');
         }
@@ -127,8 +143,11 @@ class extends Component {
             <h1 class="text-display text-slate-900">Kategori Klaster</h1>
             <p class="mt-1 text-sm text-slate-500 max-w-2xl">
                 Katalog label &amp; rekomendasi pembinaan yang dipetakan ke hasil klaster menurut
-                peringkat <span class="font-medium">skor komposit</span> (urutan 1 = komposit tertinggi).
-                Tidak menetapkan jumlah klaster — jumlah tetap ditentukan otomatis oleh algoritma.
+                peringkat <span class="font-medium">skor komposit</span>. <span class="font-medium">Entri
+                pertama</span> (urutan terkecil) selalu untuk klaster tertinggi &amp; <span class="font-medium">entri
+                terakhir</span> (urutan terbesar) selalu untuk klaster terendah — keduanya selalu tampil untuk
+                k berapa pun; entri tengah mengisi seiring bertambahnya klaster. Kategori baru disisipkan
+                sebagai level tengah. Tidak menetapkan jumlah klaster — jumlah ditentukan otomatis oleh algoritma.
             </p>
         </div>
         @can('kategori-klaster.kelola')
