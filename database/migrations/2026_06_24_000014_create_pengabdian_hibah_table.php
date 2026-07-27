@@ -19,7 +19,7 @@ return new class extends Migration
                 ->constrained('mahasiswa')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $tabel->enum('jenis', ['hibah_didanai', 'proposal_lolos', 'pengabdian_masyarakat']);
+            $tabel->enum('jenis', ['pimnas', 'hibah_didanai', 'proposal_lolos', 'pengabdian_masyarakat']);
             $tabel->string('peran')->comment('ketua/anggota (hibah/proposal) atau peserta_aktif (pengabdian)');
             $tabel->string('judul');
             $tabel->string('sumber_dana')->nullable()->comment('mis. Kemendikti, Fakultas, Mandiri');

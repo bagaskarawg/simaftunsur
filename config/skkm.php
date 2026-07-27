@@ -11,15 +11,31 @@
 | tersendiri (lihat CLAUDE.md — larangan SAW/WP tetap dihormati karena tidak
 | ada skor tunggal untuk ranking).
 |
-| Disimpan sebagai config agar besaran mudah difinalisasi bersama Wakil Dekan
-| III tanpa mengubah kode. Metode skor pada model membaca tabel ini.
+| Angka mengikuti rubrik naskah laporan (BAB II): Tabel 5 (prestasi/kejuaraan),
+| Tabel 6 (kegiatan & organisasi), Tabel 7 (pengabdian & hibah).
+|
+| PLAFON AKUMULASI: poin diakumulasi maksimal `plafon_per_grup` item ber-poin
+| TERTINGGI per GRUP per TAHUN KALENDER. Grup = tingkat (prestasi) / jenis
+| (kegiatan, pengabdian). Perhitungan plafon ada di Model Mahasiswa
+| (skorPrestasi/skorKegiatan/skorPengabdian).
+|
+| (*) Komponen adaptasi yang tidak tercakup rubrik CIC asli; besaran diusulkan
+| konsisten dengan skala CIC (praktik penilaian merujuk pedoman SKKM UNISM 2019
+| & IAINU Tuban 2020), difinalisasi bersama Wakil Dekan III. Perlakuan plafonnya
+| sama seperti komponen lain.
+|
+| Disimpan sebagai config agar besaran mudah ditinjau bersama WD III tanpa
+| mengubah kode. Metode skor pada model membaca tabel ini.
 |
 */
 
 return [
 
+    // Batas maksimal item ber-poin tertinggi yang diakumulasi per grup per tahun.
+    'plafon_per_grup' => 3,
+
     /*
-     | F5 — Prestasi/Kejuaraan.  Poin = [tingkat][capaian].
+     | F5 — Prestasi/Kejuaraan (Tabel 5). Poin = [tingkat][capaian].
      | Pemetaan tingkat enum Prestasi → jenjang rubrik:
      |   internasional → Internasional
      |   nasional      → Nasional
@@ -27,28 +43,34 @@ return [
      |   lokal         → Universitas/Fakultas
      */
     'prestasi' => [
-        'internasional' => ['juara_1' => 100, 'juara_2' => 90, 'juara_3' => 80, 'finalis' => 40],
-        'nasional'      => ['juara_1' => 80,  'juara_2' => 70, 'juara_3' => 60, 'finalis' => 30],
-        'regional'      => ['juara_1' => 60,  'juara_2' => 50, 'juara_3' => 40, 'finalis' => 20],
-        'lokal'         => ['juara_1' => 40,  'juara_2' => 30, 'juara_3' => 20, 'finalis' => 10],
+        'internasional' => ['juara_1' => 25, 'juara_2' => 22, 'juara_3' => 18, 'finalis' => 10],
+        'nasional' => ['juara_1' => 20, 'juara_2' => 17, 'juara_3' => 14, 'finalis' => 8],
+        'regional' => ['juara_1' => 10, 'juara_2' => 8,  'juara_3' => 5,  'finalis' => 2],
+        'lokal' => ['juara_1' => 8,  'juara_2' => 5,  'juara_3' => 3,  'finalis' => 1],
     ],
 
     /*
-     | F6 — Kegiatan & Organisasi.  Poin = [jenis][peran].
+     | F6 — Kegiatan & Organisasi (Tabel 6). Poin = [jenis][peran].
      */
     'kegiatan' => [
-        'organisasi'  => ['ketua' => 40, 'wakil' => 30, 'pengurus_inti' => 25, 'anggota' => 10],
-        'kepanitiaan' => ['ketua' => 20, 'koordinator' => 15, 'anggota' => 8],
-        'seminar'     => ['pembicara' => 20, 'peserta' => 5],
+        // Pengurus organisasi kemahasiswaan (BEM/DPM/HMJ), per periode.
+        'organisasi' => ['ketua_umum' => 20, 'wakil_ketua' => 18, 'pengurus_inti' => 17, 'anggota_pengurus' => 10],
+        // Pengurus UKM, per periode.
+        'ukm' => ['ketua_ukm' => 10],
+        // Kepanitiaan kegiatan (tingkat universitas/fakultas).
+        'kepanitiaan' => ['ketua' => 10, 'wakil_ketua' => 9, 'sekretaris_bendahara' => 8, 'koordinator_seksi' => 7, 'anggota' => 5],
+        // Seminar/Workshop/Pelatihan (*).
+        'seminar' => ['pembicara' => 8, 'peserta' => 1],
     ],
 
     /*
-     | F7 — Pengabdian & Hibah.  Poin = [jenis][peran].
+     | F7 — Pengabdian & Hibah (Tabel 7). Poin = [jenis][peran].
      */
     'pengabdian' => [
-        'hibah_didanai'         => ['ketua' => 50, 'anggota' => 30],
-        'proposal_lolos'        => ['ketua' => 20, 'anggota' => 12],
-        'pengabdian_masyarakat' => ['peserta_aktif' => 15],
+        'pimnas' => ['ketua' => 40, 'anggota' => 35],
+        'hibah_didanai' => ['ketua' => 35, 'anggota' => 30],
+        'proposal_lolos' => ['ketua' => 15, 'anggota' => 10], // (*)
+        'pengabdian_masyarakat' => ['dalam_kampus' => 1, 'luar_kampus' => 3],
     ],
 
 ];

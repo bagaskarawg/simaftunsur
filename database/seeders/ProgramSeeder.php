@@ -28,7 +28,7 @@ class ProgramSeeder extends Seeder
         $beasiswa->syarat()->createMany([
             ['bidang' => 'status', 'operator' => 'eq', 'nilai' => 'aktif', 'wajib' => true, 'label' => 'Status mahasiswa = Aktif'],
             ['bidang' => 'ipk_rata_rata', 'operator' => 'gte', 'nilai' => '3.25', 'wajib' => true, 'label' => 'IPK rata-rata ≥ 3,25'],
-            ['bidang' => 'skor_kegiatan', 'operator' => 'gte', 'nilai' => '40', 'wajib' => true, 'label' => 'Skor kegiatan/organisasi (F6) ≥ 40'],
+            ['bidang' => 'skor_kegiatan', 'operator' => 'gte', 'nilai' => '20', 'wajib' => true, 'label' => 'Skor kegiatan/organisasi (F6) ≥ 20'],
         ]);
 
         // 2) Pilmapres: IPK tinggi + prestasi nasional; klaster sebagai info opsional.

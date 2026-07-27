@@ -50,10 +50,11 @@ class PengabdianHibah extends Model
     public function labelJenis(): string
     {
         return match ($this->jenis) {
-            'hibah_didanai'         => 'Hibah/PKM Didanai',
-            'proposal_lolos'        => 'Proposal Lolos Seleksi',
+            'pimnas' => 'Juara PIMNAS',
+            'hibah_didanai' => 'Hibah/PKM Didanai',
+            'proposal_lolos' => 'Proposal Lolos Seleksi',
             'pengabdian_masyarakat' => 'Pengabdian Masyarakat',
-            default                 => ucfirst((string) $this->jenis),
+            default => ucfirst((string) $this->jenis),
         };
     }
 
@@ -61,10 +62,11 @@ class PengabdianHibah extends Model
     public function labelPeran(): string
     {
         return match ($this->peran) {
-            'ketua'         => 'Ketua',
-            'anggota'       => 'Anggota',
-            'peserta_aktif' => 'Peserta Aktif',
-            default         => ucfirst((string) $this->peran),
+            'ketua' => 'Ketua',
+            'anggota' => 'Anggota',
+            'dalam_kampus' => 'Di dalam kampus',
+            'luar_kampus' => 'Di luar kampus',
+            default => ucfirst((string) $this->peran),
         };
     }
 

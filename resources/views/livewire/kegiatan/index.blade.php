@@ -13,7 +13,8 @@ use Livewire\WithPagination;
 new
 #[Layout('layouts.app')]
 #[Title('Kegiatan & Organisasi')]
-class extends Component {
+class extends Component
+{
     use WithPagination;
 
     #[Url(as: 'q', except: '')]
@@ -24,16 +25,25 @@ class extends Component {
 
     /** 'tutup' | 'tambah' | 'edit'. */
     public string $modeForm = 'tutup';
+
     public ?int $idEdit = null;
 
     public ?int $mahasiswa_id = null;
+
     public string $jenis = 'organisasi';
+
     public string $peran = 'ketua';
+
     public string $nama_kegiatan = '';
+
     public string $penyelenggara = '';
+
     public string $periode = '';
+
     public string $tanggal = '';
+
     public string $url_bukti = '';
+
     public string $keterangan = '';
 
     public function mount(): void
@@ -103,7 +113,7 @@ class extends Component {
         abort_unless(auth()->user()?->can('kegiatan.kelola'), 403);
         $this->reset(['mahasiswa_id', 'nama_kegiatan', 'penyelenggara', 'periode', 'tanggal', 'url_bukti', 'keterangan', 'idEdit']);
         $this->jenis = 'organisasi';
-        $this->peran = 'ketua';
+        $this->peran = 'ketua_umum';
         $this->resetValidation();
         $this->modeForm = 'tambah';
     }
@@ -136,29 +146,29 @@ class extends Component {
         abort_unless(auth()->user()?->can('kegiatan.kelola'), 403);
 
         $data = $this->validate([
-            'mahasiswa_id'  => ['required', Rule::exists('mahasiswa', 'id')],
-            'jenis'         => ['required', Rule::in(['organisasi', 'kepanitiaan', 'seminar'])],
-            'peran'         => ['required', Rule::in(array_keys((array) config("skkm.kegiatan.{$this->jenis}", [])))],
+            'mahasiswa_id' => ['required', Rule::exists('mahasiswa', 'id')],
+            'jenis' => ['required', Rule::in(['organisasi', 'ukm', 'kepanitiaan', 'seminar'])],
+            'peran' => ['required', Rule::in(array_keys((array) config("skkm.kegiatan.{$this->jenis}", [])))],
             'nama_kegiatan' => ['required', 'string', 'max:255'],
             'penyelenggara' => ['nullable', 'string', 'max:255'],
-            'periode'       => ['nullable', 'string', 'max:20'],
-            'tanggal'       => ['nullable', 'date'],
-            'url_bukti'     => ['nullable', 'url', 'max:255'],
-            'keterangan'    => ['nullable', 'string', 'max:1000'],
+            'periode' => ['nullable', 'string', 'max:20'],
+            'tanggal' => ['nullable', 'date'],
+            'url_bukti' => ['nullable', 'url', 'max:255'],
+            'keterangan' => ['nullable', 'string', 'max:1000'],
         ], [
             'peran.in' => 'Peran tidak sesuai dengan jenis kegiatan yang dipilih.',
         ]);
 
         $atribut = [
-            'mahasiswa_id'  => $data['mahasiswa_id'],
-            'jenis'         => $data['jenis'],
-            'peran'         => $data['peran'],
+            'mahasiswa_id' => $data['mahasiswa_id'],
+            'jenis' => $data['jenis'],
+            'peran' => $data['peran'],
             'nama_kegiatan' => $data['nama_kegiatan'],
             'penyelenggara' => $data['penyelenggara'] ?: null,
-            'periode'       => $data['periode'] ?: null,
-            'tanggal'       => $data['tanggal'] ?: null,
-            'url_bukti'     => $data['url_bukti'] ?: null,
-            'keterangan'    => $data['keterangan'] ?: null,
+            'periode' => $data['periode'] ?: null,
+            'tanggal' => $data['tanggal'] ?: null,
+            'url_bukti' => $data['url_bukti'] ?: null,
+            'keterangan' => $data['keterangan'] ?: null,
         ];
 
         if ($this->modeForm === 'edit' && $this->idEdit) {
@@ -184,12 +194,15 @@ class extends Component {
 @php
     $kelasJenisKeg = [
         'organisasi'  => 'bg-blue-50 text-blue-700',
+        'ukm'         => 'bg-cyan-50 text-cyan-700',
         'kepanitiaan' => 'bg-violet-50 text-violet-700',
         'seminar'     => 'bg-amber-50 text-amber-700',
     ];
     $labelPeranKeg = [
-        'ketua' => 'Ketua', 'wakil' => 'Wakil', 'pengurus_inti' => 'Pengurus Inti', 'anggota' => 'Anggota',
-        'koordinator' => 'Koordinator', 'pembicara' => 'Pembicara', 'peserta' => 'Peserta',
+        'ketua_umum' => 'Ketua Umum', 'wakil_ketua' => 'Wakil Ketua', 'pengurus_inti' => 'Pengurus Inti',
+        'anggota_pengurus' => 'Anggota Pengurus', 'ketua_ukm' => 'Ketua UKM', 'ketua' => 'Ketua',
+        'sekretaris_bendahara' => 'Sekretaris/Bendahara', 'koordinator_seksi' => 'Koordinator Seksi',
+        'anggota' => 'Anggota', 'pembicara' => 'Pembicara', 'peserta' => 'Peserta',
     ];
 @endphp
 
@@ -220,7 +233,8 @@ class extends Component {
             <select wire:model.live="filterJenis"
                     class="w-full sm:w-auto rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
                 <option value="">Semua jenis</option>
-                <option value="organisasi">Organisasi/UKM</option>
+                <option value="organisasi">Organisasi (BEM/DPM/HMJ)</option>
+                <option value="ukm">UKM</option>
                 <option value="kepanitiaan">Kepanitiaan</option>
                 <option value="seminar">Seminar/Workshop</option>
             </select>
@@ -300,7 +314,8 @@ class extends Component {
                         <label for="keg-jenis" class="block text-sm font-medium text-slate-700 mb-1.5">Jenis</label>
                         <select wire:model.live="jenis" id="keg-jenis"
                                 class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
-                            <option value="organisasi">Organisasi/UKM</option>
+                            <option value="organisasi">Organisasi (BEM/DPM/HMJ)</option>
+                            <option value="ukm">UKM</option>
                             <option value="kepanitiaan">Kepanitiaan</option>
                             <option value="seminar">Seminar/Workshop</option>
                         </select>

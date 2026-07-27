@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * Model mahasiswa — entitas utama subjek klasterisasi K-Means.
@@ -34,7 +35,7 @@ class Mahasiswa extends Model
     protected function casts(): array
     {
         return [
-            'angkatan'       => 'integer',
+            'angkatan' => 'integer',
             'semester_aktif' => 'integer',
         ];
     }
@@ -133,27 +134,57 @@ class Mahasiswa extends Model
     }
 
     /**
-     * Skor Prestasi (fitur F5) — total poin SKKM seluruh prestasi.
+     * Skor Prestasi (fitur F5) — total poin SKKM dengan PLAFON per tingkat/tahun.
      */
     public function skorPrestasi(): int
     {
-        return (int) $this->prestasi->sum(fn (Prestasi $p) => $p->poin());
+        return $this->totalPoinBerplafon(
+            $this->prestasi,
+            fn (Prestasi $p) => $p->tingkat.'|'.($p->tanggal?->year ?? 0),
+        );
     }
 
     /**
-     * Skor Kegiatan & Organisasi (fitur F6) — total poin SKKM kegiatan.
+     * Skor Kegiatan & Organisasi (fitur F6) — total poin dengan PLAFON per
+     * jenis kegiatan/tahun.
      */
     public function skorKegiatan(): int
     {
-        return (int) $this->kegiatanKemahasiswaan->sum(fn (KegiatanKemahasiswaan $k) => $k->poin());
+        return $this->totalPoinBerplafon(
+            $this->kegiatanKemahasiswaan,
+            fn (KegiatanKemahasiswaan $k) => $k->jenis.'|'.($k->tanggal?->year ?? 0),
+        );
     }
 
     /**
-     * Skor Pengabdian & Hibah (fitur F7) — total poin SKKM pengabdian/hibah.
+     * Skor Pengabdian & Hibah (fitur F7) — total poin dengan PLAFON per jenis/tahun.
      */
     public function skorPengabdian(): int
     {
-        return (int) $this->pengabdianHibah->sum(fn (PengabdianHibah $p) => $p->poin());
+        return $this->totalPoinBerplafon(
+            $this->pengabdianHibah,
+            fn (PengabdianHibah $p) => $p->jenis.'|'.($p->tahun ?? 0),
+        );
+    }
+
+    /**
+     * Akumulasi poin dengan PLAFON: hanya `skkm.plafon_per_grup` item ber-poin
+     * TERTINGGI yang dihitung per grup per tahun kalender (rubrik SKKM). Item
+     * bernilai 0 tetap dijumlah (tidak berpengaruh). `$kunciGrup` menghasilkan
+     * kunci "grup|tahun" untuk tiap catatan.
+     *
+     * @param  Collection<int, Model>  $items
+     */
+    private function totalPoinBerplafon($items, callable $kunciGrup): int
+    {
+        $plafon = (int) config('skkm.plafon_per_grup', 3);
+
+        return (int) $items
+            ->groupBy($kunciGrup)
+            ->sum(fn ($grup) => $grup
+                ->sortByDesc(fn ($item) => $item->poin())
+                ->take($plafon)
+                ->sum(fn ($item) => $item->poin()));
     }
 
     /**
@@ -208,7 +239,7 @@ class Mahasiswa extends Model
             $dx = $t['x'] - $rataX;
             $dy = $t['y'] - $rataY;
             $pembilang += $dx * $dy;
-            $penyebut  += $dx * $dx;
+            $penyebut += $dx * $dx;
         }
 
         if ($penyebut === 0.0) {

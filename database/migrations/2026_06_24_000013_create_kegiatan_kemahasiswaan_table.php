@@ -19,7 +19,7 @@ return new class extends Migration
                 ->constrained('mahasiswa')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $tabel->enum('jenis', ['organisasi', 'kepanitiaan', 'seminar']);
+            $tabel->enum('jenis', ['organisasi', 'ukm', 'kepanitiaan', 'seminar']);
             $tabel->string('peran')->comment('Divalidasi sesuai jenis (mis. ketua, koordinator, peserta)');
             $tabel->string('nama_kegiatan');
             $tabel->string('penyelenggara')->nullable();

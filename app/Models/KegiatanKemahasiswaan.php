@@ -51,10 +51,11 @@ class KegiatanKemahasiswaan extends Model
     public function labelJenis(): string
     {
         return match ($this->jenis) {
-            'organisasi'  => 'Organisasi/UKM',
+            'organisasi' => 'Organisasi (BEM/DPM/HMJ)',
+            'ukm' => 'UKM',
             'kepanitiaan' => 'Kepanitiaan',
-            'seminar'     => 'Seminar/Workshop',
-            default       => ucfirst((string) $this->jenis),
+            'seminar' => 'Seminar/Workshop',
+            default => ucfirst((string) $this->jenis),
         };
     }
 
@@ -62,14 +63,18 @@ class KegiatanKemahasiswaan extends Model
     public function labelPeran(): string
     {
         return match ($this->peran) {
-            'ketua'         => 'Ketua',
-            'wakil'         => 'Wakil',
+            'ketua_umum' => 'Ketua Umum',
+            'wakil_ketua' => 'Wakil Ketua',
             'pengurus_inti' => 'Pengurus Inti',
-            'anggota'       => 'Anggota',
-            'koordinator'   => 'Koordinator',
-            'pembicara'     => 'Pembicara',
-            'peserta'       => 'Peserta',
-            default         => ucfirst((string) $this->peran),
+            'anggota_pengurus' => 'Anggota Pengurus',
+            'ketua_ukm' => 'Ketua UKM',
+            'ketua' => 'Ketua',
+            'sekretaris_bendahara' => 'Sekretaris/Bendahara',
+            'koordinator_seksi' => 'Koordinator Seksi',
+            'anggota' => 'Anggota',
+            'pembicara' => 'Pembicara',
+            'peserta' => 'Peserta',
+            default => ucfirst((string) $this->peran),
         };
     }
 

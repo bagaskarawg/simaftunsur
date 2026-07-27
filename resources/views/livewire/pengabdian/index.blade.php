@@ -13,7 +13,8 @@ use Livewire\WithPagination;
 new
 #[Layout('layouts.app')]
 #[Title('Pengabdian & Hibah')]
-class extends Component {
+class extends Component
+{
     use WithPagination;
 
     #[Url(as: 'q', except: '')]
@@ -24,15 +25,23 @@ class extends Component {
 
     /** 'tutup' | 'tambah' | 'edit'. */
     public string $modeForm = 'tutup';
+
     public ?int $idEdit = null;
 
     public ?int $mahasiswa_id = null;
+
     public string $jenis = 'hibah_didanai';
+
     public string $peran = 'ketua';
+
     public string $judul = '';
+
     public string $sumber_dana = '';
+
     public ?int $tahun = null;
+
     public string $url_bukti = '';
+
     public string $keterangan = '';
 
     public function mount(): void
@@ -130,26 +139,26 @@ class extends Component {
 
         $data = $this->validate([
             'mahasiswa_id' => ['required', Rule::exists('mahasiswa', 'id')],
-            'jenis'        => ['required', Rule::in(['hibah_didanai', 'proposal_lolos', 'pengabdian_masyarakat'])],
-            'peran'        => ['required', Rule::in(array_keys((array) config("skkm.pengabdian.{$this->jenis}", [])))],
-            'judul'        => ['required', 'string', 'max:255'],
-            'sumber_dana'  => ['nullable', 'string', 'max:255'],
-            'tahun'        => ['nullable', 'integer', 'between:2000,2100'],
-            'url_bukti'    => ['nullable', 'url', 'max:255'],
-            'keterangan'   => ['nullable', 'string', 'max:1000'],
+            'jenis' => ['required', Rule::in(['pimnas', 'hibah_didanai', 'proposal_lolos', 'pengabdian_masyarakat'])],
+            'peran' => ['required', Rule::in(array_keys((array) config("skkm.pengabdian.{$this->jenis}", [])))],
+            'judul' => ['required', 'string', 'max:255'],
+            'sumber_dana' => ['nullable', 'string', 'max:255'],
+            'tahun' => ['nullable', 'integer', 'between:2000,2100'],
+            'url_bukti' => ['nullable', 'url', 'max:255'],
+            'keterangan' => ['nullable', 'string', 'max:1000'],
         ], [
             'peran.in' => 'Peran tidak sesuai dengan jenis yang dipilih.',
         ]);
 
         $atribut = [
             'mahasiswa_id' => $data['mahasiswa_id'],
-            'jenis'        => $data['jenis'],
-            'peran'        => $data['peran'],
-            'judul'        => $data['judul'],
-            'sumber_dana'  => $data['sumber_dana'] ?: null,
-            'tahun'        => $data['tahun'],
-            'url_bukti'    => $data['url_bukti'] ?: null,
-            'keterangan'   => $data['keterangan'] ?: null,
+            'jenis' => $data['jenis'],
+            'peran' => $data['peran'],
+            'judul' => $data['judul'],
+            'sumber_dana' => $data['sumber_dana'] ?: null,
+            'tahun' => $data['tahun'],
+            'url_bukti' => $data['url_bukti'] ?: null,
+            'keterangan' => $data['keterangan'] ?: null,
         ];
 
         if ($this->modeForm === 'edit' && $this->idEdit) {
@@ -174,11 +183,15 @@ class extends Component {
 
 @php
     $kelasJenisPeng = [
-        'hibah_didanai'         => 'bg-green-50 text-green-700',
+        'pimnas'                => 'bg-green-50 text-green-700',
+        'hibah_didanai'         => 'bg-emerald-50 text-emerald-700',
         'proposal_lolos'        => 'bg-blue-50 text-blue-700',
         'pengabdian_masyarakat' => 'bg-amber-50 text-amber-700',
     ];
-    $labelPeranPeng = ['ketua' => 'Ketua', 'anggota' => 'Anggota', 'peserta_aktif' => 'Peserta Aktif'];
+    $labelPeranPeng = [
+        'ketua' => 'Ketua', 'anggota' => 'Anggota',
+        'dalam_kampus' => 'Di dalam kampus', 'luar_kampus' => 'Di luar kampus',
+    ];
 @endphp
 
 <div>
@@ -208,6 +221,7 @@ class extends Component {
             <select wire:model.live="filterJenis"
                     class="w-full sm:w-auto rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
                 <option value="">Semua jenis</option>
+                <option value="pimnas">Juara PIMNAS</option>
                 <option value="hibah_didanai">Hibah/PKM Didanai</option>
                 <option value="proposal_lolos">Proposal Lolos Seleksi</option>
                 <option value="pengabdian_masyarakat">Pengabdian Masyarakat</option>
@@ -290,6 +304,7 @@ class extends Component {
                         <label for="peng-jenis" class="block text-sm font-medium text-slate-700 mb-1.5">Jenis</label>
                         <select wire:model.live="jenis" id="peng-jenis"
                                 class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                            <option value="pimnas">Juara PIMNAS</option>
                             <option value="hibah_didanai">Hibah/PKM Didanai</option>
                             <option value="proposal_lolos">Proposal Lolos Seleksi</option>
                             <option value="pengabdian_masyarakat">Pengabdian Masyarakat</option>
