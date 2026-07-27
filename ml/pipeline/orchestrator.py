@@ -48,8 +48,8 @@ def jalankan_klasterisasi(
     fitur : list[str] | None
         Atribut yang dipakai; None → FITUR_NUMERIK_DEFAULT.
     k : int | None
-        Jumlah klaster. None → ditentukan otomatis (Silhouette tertinggi)
-        pada rentang [k_min, k_max].
+        Jumlah klaster. None → ditentukan otomatis via Elbow (siku WCSS)
+        pada rentang [k_min, k_max]; Silhouette/DBI sebagai evaluasi.
     k_min, k_max : int
         Rentang pencarian k saat k otomatis.
     skema_penskalaan : str
@@ -73,7 +73,7 @@ def jalankan_klasterisasi(
     # 3) Penentuan k.
     if k is None:
         k_terpilih, tabel_evaluasi = pilih_k_optimal(X, k_min, k_max)
-        metode_k = "otomatis (Silhouette tertinggi)"
+        metode_k = "otomatis (Elbow — siku WCSS)"
     else:
         k_terpilih = int(k)
         # Tetap hitung tabel evaluasi rentang untuk grafik Elbow/Silhouette.

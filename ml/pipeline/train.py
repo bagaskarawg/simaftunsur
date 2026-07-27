@@ -1,12 +1,14 @@
 """
 Tahap pelatihan model K-Means dan penentuan jumlah klaster optimal (k).
 
-Penentuan k memakai kombinasi dua pendekatan sesuai naskah:
-    - Elbow Method (WCSS / inertia) — titik "siku" penurunan inertia.
-    - Silhouette Coefficient — k dengan silhouette tertinggi.
-Pemilihan otomatis di sini berbasis Silhouette tertinggi (lebih objektif
-daripada membaca siku secara visual), sementara tabel inertia tetap
-dikembalikan agar Elbow dapat divisualisasikan & dibahas di BAB IV.
+Penentuan k memakai dua pendekatan sesuai naskah, dengan PERAN BERBEDA:
+    - Elbow Method (WCSS / inertia) — MENENTUKAN k pada titik "siku" penurunan
+      inertia (dideteksi otomatis via metode jarak-ke-garis/kneedle).
+    - Silhouette Coefficient & Davies-Bouldin — METRIK EVALUASI kualitas klaster
+      pada k terpilih (bukan pemilih k).
+Elbow dipakai sebagai pemilih agar tidak over-segmentasi ketika kurva silhouette
+mendatar (silhouette tertinggi bisa jatuh pada k besar yang tak bermakna). Tabel
+per-k tetap dikembalikan agar Elbow & Silhouette dapat divisualisasikan di BAB IV.
 """
 
 from __future__ import annotations
@@ -67,7 +69,8 @@ def pilih_k_optimal(
     Cari k optimal dengan mengevaluasi rentang [k_min, k_max].
 
     Untuk tiap k dihitung inertia (WCSS), Silhouette, dan Davies-Bouldin.
-    k terpilih = k dengan Silhouette tertinggi.
+    k terpilih = "siku" (knee) kurva WCSS via Elbow Method (deteksi otomatis).
+    Silhouette & Davies-Bouldin dikembalikan sebagai metrik EVALUASI.
 
     Parameter
     ---------
@@ -122,6 +125,34 @@ def pilih_k_optimal(
     if not tabel:
         raise ValueError("Gagal membentuk klaster yang valid pada rentang k yang diberikan.")
 
-    # k terbaik = Silhouette tertinggi (semakin mendekati 1 semakin baik).
-    terbaik = max(tabel, key=lambda baris: baris["silhouette"])
-    return terbaik["k"], tabel
+    # k terpilih = "siku" (knee) kurva WCSS/inertia — Elbow Method. Silhouette &
+    # Davies-Bouldin pada tabel dipakai sebagai metrik EVALUASI, bukan pemilih k.
+    ks = [b["k"] for b in tabel]
+    inertias = [b["inertia"] for b in tabel]
+    return _knee_elbow(ks, inertias), tabel
+
+
+def _knee_elbow(ks: list[int], inertias: list[float]) -> int:
+    """
+    Deteksi "siku" (knee) kurva Elbow secara otomatis dengan metode jarak-ke-garis
+    (kneedle sederhana): titik pada kurva (k, inertia) dengan jarak tegak lurus
+    TERBESAR terhadap garis penghubung titik pertama & terakhir. Kedua sumbu
+    dinormalisasi ke [0, 1] agar jarak tidak bergantung skala sumbu.
+
+    Mengembalikan k pada siku. Bila hanya ada satu kandidat, kembalikan k itu.
+    """
+    if len(ks) == 1:
+        return int(ks[0])
+
+    x = np.asarray(ks, dtype=float)
+    y = np.asarray(inertias, dtype=float)
+    rentang_x = (x.max() - x.min()) or 1.0
+    rentang_y = (y.max() - y.min()) or 1.0
+    xn = (x - x.min()) / rentang_x
+    yn = (y - y.min()) / rentang_y
+
+    dx, dy = xn[-1] - xn[0], yn[-1] - yn[0]
+    penyebut = float(np.hypot(dx, dy)) or 1.0
+    jarak = np.abs(dy * (xn - xn[0]) - dx * (yn - yn[0])) / penyebut
+
+    return int(x[int(np.argmax(jarak))])
