@@ -1,0 +1,1226 @@
+npm,nama,kode_prodi,angkatan,jenis_kelamin,semester_aktif,status
+2620113001,Gilang Aristiana,TID,2013,L,14,aktif
+2620113005,Asep Sunarya,TID,2013,L,14,non_aktif
+2620113014,Andri Setiawan,TID,2013,L,14,non_aktif
+2620113017,Dadang Suparman,TID,2013,L,14,aktif
+2620114001,Andri Firmansyah,TID,2014,L,14,aktif
+2620114004,Ahmad Latif,TID,2014,L,14,non_aktif
+2620114007,Aldytia Sembiring,TID,2014,L,14,aktif
+2620114011,Ahmad Faturohman,TID,2014,L,14,non_aktif
+2620114018,Muhammad Michael,TID,2014,L,14,aktif
+2620114022,Chelvy Hilman S.M,TID,2014,L,14,non_aktif
+2620114023,Nanda Robilah,TID,2014,L,14,aktif
+2620114025,Arbi Riko Nugroho,TID,2014,L,14,non_aktif
+2620114028,Rizki Pratama Ramdani,TID,2014,P,14,non_aktif
+2620114032,M. Arif Rismawan,TID,2014,L,14,non_aktif
+2620114033,Kurnia Sandi,TID,2014,L,14,non_aktif
+2620115004,Moch.Yusup A.Aziz,TID,2015,L,14,aktif
+2620115005,Ari Yantono Sutisna,TID,2015,L,14,aktif
+2620115006,Dhea Ayu Cahyani Putri,TID,2015,P,14,non_aktif
+2620115008,Teguh Muhammad Iqbal,TID,2015,L,14,non_aktif
+2620115011,Muh. Rizal Jaya S,TID,2015,L,14,non_aktif
+2620115012,Ai Nurhalimah,TID,2015,P,14,aktif
+2620115014,Hadi Iman Ahmad,TID,2015,L,14,aktif
+2620115015,Muhammad Julham,TID,2015,L,14,non_aktif
+2620115016,Ajeng Tri Yuniarti,TID,2015,L,14,non_aktif
+2620115018,Budiman,TID,2015,L,14,aktif
+2620115019,Imuk Mugni Muhtaj,TID,2015,L,14,aktif
+2620115021,Muhammad Suyudi,TID,2015,L,14,aktif
+2620115022,Alex Putra Wijaya,TID,2015,L,14,aktif
+2620115023,Ihsan Maulana,TID,2015,L,14,aktif
+2620115025,Riki Aditia Irawan,TID,2015,L,14,non_aktif
+2620116001,Moch Restu Fauzi,TID,2016,L,14,aktif
+2620116002,Aris Munandar Aflani,TID,2016,L,14,non_aktif
+2620116003,Widi Munajat,TID,2016,L,14,non_aktif
+2620116004,Revian Cornedi Navenata,TID,2016,L,14,aktif
+2620116005,Amelia Hartani,TID,2016,P,14,non_aktif
+2620116006,Ajizah Nurhiqmah,TID,2016,P,14,aktif
+2620116007,Muhamad Yunus A,TID,2016,L,14,non_aktif
+2620116008,Alfiana Rinaldi,TID,2016,L,14,aktif
+2620116009,Jabar Hidayat,TID,2016,L,14,aktif
+2620116010,Muhamad Luthfi Muharam,TID,2016,L,14,aktif
+2620116011,M. Andi Maulidan,TID,2016,L,14,aktif
+2620116012,Fahmi Manarul Hidayat,TID,2016,L,14,aktif
+2620116013,Arief Nur Iman,TID,2016,L,14,aktif
+2620116014,Restu Ismawan,TID,2016,L,14,non_aktif
+2620116015,Sigit Kamseno,TID,2016,L,14,non_aktif
+2620116016,Imam Ziqrya Heryansyah,TID,2016,L,14,aktif
+2620116017,Andri Suhandri,TID,2016,L,14,non_aktif
+2620116018,Amad Suhendar,TID,2016,L,14,non_aktif
+2620117001,Syahril Azhary,TID,2017,L,14,aktif
+2620117002,Mifan Harpan Vibriansyah,TID,2017,L,14,aktif
+2620117003,Saleh Haliluloh,TID,2017,L,14,aktif
+2620117004,Warisman Soleh,TID,2017,L,14,aktif
+2620117005,Teddy Martien,TID,2017,L,14,aktif
+2620117006,Kiran Hermawan,TID,2017,L,14,aktif
+2620117007,Faddli Muhammad Addlillah,TID,2017,L,14,aktif
+2620117008,Teguh Adriansah,TID,2017,L,14,aktif
+2620117009,Zulfi Noor Islami,TID,2017,L,14,non_aktif
+2620117010,Dwi Indrawati,TID,2017,P,14,aktif
+2620117011,Saoud Dynaoulye Manihuruk,TID,2017,L,14,aktif
+2620117012,Ai Yuni Cahyati,TID,2017,P,14,aktif
+2620117013,Moch Rizal Apriyana,TID,2017,L,14,non_aktif
+2620117014,Muhamad Farhan Gumelar,TID,2017,L,14,aktif
+2620117015,Muhammad Azhar Al Fayadh,TID,2017,L,14,aktif
+2620117016,Mochamad Rama Randany,TID,2017,L,14,aktif
+2620117017,Reski Ramzan,TID,2017,L,14,aktif
+2620117018,Zulfikri Azlam,TID,2017,L,14,non_aktif
+2620118001,Moh. Rizqi Pirmansah,TID,2018,L,14,aktif
+2620118002,Asep Rizki Maulana,TID,2018,L,14,aktif
+2620118003,Sandi,TID,2018,L,14,aktif
+2620118004,Muhamad Sopyan Pratama,TID,2018,L,14,aktif
+2620118005,Alwi Iqbal Rofiky,TID,2018,L,14,non_aktif
+2620118006,Aqilla Puspa Juniarty,TID,2018,P,14,non_aktif
+2620118007,Toni Robyanto,TID,2018,L,14,non_aktif
+2620118008,Dani Supriatna,TID,2018,L,14,aktif
+2620118009,Muhammad Maqi Maulidan,TID,2018,L,14,non_aktif
+2620118010,Iqbal Ramadhan Triawan,TID,2018,L,14,aktif
+2620118011,Ahmad Sadudin,TID,2018,L,14,aktif
+2620118012,Ichsan Kamaludin,TID,2018,L,14,aktif
+2620118013,Mohammad Nuralam Ramadhan,TID,2018,L,14,aktif
+2620118014,R Muhammad Ridwanudin,TID,2018,L,14,aktif
+2620118015,Wildan Herdi Firdaus,TID,2018,L,14,aktif
+2620118016,Okki Panggalih Nirwana,TID,2018,L,14,aktif
+2620118017,Yandi AR,TID,2018,L,14,non_aktif
+2620118018,M. Correzsa Da Silva Setiawan,TID,2018,L,14,aktif
+2620119001,Moh Rizky Shandy,TID,2019,L,14,aktif
+2620119002,Diman Tasrip,TID,2019,L,14,aktif
+2620119003,Napis Alwan,TID,2019,L,14,aktif
+2620119004,Rizal Novian,TID,2019,L,14,aktif
+2620119005,Anggita Hayuni,TID,2019,P,14,aktif
+2620119006,Ahmad Sutisna Purnama,TID,2019,L,14,aktif
+2620119007,Zikrina Kuni Khairunnisa,TID,2019,P,14,aktif
+2620119008,Du'a Nurul Fatimah,TID,2019,P,14,aktif
+2620119009,Farhan Fauziah Zovitsan,TID,2019,L,14,aktif
+2620119010,Muhammad Tirta Angkawijaya,TID,2019,L,14,aktif
+2620119011,Agung Solehan,TID,2019,L,14,aktif
+2620119012,Irfan Naufal Ibrahim,TID,2019,L,14,aktif
+2620119013,Nurwan Tjadis Ibrahim,TID,2019,L,14,aktif
+2620119014,Irpan Saepul Ilham,TID,2019,L,14,aktif
+2620119015,Muhamad Anjar,TID,2019,L,14,aktif
+2620120001,Masrukhul Rohib Maulana M,TID,2020,L,13,aktif
+2620120002,Ilham Subagja,TID,2020,L,13,aktif
+2620120003,Syahrul Romdhon,TID,2020,L,13,aktif
+2620120004,Muhammad Fitrah Ramadhan,TID,2020,L,13,aktif
+2620120005,Ai Hindun Fitriani,TID,2020,P,13,aktif
+2620120006,Fikri Ramdhan Gunawan,TID,2020,L,13,aktif
+2620120007,M. Ares Pranata,TID,2020,L,13,aktif
+2620120008,Ibnu Hasby Khabab Arrasyid,TID,2020,L,13,aktif
+2620120009,Mokhammad Latif Mutakin,TID,2020,L,13,aktif
+2620120010,Asmi Pitriani,TID,2020,P,13,aktif
+2620120011,Astri Dwi Septianti,TID,2020,P,13,aktif
+2620120012,Muhammad Miftahudin Permana,TID,2020,L,13,aktif
+2620120013,Asep Muhamad Jalal Ali,TID,2020,L,13,aktif
+2620120014,Ihsan Saepul Rahmat,TID,2020,L,13,aktif
+2620120015,Roesman Hadie Putra,TID,2020,L,13,aktif
+2620120016,Sofia Maharani Dewi,TID,2020,L,13,aktif
+2620120017,Moh Iqbal Gimnastiar,TID,2020,P,13,aktif
+2620120018,Muhamad Fauzi,TID,2020,L,13,aktif
+2620120019,Artdise Rio Hadyatul Hasya,TID,2020,L,13,aktif
+2620120020,Gina Nurul Fadillah,TID,2020,P,13,aktif
+2620122001,Zulfa Jauharunnajah,TID,2022,P,9,aktif
+2620122002,Anisa Febriana,TID,2022,P,9,aktif
+2620122003,Safrie Syamsoeddin,TID,2022,L,9,aktif
+2620122004,Risman Hakim,TID,2022,L,9,aktif
+2620122005,Viral Iskandar,TID,2022,L,9,aktif
+2620122006,Riyo Yogaswara,TID,2022,L,9,aktif
+2620122007,Sheril Lintang Cahaya,TID,2022,L,9,aktif
+2620122008,Muhammad Rabi Fadhillah,TID,2022,L,9,aktif
+2620122009,Romi Maulana Saputra,TID,2022,L,9,aktif
+2620122010,Fito Gunawan,TID,2022,L,9,aktif
+2620122011,Samsul Herdiana,TID,2022,L,9,aktif
+2620122012,Mochamad Fahmi,TID,2022,L,9,aktif
+2620122013,M. Fikri Kurniawan,TID,2022,L,9,aktif
+2620122014,Dita Sawitri Febrianti,TID,2022,P,9,aktif
+2620122015,Johar Aji Zakaria,TID,2022,L,9,aktif
+2620122016,Muhammad Yusup Juliansyah,TID,2022,L,9,aktif
+2620122017,Fadhila Alawiyah Zulfa,TID,2022,P,9,aktif
+2620122018,Nizar Waliuddin Rahmat,TID,2022,L,9,aktif
+2620122019,Muhamad Alpian,TID,2022,L,9,aktif
+2620122020,Muhammad Fahmi Hidayat,TID,2022,L,9,aktif
+2620122021,Raihan Nabil Ridwan,TID,2022,L,9,aktif
+2620122022,Muhammad Reihan Andari Gumilang,TID,2022,L,9,aktif
+2620122023,Ujang Nurjaman,TID,2022,L,9,aktif
+2620122024,Luqman Hadi,TID,2022,L,9,aktif
+2620122025,Moch Iram Faldira,TID,2022,L,9,aktif
+5520113001,Sri Yuliani Wokanubu,TIF,2013,P,14,non_aktif
+5520113004,Mochamad Ridwan Fauzi F,TIF,2013,L,14,non_aktif
+5520113013,M Nizar Budiman,TIF,2013,L,14,non_aktif
+5520113016,Rahmat Abdilah,TIF,2013,L,14,non_aktif
+5520113018,Mochammad Fikri Rifa'i,TIF,2013,L,14,non_aktif
+5520113023,Leo Yunandar,TIF,2013,L,14,non_aktif
+5520113025,Diaz Pratama,TIF,2013,L,14,non_aktif
+5520113027,Deni Muslihudin,TIF,2013,L,14,non_aktif
+5520113028,Aldi Muhammad Naser,TIF,2013,L,14,non_aktif
+5520113029,Muhamad Hardiansyah,TIF,2013,L,14,non_aktif
+5520113030,Dicky Sopiulloh,TIF,2013,L,14,non_aktif
+5520113041,Atep Khaerul Usman,TIF,2013,L,14,non_aktif
+5520113044,Tati Hariyanti,TIF,2013,P,14,non_aktif
+5520113053,Billy Mulyana,TIF,2013,L,14,aktif
+5520113056,Roni Nupalah,TIF,2013,L,14,aktif
+5520113061,Ikhsan Khaerul Mu'min,TIF,2013,L,14,non_aktif
+5520113067,Asep Muhamad Badru Tamam,TIF,2013,L,14,non_aktif
+5520113068,Annisa Widyastuti,TIF,2013,P,14,non_aktif
+5520113069,Lutfi Surya Ramadhan,TIF,2013,L,14,aktif
+5520113070,M Denis Salman A,TIF,2013,L,14,non_aktif
+5520113072,Dena Renaldi F,TIF,2013,P,14,non_aktif
+5520113073,M Reza Patria,TIF,2013,L,14,non_aktif
+5520113083,Femi Zulfaida,TIF,2013,L,14,non_aktif
+5520113088,Gunawan Andriansyah,TIF,2013,L,14,non_aktif
+5520113094,Rizky Anugrah Ilham,TIF,2013,L,14,non_aktif
+5520113096,Asep Suhendar,TIF,2013,L,14,non_aktif
+5520113099,Rizqi Cahya Gumelar,TIF,2013,L,14,aktif
+5520113105,Fadhil Dzikri M,TIF,2013,L,14,aktif
+5520113107,Bagus Ramadan,TIF,2013,L,14,aktif
+5520113109,Fikri Taufik Fadhilah,TIF,2013,L,14,non_aktif
+5520113123,Zulfan Arsyad Maulana,TIF,2013,L,14,non_aktif
+5520113125,Aus Ahmad Usmani,TIF,2013,L,14,non_aktif
+5520113129,Muhammad Arighi,TIF,2013,L,14,non_aktif
+5520113131,Agung Pratama Munandar,TIF,2013,L,14,non_aktif
+5520113132,Danang Aditya,TIF,2013,L,14,cuti
+5520113135,Andi Rahman,TIF,2013,L,14,non_aktif
+5520113137,Rizkie Maulana Syaputra,TIF,2013,L,14,non_aktif
+5520113138,Mochamad Fikri Rifa'i,TIF,2013,L,14,non_aktif
+5520113139,Insan Ramdhani,TIF,2013,L,14,non_aktif
+5520114003,Tommy,TIF,2014,L,14,non_aktif
+5520114008,Wahid Ridha Subha,TIF,2014,L,14,non_aktif
+5520114012,Panji Rahman,TIF,2014,L,14,non_aktif
+5520114013,Andhika Nursamsi Husin,TIF,2014,P,14,non_aktif
+5520114015,Intan Gilang Nugraha,TIF,2014,P,14,aktif
+5520114018,Isma Maulita Nurahayu,TIF,2014,P,14,non_aktif
+5520114027,M Yuvie Gifari,TIF,2014,L,14,non_aktif
+5520114033,Firman Khaerul Anas,TIF,2014,L,14,non_aktif
+5520114034,Rian Jatnika,TIF,2014,L,14,non_aktif
+5520114036,Andi Muhamad Aziz,TIF,2014,L,14,non_aktif
+5520114037,Duloh Abdulloh,TIF,2014,L,14,aktif
+5520114039,Andi Subagja,TIF,2014,L,14,non_aktif
+5520114040,Sendy Kustanto,TIF,2014,L,14,non_aktif
+5520114043,Muhammad Fulki Dwinali,TIF,2014,L,14,non_aktif
+5520114044,Indri Ervinawan,TIF,2014,L,14,cuti
+5520114052,Rian Yusuf,TIF,2014,L,14,non_aktif
+5520114062,Endar Resab,TIF,2014,L,14,non_aktif
+5520114063,Iqbal Taufik Ramdan,TIF,2014,L,14,non_aktif
+5520114065,Deri Darmawan,TIF,2014,L,14,non_aktif
+5520114068,Much Leo Permana Putra,TIF,2014,L,14,non_aktif
+5520114079,Mochamad Wisyam,TIF,2014,L,14,non_aktif
+5520114081,Kabul Yusup Sanaya,TIF,2014,L,14,cuti
+5520114090,Dely Meilda Mukti,TIF,2014,L,14,non_aktif
+5520114093,Rifan Saepul Bahri,TIF,2014,L,14,non_aktif
+5520114111,Alfhianus,TIF,2014,L,14,non_aktif
+5520114112,Riko Handoko,TIF,2014,L,14,non_aktif
+5520114114,Wulandari,TIF,2014,P,14,non_aktif
+5520114115,Firman Ade Putra,TIF,2014,L,14,non_aktif
+5520114124,Winda Sepriani,TIF,2014,P,14,cuti
+5520114129,M Taufik Saputra,TIF,2014,L,14,non_aktif
+5520114136,Rizal Herdiansyah,TIF,2014,L,14,non_aktif
+5520114143,Fahmy Pebri Supiandi,TIF,2014,L,14,cuti
+5520114154,Mochammad Hariri Ridwan,TIF,2014,L,14,aktif
+5520114155,Ridwan,TIF,2014,L,14,non_aktif
+5520114159,Agung Wanda Aji,TIF,2014,L,14,non_aktif
+5520114160,Abdulatif Gunawan,TIF,2014,L,14,cuti
+5520114162,Muhammad Nasrul Azis,TIF,2014,L,14,non_aktif
+5520114163,Edi Surya Lesmana,TIF,2014,L,14,aktif
+5520115002,Agung Rizki Juniadi,TIF,2015,P,14,non_aktif
+5520115003,Hanip,TIF,2015,L,14,lulus
+5520115011,Fikri Ghinandean Fauzi,TIF,2015,L,14,aktif
+5520115024,Gunawan Ependi,TIF,2015,L,14,aktif
+5520115027,Ridwansyah,TIF,2015,L,14,cuti
+5520115028,Wisnu Hariyanto,TIF,2015,L,14,non_aktif
+5520115030,Indra Permana,TIF,2015,L,14,non_aktif
+5520115041,Mochamad Rizal Sya'bani,TIF,2015,L,14,aktif
+5520115044,Yadi Prasetya,TIF,2015,L,14,aktif
+5520115049,Egi Permana,TIF,2015,L,14,non_aktif
+5520115052,M. Alex Maulana Iskandar,TIF,2015,L,14,aktif
+5520115061,Reksa Mulia Fitrananda,TIF,2015,P,14,aktif
+5520115063,Nur'aini Siti Fatimah,TIF,2015,P,14,aktif
+5520115076,Regi Guntaram,TIF,2015,L,14,aktif
+5520115080,Sandy Sehabudin,TIF,2015,L,14,non_aktif
+5520115083,Lucky Renaldi,TIF,2015,L,14,aktif
+5520115092,Ikmaludin Ahmadi,TIF,2015,L,14,aktif
+5520115098,Catur Prasetya Putra,TIF,2015,L,14,non_aktif
+5520115101,Dilla Humaidi Abdillah,TIF,2015,L,14,non_aktif
+5520115106,Alifia Nurhaliza Nugraha,TIF,2015,P,14,aktif
+5520115107,Agung Rachmatulloh,TIF,2015,L,14,non_aktif
+5520115111,Muhamad Dendi,TIF,2015,L,14,aktif
+5520115113,Syarifah Shahnaz Hanifa Assegaf,TIF,2015,L,14,lulus
+5520115114,M Ikhsan Asnuritama,TIF,2015,L,14,aktif
+5520115115,Gilang Dwi Syiaprian,TIF,2015,L,14,aktif
+5520115117,Herdiansyah Hidayat,TIF,2015,L,14,non_aktif
+5520115118,Taupik Hidayat,TIF,2015,L,14,aktif
+5520115123,Asep Mulyadi,TIF,2015,L,14,non_aktif
+5520115125,Achmad Arief A,TIF,2015,L,14,non_aktif
+5520115126,M Juan Sani,TIF,2015,L,14,aktif
+5520115127,Ilham Syah,TIF,2015,L,14,non_aktif
+5520115128,M Yogi Ramdani,TIF,2015,L,14,non_aktif
+5520115129,Moch. Yusuf Ahdian,TIF,2015,L,14,aktif
+5520115130,Kurnia Sari,TIF,2015,P,14,aktif
+5520115132,Bima Panca Hadipurnomo,TIF,2015,L,14,cuti
+5520115136,Sugih Saputra,TIF,2015,L,14,aktif
+5520115137,Muhammad Zulkifli Ihsan,TIF,2015,L,14,non_aktif
+5520115138,R. Zindy Mutiara Sari Munawar,TIF,2015,L,14,non_aktif
+5520115140,Alenando R Firdaus,TIF,2015,L,14,non_aktif
+5520115141,Muhammad Agung Permana Sidik,TIF,2015,L,14,non_aktif
+5520115142,Angga Saputra,TIF,2015,L,14,non_aktif
+5520115145,Moch. Angga Nugraha S L,TIF,2015,L,14,aktif
+5520116001,Dinda Siti Salamah,TIF,2016,P,14,aktif
+5520116002,Amilia Zamillatun Nissa,TIF,2016,P,14,aktif
+5520116003,Siti Mutiah,TIF,2016,P,14,aktif
+5520116004,Mala Nursilah Sifa,TIF,2016,P,14,aktif
+5520116005,Rio Fardhaniko Pratama,TIF,2016,L,14,aktif
+5520116006,Alief Ramadhan,TIF,2016,L,14,aktif
+5520116007,Mohammad Jibril Alhaq,TIF,2016,L,14,aktif
+5520116008,Sidiq Sudrajat,TIF,2016,L,14,aktif
+5520116009,Bayu Adi Nugraha,TIF,2016,L,14,aktif
+5520116011,Dwifitri Harti Utami,TIF,2016,L,14,aktif
+5520116012,Kintan Meitasari,TIF,2016,L,14,aktif
+5520116014,Muhammad Ilham Piqri,TIF,2016,L,14,aktif
+5520116015,Tatang Hermawan,TIF,2016,L,14,aktif
+5520116016,Herdiansyah Setiawan,TIF,2016,L,14,aktif
+5520116017,Wawan Setiawan,TIF,2016,L,14,non_aktif
+5520116018,Ahmad Hamdi,TIF,2016,L,14,aktif
+5520116019,Agung Wicaksono,TIF,2016,L,14,non_aktif
+5520116020,Eka Purnama Putra,TIF,2016,L,14,aktif
+5520116021,Mochamad Yusuf Ibrahim,TIF,2016,L,14,aktif
+5520116022,Gina Ayu Wandira,TIF,2016,P,14,aktif
+5520116023,Aditya Prasetya Pamungkas,TIF,2016,L,14,aktif
+5520116024,Muhamad Fauzi,TIF,2016,L,14,aktif
+5520116025,Angga Sutisna Darmawan,TIF,2016,L,14,aktif
+5520116026,Rizki Rizaldi,TIF,2016,P,14,aktif
+5520116027,Muhamad Rijan Alpalah,TIF,2016,L,14,aktif
+5520116028,Ulumudin,TIF,2016,L,14,non_aktif
+5520116029,Bayu Nugraha,TIF,2016,L,14,aktif
+5520116030,Agung Aditya Gumilar,TIF,2016,L,14,aktif
+5520116031,Zulfikar Nurrohman,TIF,2016,L,14,aktif
+5520116032,Muhammad Feisal Akbar Gumelar,TIF,2016,L,14,aktif
+5520116033,Siti Sarah Nabila,TIF,2016,P,14,aktif
+5520116034,Alryandita,TIF,2016,P,14,non_aktif
+5520116036,Devia Nurhaliza,TIF,2016,P,14,aktif
+5520116037,Reza Rahman Firdaus,TIF,2016,L,14,aktif
+5520116038,Muhammad Yazid Gani,TIF,2016,L,14,aktif
+5520116039,Syifa Noer Azizah,TIF,2016,P,14,aktif
+5520116040,Mohamad Dinal Nurzein,TIF,2016,L,14,aktif
+5520116041,Muhammad Riko,TIF,2016,L,14,non_aktif
+5520116042,Dina Agustina,TIF,2016,P,14,aktif
+5520116043,Aldian Alif Sukmana,TIF,2016,L,14,aktif
+5520116044,Veri Arlanda,TIF,2016,L,14,aktif
+5520116045,Deni,TIF,2016,L,14,non_aktif
+5520116046,Yoga Aulia Rahman,TIF,2016,P,14,aktif
+5520116047,Risfan Iqbal Fauzan,TIF,2016,L,14,aktif
+5520116048,Deden Tarmizi Taher,TIF,2016,L,14,aktif
+5520116049,Adi Setiadi Priatna,TIF,2016,L,14,non_aktif
+5520116050,Muhamad Rizky Khobir Budiman,TIF,2016,L,14,aktif
+5520116051,Rizqi Muhammad,TIF,2016,L,14,aktif
+5520116052,Rizky Selvian Mairlan,TIF,2016,L,14,aktif
+5520116053,Muhammad Rizal Al Fath,TIF,2016,L,14,aktif
+5520116054,Peri Santria,TIF,2016,L,14,aktif
+5520116055,Tri Aji Tunggal Saputra,TIF,2016,L,14,aktif
+5520116056,Dimas Aditya,TIF,2016,L,14,aktif
+5520116057,Luthfi Fajri Aprilianto,TIF,2016,L,14,aktif
+5520116058,Peri Gumilar,TIF,2016,L,14,aktif
+5520116059,Azmi Abdul Azis,TIF,2016,L,14,aktif
+5520116060,Muhamad Ivan,TIF,2016,L,14,aktif
+5520116061,Moh. Rizki Maulana Y,TIF,2016,P,14,non_aktif
+5520116062,Audi Herlanda Susanto,TIF,2016,L,14,aktif
+5520116063,Deni Pirmansyah,TIF,2016,L,14,aktif
+5520116064,Syahril Muhamad Sahebani,TIF,2016,L,14,aktif
+5520116065,Resta Wijaya,TIF,2016,P,14,aktif
+5520116066,Radityatama Mulia Sembada,TIF,2016,P,14,aktif
+5520116067,Ferry Febrian,TIF,2016,L,14,non_aktif
+5520116071,Rizal Maulana Mulyadi,TIF,2016,L,14,aktif
+5520116073,Aldy Geral Renaldy,TIF,2016,L,14,aktif
+5520116074,Tita Setiawati,TIF,2016,P,14,aktif
+5520116075,Ilham Harry Permana,TIF,2016,L,14,aktif
+5520116076,Aria Satriani Hermawan,TIF,2016,L,14,aktif
+5520116077,Muhammad Fadly Habibi Maulana,TIF,2016,L,14,non_aktif
+5520116078,Muhammad Irpan Supardi Yullah,TIF,2016,L,14,aktif
+5520116079,Muhamad Ardi Kurniawan,TIF,2016,L,14,non_aktif
+5520116080,Ilham Fitrah Anugrah Boer,TIF,2016,L,14,aktif
+5520116081,Juliana Titih Zulfa Suherman,TIF,2016,P,14,aktif
+5520116082,Selviani Kusnadi,TIF,2016,L,14,aktif
+5520116083,Herdi Jaelani,TIF,2016,L,14,aktif
+5520116084,Taufik Usman,TIF,2016,L,14,non_aktif
+5520116085,Ali Nurdin,TIF,2016,L,14,aktif
+5520116086,Acep Bandani,TIF,2016,L,14,aktif
+5520116087,Alvira Nuramelissa,TIF,2016,P,14,aktif
+5520116088,Eky Riaz Dwi Rezki,TIF,2016,L,14,aktif
+5520116089,Abdul Aziz Awaludin,TIF,2016,L,14,aktif
+5520116090,Fahman Fuadi,TIF,2016,L,14,aktif
+5520116091,Lusi Anggraeni,TIF,2016,L,14,aktif
+5520116092,Muhammad Ganjar Hambali,TIF,2016,L,14,aktif
+5520116093,Renren Nurmawati,TIF,2016,P,14,non_aktif
+5520116094,Muchamad Zulfikar Kurniawan,TIF,2016,L,14,aktif
+5520116095,Egi Permana,TIF,2016,L,14,aktif
+5520116096,Fiqri Dwiwaluya Irawan,TIF,2016,L,14,aktif
+5520116097,Recka Agusty Rachmawan,TIF,2016,L,14,aktif
+5520116098,Fajar Saepul Ramdhan,TIF,2016,L,14,aktif
+5520116099,Ahmad Abdullah,TIF,2016,L,14,aktif
+5520116100,Lintar Taharah,TIF,2016,L,14,non_aktif
+5520116101,Sri Rahayu Agustini,TIF,2016,P,14,aktif
+5520116102,Andhika Renaldi,TIF,2016,P,14,non_aktif
+5520116106,Frida Ramdani Saputri,TIF,2016,L,14,aktif
+5520116107,Gilang Daruri Wiyana,TIF,2016,L,14,aktif
+5520116108,Ridwan Muhamad Misbah,TIF,2016,L,14,non_aktif
+5520116109,Finni Rizkia,TIF,2016,L,14,aktif
+5520116110,Raden Hilmandan Muksit,TIF,2016,L,14,aktif
+5520116111,Muhammad Abdul Latif,TIF,2016,L,14,aktif
+5520116112,Hanifar,TIF,2016,L,14,non_aktif
+5520116113,Eko Heriyanto Idham,TIF,2016,L,14,aktif
+5520116114,Ridwan Firdaus Alamsyah,TIF,2016,L,14,aktif
+5520116115,Dery Akbar Oktayunas Gazali,TIF,2016,L,14,aktif
+5520116116,Haris Fauzan Hudaya,TIF,2016,L,14,aktif
+5520116117,Ranti Yulita,TIF,2016,L,14,aktif
+5520116118,Muhammad Raka Aditya Sidik,TIF,2016,L,14,aktif
+5520116119,Muhammad Chaerul Cahyadi,TIF,2016,L,14,non_aktif
+5520116120,Aji Septi Sulaeman,TIF,2016,L,14,aktif
+5520116121,Aldio Aprisal Lazuardi,TIF,2016,L,14,aktif
+5520116122,M. Firaz Fakhriza Nurjaman,TIF,2016,L,14,aktif
+5520116123,Fauzan Ahmad Agus Nugraha,TIF,2016,L,14,aktif
+5520116124,Suci Muhamad Nurjana,TIF,2016,L,14,non_aktif
+5520116125,Muhammad Birril Yuzakki,TIF,2016,L,14,non_aktif
+5520116126,Muh. Irfan Ferdiansyah,TIF,2016,L,14,aktif
+5520116127,Muhammad Farhan Saputra,TIF,2016,L,14,aktif
+5520116128,Agung Afriza,TIF,2016,L,14,aktif
+5520116129,Ratu Indah Parlina,TIF,2016,P,14,non_aktif
+5520116130,Ringga Anggiat Sinaga,TIF,2016,P,14,non_aktif
+5520116131,Mufti Akhmad Rilmansyah,TIF,2016,L,14,aktif
+5520116132,Asshar Fazri Maskur,TIF,2016,L,14,aktif
+5520116133,Rizal Erdyana,TIF,2016,L,14,non_aktif
+5520116134,Dede Rustandi,TIF,2016,L,14,aktif
+5520116135,Sachril Razib,TIF,2016,L,14,aktif
+5520116136,Charles Wilson Dubulie,TIF,2016,L,14,aktif
+5520116137,Mohammad Rafli Hilmy,TIF,2016,L,14,non_aktif
+5520116138,Indrani Mulyani,TIF,2016,L,14,non_aktif
+5520116139,Nia Fatmala,TIF,2016,P,14,aktif
+5520116141,Sandi Gelar Pamungkas,TIF,2016,L,14,aktif
+5520116142,Rama Restiana Iskandar,TIF,2016,P,14,aktif
+5520116143,Sri Asriati,TIF,2016,P,14,non_aktif
+5520116144,Misbahudin,TIF,2016,L,14,aktif
+5520116146,Moch. Lingga Abraham,TIF,2016,L,14,non_aktif
+5520116148,Regia Marta Julieta,TIF,2016,P,14,non_aktif
+5520116149,Cecep Sudrajat A A,TIF,2016,L,14,aktif
+5520116150,Diki M. Rosid Liki,TIF,2016,L,14,aktif
+5520116151,Saepul Roby,TIF,2016,L,14,non_aktif
+5520116152,Kusnadi,TIF,2016,L,14,aktif
+5520116153,Firman Hidayat,TIF,2016,L,14,aktif
+5520116154,Aceng Ridwan,TIF,2016,L,14,aktif
+5520116155,Aditia Saputra,TIF,2016,P,14,non_aktif
+5520116157,Muhammad Faisal Firmansyah,TIF,2016,L,14,aktif
+5520116158,Asep Saprijal,TIF,2016,L,14,cuti
+5520116159,Alfyan Sandi Bhakti,TIF,2016,L,14,aktif
+5520116160,Eri Ermawandi,TIF,2016,L,14,non_aktif
+5520116161,Ripki Zanuritman,TIF,2016,L,14,non_aktif
+5520116162,Faris Nuchadrin,TIF,2016,L,14,non_aktif
+5520116163,Saepul Nur Iskandar,TIF,2016,L,14,aktif
+5520116164,Riki Koswara,TIF,2016,L,14,aktif
+5520116165,Cucu Rohmat Nurapipah,TIF,2016,L,14,aktif
+5520116166,Maulana Hamdi Mubarok Sugito,TIF,2016,P,14,non_aktif
+5520116167,Rifqi Dahwan Aziz,TIF,2016,L,14,non_aktif
+5520116168,Novantira,TIF,2016,P,14,non_aktif
+5520117002,Dede Siti Fatimah,TIF,2017,P,14,aktif
+5520117003,Wina Ajeng Anggraeni,TIF,2017,P,14,aktif
+5520117004,Risna Sindi Aditia,TIF,2017,P,14,aktif
+5520117005,Rahma Ziyadati Hakim,TIF,2017,P,14,aktif
+5520117006,Sandi Mahendra,TIF,2017,L,14,aktif
+5520117007,Ressanova Maulina,TIF,2017,P,14,aktif
+5520117008,Asep Nasruloh,TIF,2017,L,14,aktif
+5520117009,Rivan Hendiawan,TIF,2017,L,14,aktif
+5520117010,Kahfi Alfiansyah,TIF,2017,L,14,aktif
+5520117011,Gilang Kharisma Putra Turwandi,TIF,2017,L,14,non_aktif
+5520117012,Fikri Muhammad Fadhil,TIF,2017,L,14,aktif
+5520117013,Mochammad Arka Suyudi,TIF,2017,L,14,aktif
+5520117014,Dimas Satria Reforma,TIF,2017,L,14,aktif
+5520117015,Dede Enda Mahbubi,TIF,2017,L,14,aktif
+5520117016,Ali Irpan,TIF,2017,L,14,aktif
+5520117017,Tesya Retnawati Sutrisno,TIF,2017,P,14,aktif
+5520117018,Ratu Listianingsih Sumirat,TIF,2017,P,14,aktif
+5520117019,Fahmi Idris,TIF,2017,L,14,aktif
+5520117020,Delviana Nurfitri Maharani,TIF,2017,P,14,aktif
+5520117021,Siti Mariam,TIF,2017,P,14,aktif
+5520117022,Muhamad Igham Restu,TIF,2017,L,14,non_aktif
+5520117023,Fajar Fathurochman,TIF,2017,L,14,aktif
+5520117024,Ipan Nurdiansyah,TIF,2017,L,14,aktif
+5520117025,Syamsy Wiguna Putra Dwi Raksa,TIF,2017,L,14,aktif
+5520117026,Ahmad Uhan Uhani,TIF,2017,L,14,aktif
+5520117027,Muhamad Fikri Maulana,TIF,2017,L,14,non_aktif
+5520117028,Tafan Nirfana,TIF,2017,L,14,non_aktif
+5520117029,Muhammad Alvin,TIF,2017,L,14,non_aktif
+5520117030,Yogas Bastian Masit,TIF,2017,L,14,aktif
+5520117031,Gugi Gustaman,TIF,2017,L,14,aktif
+5520117032,Dimas Dwi Prastio,TIF,2017,L,14,aktif
+5520117033,Sucipto Girsang,TIF,2017,L,14,aktif
+5520117036,Renaldi Putra Gustofa,TIF,2017,L,14,non_aktif
+5520117037,Hisyam Erisyied,TIF,2017,L,14,aktif
+5520117038,Tedi Alfian,TIF,2017,L,14,aktif
+5520117039,Dandi Rustandi,TIF,2017,L,14,aktif
+5520117040,Yakobus Dwi Anto,TIF,2017,L,14,non_aktif
+5520117041,Muhamad Nurochmat,TIF,2017,L,14,aktif
+5520117042,Arif Muhamad Giri,TIF,2017,L,14,aktif
+5520117043,Muhamad Agung Fauzi,TIF,2017,L,14,aktif
+5520117044,Mochamad Zenal Muttaqin,TIF,2017,L,14,aktif
+5520117045,Pangestu Weninggalih,TIF,2017,L,14,aktif
+5520117046,Patria Wiwaha,TIF,2017,P,14,aktif
+5520117047,Ilham Maulana Akbar,TIF,2017,L,14,aktif
+5520117048,Izra Yahya Ramadhan,TIF,2017,P,14,non_aktif
+5520117049,Diaz Adiyansyah,TIF,2017,L,14,aktif
+5520117050,Gilang Lukita Rahman,TIF,2017,L,14,non_aktif
+5520117051,Muhammad Jamaludin Akbar,TIF,2017,L,14,aktif
+5520117052,M. Teguh Prasetyo,TIF,2017,L,14,aktif
+5520117053,Muhammad Mufty Arifin,TIF,2017,L,14,aktif
+5520117054,Indrani Mulyani,TIF,2017,L,14,non_aktif
+5520117055,Reza Suparman,TIF,2017,L,14,aktif
+5520117056,Fitri Handayani,TIF,2017,P,14,aktif
+5520117058,Martina Megawati,TIF,2017,P,14,aktif
+5520117059,Shela Andriyani,TIF,2017,P,14,aktif
+5520117060,Syifa Alawiyah,TIF,2017,P,14,non_aktif
+5520117061,Ratna Widya Ningrum,TIF,2017,P,14,aktif
+5520117062,Nabila Sakinah,TIF,2017,P,14,aktif
+5520117063,Muhammad Irvan Sopyan,TIF,2017,L,14,aktif
+5520117064,Elly Nurullatipah,TIF,2017,L,14,aktif
+5520117065,Ihsan Bahrul Ulum,TIF,2017,L,14,aktif
+5520117066,Fajar Aji Nugraha,TIF,2017,L,14,aktif
+5520117067,Febryanto Eko Prakoso,TIF,2017,L,14,aktif
+5520117068,Muhamad Maldini Wibowo,TIF,2017,L,14,aktif
+5520117071,Repi Maulana Risyan,TIF,2017,L,14,aktif
+5520117072,Evan Anastasius Laubana,TIF,2017,L,14,non_aktif
+5520117073,Imam Purnomo,TIF,2017,L,14,aktif
+5520117074,Hendri Pebriyadi,TIF,2017,L,14,non_aktif
+5520117075,Muhammad Andika Perdhana,TIF,2017,L,14,aktif
+5520117076,Titan Denis Davisa,TIF,2017,L,14,aktif
+5520117077,Ilham Syahrul Aji,TIF,2017,L,14,aktif
+5520117078,Uniq Fadilah Awalia,TIF,2017,L,14,aktif
+5520117079,Sigit Yunansyah Putra,TIF,2017,L,14,non_aktif
+5520117080,Azmi Afkarizal,TIF,2017,L,14,do
+5520117081,Renaldi Maulana Ishak,TIF,2017,L,14,aktif
+5520117082,Deviyanti Komala,TIF,2017,L,14,aktif
+5520117083,Zachra Nurmandita,TIF,2017,P,14,non_aktif
+5520117084,Fikri Fahrul Rahman,TIF,2017,L,14,aktif
+5520117085,Fifi Alfira Harianto,TIF,2017,L,14,aktif
+5520117086,M. Zaeni Luthfi Saleh,TIF,2017,L,14,aktif
+5520117087,Tiyara Widiansyah Noor,TIF,2017,L,14,aktif
+5520117088,Husni Martin Sulaeman,TIF,2017,L,14,aktif
+5520117089,Pujangga Satrya Perkasa,TIF,2017,P,14,aktif
+5520117090,Nur Zaenab,TIF,2017,L,14,aktif
+5520117091,Imam Agus Faisal,TIF,2017,L,14,aktif
+5520117092,Septiana,TIF,2017,P,14,aktif
+5520117093,Aditia Nandika,TIF,2017,P,14,aktif
+5520117094,Muhamad Bahrul Ulum,TIF,2017,L,14,aktif
+5520117095,Muhammad Agstriadi Hutomo,TIF,2017,L,14,aktif
+5520117096,M. Dzikriyana Rahmaturrijal,TIF,2017,L,14,aktif
+5520117097,Farijal Zainoor Hendrawan,TIF,2017,L,14,non_aktif
+5520117098,Sicha Bhatin Ratusyaqina Manggala,TIF,2017,P,14,aktif
+5520117100,Rivaldy Tirta Tedjasukmana,TIF,2017,L,14,aktif
+5520117102,Gugum Gumelar,TIF,2017,L,14,aktif
+5520117103,Indra Mubarok,TIF,2017,L,14,aktif
+5520117106,Ahmad Ginanjar,TIF,2017,L,14,aktif
+5520117107,Syihab Fahmi Mr,TIF,2017,L,14,aktif
+5520117108,Rahmat Setiawan,TIF,2017,L,14,aktif
+5520117109,Fahmi Muzayin Nur,TIF,2017,L,14,aktif
+5520117110,Andistian,TIF,2017,L,14,non_aktif
+5520117111,Toriq Sudrajat,TIF,2017,L,14,aktif
+5520117112,Niman Maulana,TIF,2017,L,14,non_aktif
+5520117113,Adhitya Muhammad Maryadin,TIF,2017,L,14,aktif
+5520117114,Ilyas Muzakir Harahap,TIF,2017,L,14,non_aktif
+5520117115,Muldani,TIF,2017,L,14,aktif
+5520117116,Gusgus Awalludin Hidayat,TIF,2017,L,14,aktif
+5520117117,Rai Maulana Yusuf,TIF,2017,L,14,cuti
+5520118001,Mohamad Alizi,TIF,2018,L,14,aktif
+5520118002,Haikal Lutfi Fauzy,TIF,2018,L,14,aktif
+5520118003,Riny Octaviany,TIF,2018,L,14,aktif
+5520118004,Gabriella Rachma Poetri,TIF,2018,P,14,aktif
+5520118005,M. Ridwan Gustiawan,TIF,2018,L,14,aktif
+5520118006,Rizki Fauzi,TIF,2018,P,14,aktif
+5520118007,Allex Zulfiqar Djorgy,TIF,2018,L,14,aktif
+5520118008,Hadian Zainal Muttaqin,TIF,2018,L,14,aktif
+5520118009,Muhammad Rafi Naufal Islami,TIF,2018,L,14,aktif
+5520118010,Muhammad Haekal,TIF,2018,L,14,aktif
+5520118011,Amarulloh Sahlan Hidayat,TIF,2018,L,14,aktif
+5520118012,Moh. Lutfi Fauzi,TIF,2018,L,14,aktif
+5520118013,Ujang Setiawan,TIF,2018,L,14,aktif
+5520118014,Susi Sulistiawati,TIF,2018,P,14,aktif
+5520118015,R. Muhamad Fajar,TIF,2018,L,14,aktif
+5520118016,Tiara Tsaniya Fauziyana,TIF,2018,P,14,aktif
+5520118017,Y. Surya Saputra,TIF,2018,L,14,aktif
+5520118018,Moch Herdha Augustyan Ridhwan,TIF,2018,L,14,aktif
+5520118019,Mochamad Fauqi Alsyiari Hakim,TIF,2018,L,14,aktif
+5520118020,Hesu Refiyana,TIF,2018,L,14,aktif
+5520118021,M. Asipa Zenal Aripin,TIF,2018,L,14,aktif
+5520118022,Muhammad Andi Firmansyah,TIF,2018,L,14,aktif
+5520118023,Saidina Husen,TIF,2018,P,14,aktif
+5520118031,Feri Adzi Irwanda,TIF,2018,L,14,aktif
+5520118032,Anggun Aprilia Robiatul Kamila,TIF,2018,P,14,aktif
+5520118033,Fandy Setyo Nugroho,TIF,2018,L,14,non_aktif
+5520118034,Rizky Ginanjar,TIF,2018,L,14,aktif
+5520118035,Muhammad Faqih Ramadhan,TIF,2018,L,14,aktif
+5520118036,Lingga Firdaus,TIF,2018,P,14,aktif
+5520118037,Muhammad Aditya,TIF,2018,L,14,aktif
+5520118038,Dandi Andrian,TIF,2018,L,14,aktif
+5520118039,Alma Hana Katherina,TIF,2018,P,14,aktif
+5520118040,Agung Fhajar Fadilah,TIF,2018,L,14,aktif
+5520118041,Nabila Amiratu Sopyan,TIF,2018,P,14,aktif
+5520118042,Haris Anwar,TIF,2018,L,14,aktif
+5520118043,Zaenal Muttaqin,TIF,2018,L,14,aktif
+5520118044,Nisa Fauziah,TIF,2018,P,14,aktif
+5520118045,Crisna Hadi Pahlawan,TIF,2018,L,14,aktif
+5520118046,Fitri Hidayanti,TIF,2018,P,14,aktif
+5520118048,Adi Cahyadi Ramadhan,TIF,2018,L,14,aktif
+5520118049,Fahri Nur Ilahi,TIF,2018,L,14,aktif
+5520118050,Muhammad Musa Mustofa,TIF,2018,L,14,aktif
+5520118051,Farhan Rizky Ramdhani,TIF,2018,L,14,aktif
+5520118052,Imel Nursida,TIF,2018,L,14,aktif
+5520118053,Alvin Lie,TIF,2018,L,14,aktif
+5520118054,Deny Rizky Rivaldi,TIF,2018,L,14,aktif
+5520118055,Mochamad Dias Adikusuma Wijaya,TIF,2018,L,14,aktif
+5520118056,Muhamad Ridho Zulfikri,TIF,2018,L,14,aktif
+5520118061,Nur Adilawati,TIF,2018,P,14,aktif
+5520118062,Abdullah Taufiq,TIF,2018,L,14,non_aktif
+5520118063,Wildan Saefurizal,TIF,2018,L,14,aktif
+5520118064,Muhamad Alif Dava,TIF,2018,L,14,aktif
+5520118065,Dodi Kusnaedi,TIF,2018,L,14,aktif
+5520118066,Aji Pangestu,TIF,2018,L,14,non_aktif
+5520118067,Nihayatuz Zain Nawawi,TIF,2018,L,14,aktif
+5520118068,Muhamad Adrian Perdiana,TIF,2018,L,14,non_aktif
+5520118069,Muhammad Bayu Misbahudin,TIF,2018,L,14,aktif
+5520118070,Shereene Mutiara Halim,TIF,2018,L,14,non_aktif
+5520118071,Windi Febriana Widyanti,TIF,2018,L,14,aktif
+5520118072,Adinda Wini Wulandari,TIF,2018,P,14,aktif
+5520118073,Riandy Febriansyah,TIF,2018,L,14,aktif
+5520118075,Lutpi Pauji Ismail,TIF,2018,L,14,aktif
+5520118076,M. Galih Tresna,TIF,2018,L,14,aktif
+5520118077,M. Farhan Usman,TIF,2018,L,14,aktif
+5520118078,Fikri Hidayat,TIF,2018,L,14,aktif
+5520118079,Sarah Aulia Marwah,TIF,2018,P,14,aktif
+5520118080,Aria Wisnu Wardana,TIF,2018,P,14,aktif
+5520118081,Suwandi,TIF,2018,L,14,aktif
+5520118082,Ahmad Muhamad Ismail,TIF,2018,L,14,aktif
+5520118084,Neng Ika,TIF,2018,P,14,aktif
+5520118085,Syu'ban Nur'adila,TIF,2018,L,14,non_aktif
+5520118086,Richo Andika Firdaus Ananda Koswara,TIF,2018,L,14,aktif
+5520118091,Ruslan Hidayat,TIF,2018,L,14,aktif
+5520118093,Mochammad Ichsan Maulana,TIF,2018,L,14,non_aktif
+5520118094,Muhammad Raihan Nismarajendra,TIF,2018,L,14,non_aktif
+5520118095,Azet Widi Respati,TIF,2018,L,14,non_aktif
+5520118096,Deden Muhammad Dzulkifli,TIF,2018,L,14,aktif
+5520118097,Muhammad Ahwaludin,TIF,2018,L,14,non_aktif
+5520118098,Frastya Z Inayatuloh,TIF,2018,P,14,aktif
+5520118101,Ridwan Suhendi,TIF,2018,L,14,non_aktif
+5520118102,Dede Setiawan,TIF,2018,L,14,aktif
+5520118103,Nguzer Muslim,TIF,2018,L,14,non_aktif
+5520118104,Abdurahman Azhari,TIF,2018,L,14,aktif
+5520118105,Muhamad Dodi Saputra,TIF,2018,L,14,aktif
+5520118106,Cahman Efendi,TIF,2018,L,14,non_aktif
+5520118107,Wyldan Maulid Nugraha,TIF,2018,L,14,aktif
+5520118108,Dizkri Rahmat Rhamdani,TIF,2018,L,14,aktif
+5520118109,Rendi Stevanus,TIF,2018,L,14,aktif
+5520118110,Rizki Fajar Firdaus,TIF,2018,P,14,aktif
+5520118111,Muhammad Mamur,TIF,2018,L,14,non_aktif
+5520118112,Muh. Dindi Hidayat,TIF,2018,L,14,aktif
+5520118113,Bobi,TIF,2018,L,14,non_aktif
+5520119001,Kurnia Juanugraha,TIF,2019,P,14,aktif
+5520119002,Hildha Siti Noor Ela,TIF,2019,P,14,aktif
+5520119003,Rispianti,TIF,2019,L,14,aktif
+5520119004,Gingin Tingin Nurgina,TIF,2019,L,14,aktif
+5520119005,Endar Suntara,TIF,2019,L,14,aktif
+5520119006,Dhimas Wahyu Nuryanto,TIF,2019,L,14,aktif
+5520119007,Mochamad Faizal Alfriadi Heryawan,TIF,2019,L,14,aktif
+5520119008,Azril Akbar,TIF,2019,L,14,aktif
+5520119009,Agus Kurniawan,TIF,2019,L,14,aktif
+5520119010,Nabeel Ahmad Tahir,TIF,2019,L,14,aktif
+5520119011,Salman Alfarizi,TIF,2019,L,14,aktif
+5520119012,Jamaludin Mahardika,TIF,2019,L,14,aktif
+5520119013,Rifqi Aufa Arofik,TIF,2019,L,14,aktif
+5520119014,Versa Hasna Afifah,TIF,2019,P,14,aktif
+5520119015,Aldi Azhari Maulana,TIF,2019,L,14,aktif
+5520119016,Hilman Saepul Anwar,TIF,2019,L,14,aktif
+5520119017,Moch Irsan Firmansyah,TIF,2019,L,14,aktif
+5520119018,Helmi Sulaeman,TIF,2019,L,14,aktif
+5520119019,Asep Ilham,TIF,2019,L,14,aktif
+5520119020,Muhammad Baihaki Abdul Aziz,TIF,2019,L,14,aktif
+5520119021,Muhamad Noval,TIF,2019,L,14,aktif
+5520119022,Muchammad Decky Putra,TIF,2019,L,14,aktif
+5520119023,Moch. Restu Respati,TIF,2019,L,14,aktif
+5520119024,Muhamad Arya Cendikia,TIF,2019,L,14,aktif
+5520119025,Rendi Maulana,TIF,2019,L,14,aktif
+5520119026,Dava Pramudia,TIF,2019,P,14,aktif
+5520119027,Fawwaz Ahmad Fadhillah,TIF,2019,L,14,aktif
+5520119028,Muhammad Lutfi Assidiq,TIF,2019,L,14,aktif
+5520119029,Wahyu Agustian,TIF,2019,L,14,aktif
+5520119030,Sofia Indah Febri Agusti,TIF,2019,P,14,aktif
+5520119031,Isny Hanifi Diniar,TIF,2019,L,14,aktif
+5520119032,Dini Nurhayati,TIF,2019,P,14,aktif
+5520119033,Bagya Gumelar,TIF,2019,P,14,aktif
+5520119034,Yudha Bella Virdhi,TIF,2019,P,14,aktif
+5520119036,Wardah Durrah Umniyyah,TIF,2019,L,14,aktif
+5520119037,Ricky Ilham Januari,TIF,2019,L,14,aktif
+5520119038,Leni Tiara,TIF,2019,L,14,aktif
+5520119039,Ahmad Fauzi,TIF,2019,L,14,aktif
+5520119040,Asep Ridwan,TIF,2019,L,14,aktif
+5520119041,Rivaldi Zakie Saputra,TIF,2019,L,14,aktif
+5520119042,Redho Syahkumar,TIF,2019,L,14,aktif
+5520119043,Arie Juliastriadi,TIF,2019,L,14,aktif
+5520119044,Dendi Dewa Purnama,TIF,2019,L,14,aktif
+5520119045,Rizky Hartono,TIF,2019,L,14,aktif
+5520119046,Ahmad Nur Fajar,TIF,2019,L,14,aktif
+5520119047,Amara Silviani Agustina,TIF,2019,P,14,aktif
+5520119048,Intan Permata Wangi,TIF,2019,P,14,aktif
+5520119049,Sulaiman Firdaus,TIF,2019,L,14,aktif
+5520119050,Rizki Ramadhan,TIF,2019,P,14,aktif
+5520119051,Dea Nur'afiah Ramdani,TIF,2019,L,14,aktif
+5520119052,Ilham Rhamdan H,TIF,2019,L,14,aktif
+5520119053,Hadi Lazuardi Sufyan,TIF,2019,L,14,aktif
+5520119054,Haykal Agung Setiawan,TIF,2019,L,14,aktif
+5520119055,Shafly Nabhan Kurniawan,TIF,2019,L,14,aktif
+5520119056,Ari Mukhtar Yahya,TIF,2019,L,14,aktif
+5520119057,Muhammad Alfi Fauzy,TIF,2019,L,14,aktif
+5520119058,Faishal Muzakki,TIF,2019,L,14,aktif
+5520119059,Yogi Ardiansyah Nugraha,TIF,2019,L,14,aktif
+5520119060,Rizal Erizia Maulana,TIF,2019,L,14,aktif
+5520119061,Arif Ilham Al Furqon,TIF,2019,L,14,aktif
+5520119062,Alviansyah Yuspratma,TIF,2019,L,14,aktif
+5520119063,Ratri Nanda Lutfiah,TIF,2019,L,14,aktif
+5520119064,M Abdullah Dzikri,TIF,2019,L,14,aktif
+5520119065,Muh. Agung Arrafi M,TIF,2019,L,14,aktif
+5520119066,Muhammad Ramandika,TIF,2019,L,14,aktif
+5520119067,Fatra Candra Ardiwinata,TIF,2019,L,14,aktif
+5520119068,Muhammad Rizki Hidayat,TIF,2019,P,14,aktif
+5520119069,Muhamad Ari Ramdani,TIF,2019,L,14,aktif
+5520119071,Muhammad Fikri,TIF,2019,L,14,aktif
+5520119072,Muhammad Ardiana,TIF,2019,L,14,aktif
+5520119073,Alipia Ibrahim,TIF,2019,P,14,aktif
+5520119074,Ahmad Munawar,TIF,2019,L,14,aktif
+5520119075,Astuti Mega Putri Ratry,TIF,2019,P,14,aktif
+5520119076,M. Ilham Maulana,TIF,2019,L,14,aktif
+5520119077,Muhammad Haidar Anwar,TIF,2019,L,14,aktif
+5520119078,Anjani Nurhasanah,TIF,2019,P,14,aktif
+5520119079,Asep Maulana,TIF,2019,L,14,aktif
+5520119080,M. Wildan Firdaus,TIF,2019,L,14,aktif
+5520119081,Arya Eka Surya,TIF,2019,L,14,aktif
+5520119082,Abdul Latip Muhyi,TIF,2019,L,14,aktif
+5520119083,Idham Waliyur Rachman,TIF,2019,L,14,aktif
+5520119084,Muhammad Farhan,TIF,2019,L,14,aktif
+5520119085,Sapri Imam Pangestu,TIF,2019,L,14,aktif
+5520119086,Sandi Maulana,TIF,2019,L,14,aktif
+5520119087,Muhammad Rifqi Muzakki,TIF,2019,L,14,aktif
+5520119088,Muhammad Nauval A,TIF,2019,L,14,aktif
+5520119089,Syamsul Hidayatulloh,TIF,2019,L,14,aktif
+5520119090,Indra Fathurohman,TIF,2019,L,14,aktif
+5520119091,Rizky Nurfauzi,TIF,2019,L,14,aktif
+5520119092,Aditya Hermawan,TIF,2019,L,14,aktif
+5520119093,Indra Parta Julyana,TIF,2019,L,14,aktif
+5520119094,Alvio Irawan,TIF,2019,L,14,aktif
+5520119095,Muhammad Zamzam Maulana,TIF,2019,L,14,aktif
+5520119096,Muhammad Ihsan Fauzi Rahman,TIF,2019,L,14,aktif
+5520119097,Asri Noviana Fitri,TIF,2019,P,14,aktif
+5520119098,Moch. Rizky Hermawan M,TIF,2019,L,14,aktif
+5520119099,Fadilah Nurlaila,TIF,2019,L,14,aktif
+5520119100,Moh Ihsan Faozan,TIF,2019,L,14,aktif
+5520119101,Naufal Fakhri,TIF,2019,L,14,aktif
+5520119102,Saaddudin,TIF,2019,L,14,aktif
+5520119103,Samsul Rizal Andrian,TIF,2019,L,14,aktif
+5520119104,Ahmad Dinar Ardiansyah,TIF,2019,L,14,aktif
+5520119106,Yasin Ibnan Faisal,TIF,2019,L,14,aktif
+5520119107,Bima Agung Permana,TIF,2019,L,14,aktif
+5520119108,Muhamad Rizki,TIF,2019,P,14,aktif
+5520119109,Nia Nurlaela Sari,TIF,2019,P,14,aktif
+5520119110,Yona Appriatna,TIF,2019,P,14,aktif
+5520119111,Mulki Rohmayana Maulana,TIF,2019,L,14,aktif
+5520119112,Harkat Mulyadi Yusup,TIF,2019,L,14,aktif
+5520119113,Diki,TIF,2019,L,14,aktif
+5520119114,Muhammad Reza Firdaus,TIF,2019,L,14,aktif
+5520119115,Muhammad Rangga Pratama C.,TIF,2019,L,14,aktif
+5520119116,Rubby Febriananda Nugraha,TIF,2019,L,14,aktif
+5520119117,Zam Zam Maulana,TIF,2019,L,14,aktif
+5520119118,Firjia Firdaus Sukandy,TIF,2019,P,14,aktif
+5520119119,Arief Barkah,TIF,2019,L,14,aktif
+5520119120,Safitri Andriyani,TIF,2019,L,14,aktif
+5520119121,Randi Salim,TIF,2019,L,14,aktif
+5520119122,Diki Gustaman,TIF,2019,L,14,aktif
+5520119123,Andy Ramdhany Rahayu,TIF,2019,L,14,aktif
+5520119124,Bagaskara Wisnu Gunawan,TIF,2019,L,14,aktif
+5520119125,Redha Fathul Hijazi,TIF,2019,P,14,aktif
+5520119126,Rahman Yusup,TIF,2019,L,14,aktif
+5520120001,Marwa Fikriah,TIF,2020,P,13,aktif
+5520120002,Asep Sunarya,TIF,2020,L,13,aktif
+5520120003,Dita Aulya Yulanda,TIF,2020,P,13,aktif
+5520120004,Hendi Irwana,TIF,2020,L,13,aktif
+5520120005,Muhammad Ragil Wahab,TIF,2020,L,13,aktif
+5520120006,Ridwan Gunawan,TIF,2020,L,13,aktif
+5520120007,Yandi Rohman,TIF,2020,L,13,aktif
+5520120008,Agung Hermawan,TIF,2020,L,13,aktif
+5520120009,Regina Nurpaidah,TIF,2020,P,13,aktif
+5520120010,Muhammad Fikriansyah,TIF,2020,L,13,aktif
+5520120011,Haneman Abdul Aziz,TIF,2020,L,13,aktif
+5520120012,M Aji Solehudin,TIF,2020,L,13,aktif
+5520120013,Mochamad Rizki ramadhan,TIF,2020,L,13,aktif
+5520120014,Rian Maulana,TIF,2020,L,13,aktif
+5520120015,Renaldy Baleano Yohzain,TIF,2020,L,13,aktif
+5520120016,Ridat maulana,TIF,2020,L,13,aktif
+5520120017,Muhammad farhan novian,TIF,2020,L,13,aktif
+5520120018,Resa Auliana Risyan,TIF,2020,L,13,aktif
+5520120019,Yeni Mulyani,TIF,2020,P,13,aktif
+5520120020,M.Adit.Stiawan,TIF,2020,L,13,aktif
+5520120021,Ferry Aditya Herman,TIF,2020,L,13,aktif
+5520120022,Dede irpan,TIF,2020,L,13,aktif
+5520120023,Irma Nurmahesa,TIF,2020,P,13,aktif
+5520120024,Jaenal abidin,TIF,2020,L,13,aktif
+5520120025,Jaenal Mutaqin,TIF,2020,L,13,aktif
+5520120026,Muhamad Iqbal Ramadhan,TIF,2020,L,13,aktif
+5520120027,Mahesa Salman Dien Ibrahim,TIF,2020,L,13,aktif
+5520120028,Muhamad Lutfi Mubarok,TIF,2020,L,13,aktif
+5520120029,Muhamad Rizal,TIF,2020,L,13,aktif
+5520120030,Muhammad Adliansyah,TIF,2020,L,13,aktif
+5520120031,Suci Nur Fadilah,TIF,2020,P,13,aktif
+5520120032,Aldi Mohammad Rizqiana,TIF,2020,L,13,aktif
+5520120033,Nurul Hani Fitriani,TIF,2020,P,13,aktif
+5520120034,Mohamad Ibnu Maggie,TIF,2020,L,13,aktif
+5520120035,Moh Al Rafie Ibnu Mahmud,TIF,2020,L,13,aktif
+5520120036,Nabila Aulia Rahmah,TIF,2020,P,13,aktif
+5520120037,Zulpahmi Herman,TIF,2020,L,13,aktif
+5520120038,Putra Ramadhan Dewantoro,TIF,2020,L,13,aktif
+5520120039,Aldy Kurniawan,TIF,2020,L,13,aktif
+5520120040,Muhamad Reza Septiadi,TIF,2020,L,13,aktif
+5520120041,Achmad Fauzi Rachmadi,TIF,2020,L,13,aktif
+5520120042,M Yusuf Iskandar Muslim,TIF,2020,L,13,aktif
+5520120043,Harry Muttahar,TIF,2020,L,13,aktif
+5520120044,Alfafa Hubba Shuhufa,TIF,2020,P,13,aktif
+5520120045,Dhikapakti sentanu,TIF,2020,L,13,aktif
+5520120046,Muhamad Resa Fahmi Mustopa,TIF,2020,L,13,aktif
+5520120047,Muhammad luthfy tirta pratama,TIF,2020,L,13,aktif
+5520120048,MUHAMMAD HERU PERMANA,TIF,2020,L,13,aktif
+5520120049,Muhammad rizky choerul fadhilah,TIF,2020,L,13,aktif
+5520120050,M. Rizky Ramdhani,TIF,2020,L,13,aktif
+5520120051,Lintang Bagas Satrio,TIF,2020,L,13,aktif
+5520120052,M. Khaerul Muttakin,TIF,2020,L,13,aktif
+5520120053,Hilda Pradita,TIF,2020,P,13,aktif
+5520120054,Ega Satria,TIF,2020,L,13,aktif
+5520120055,Muhamad Rashad Fauzan,TIF,2020,L,13,aktif
+5520120056,Muhamad Alwan Faiz,TIF,2020,L,13,aktif
+5520120057,Mikhael Adithia Kaian,TIF,2020,L,13,aktif
+5520120058,Iqbal Firdaus,TIF,2020,L,13,aktif
+5520120059,Vera Nurrahmayanti,TIF,2020,P,13,aktif
+5520120060,Adila Agistiani Putri,TIF,2020,P,13,aktif
+5520120061,Angga Saepul Rivian,TIF,2020,L,13,aktif
+5520120062,Harry Nur Fazri,TIF,2020,L,13,aktif
+5520120063,Rizky,TIF,2020,L,13,aktif
+5520120064,Fadli Seftian Ibadurrahman,TIF,2020,L,13,aktif
+5520120065,Nisha Sri Mulyani,TIF,2020,P,13,aktif
+5520120066,Regina Almalia Pratiwi,TIF,2020,P,13,aktif
+5520120067,Muhammad Bintang Naufal,TIF,2020,L,13,aktif
+5520120068,Nizhan M.Wafal Amar,TIF,2020,L,13,aktif
+5520120069,Muhammad Rifqi Adhari,TIF,2020,L,13,aktif
+5520120070,Muhamad Shendy Hasan,TIF,2020,L,13,aktif
+5520120071,Muhamad Rizky Maulana S,TIF,2020,L,13,aktif
+5520120072,Sulton Hasan Tosin Marin Salim,TIF,2020,L,13,aktif
+5520120073,M. Rifki Arisagas,TIF,2020,L,13,aktif
+5520120074,Yusril Azhar,TIF,2020,L,13,aktif
+5520120075,Muhamad Haidar Supriya Nugroho,TIF,2020,L,13,aktif
+5520120076,M Rifky Fauzan,TIF,2020,L,13,aktif
+5520120077,Muhamad Dicky Irsyad Fauzan,TIF,2020,L,13,aktif
+5520120078,Erni,TIF,2020,P,13,aktif
+5520120079,Sandi Darmawan,TIF,2020,L,13,aktif
+5520120080,Erik Sandra Saputra,TIF,2020,L,13,aktif
+5520120081,Moch Fahmi Setiadi,TIF,2020,L,13,aktif
+5520120082,Dede Nurul Yakin,TIF,2020,L,13,aktif
+5520120083,Muhammad Eddayu Gama Pratama,TIF,2020,L,13,aktif
+5520120084,Elsa Nuranggraeni,TIF,2020,P,13,aktif
+5520120085,Muhamad Luthfi Naufal,TIF,2020,L,13,aktif
+5520120086,Rizal Adinda Mujahid,TIF,2020,L,13,aktif
+5520120087,Abas,TIF,2020,L,13,aktif
+5520120088,Andy Sopiyandi,TIF,2020,L,13,aktif
+5520120089,Eki Sukmana,TIF,2020,L,13,aktif
+5520120090,Muhamad Riyan Fauzi,TIF,2020,L,13,aktif
+5520120091,Abdul Anan,TIF,2020,L,13,aktif
+5520120092,Hanifa Siti Nur Hidayah,TIF,2020,P,13,aktif
+5520120093,Kamil Aditya Agustiana,TIF,2020,L,13,aktif
+5520120094,Muhammad Zulfikar,TIF,2020,L,13,aktif
+5520120095,Syamsu Abdul Maulana Yusup,TIF,2020,L,13,aktif
+5520120096,Amany Asma,TIF,2020,P,13,aktif
+5520120097,Mita Aulia Fransiska,TIF,2020,P,13,aktif
+5520120098,Siti Anisa,TIF,2020,P,13,aktif
+5520120099,Muhammad Zaidan Wafi,TIF,2020,L,13,aktif
+5520120100,Satria Fahmi Fauzy,TIF,2020,L,13,aktif
+5520120101,Dany Prasetyo Pawzi,TIF,2020,L,13,aktif
+5520120102,Nisrina Humaira,TIF,2020,P,13,aktif
+5520120103,Derry Agustin Nurhikmat,TIF,2020,L,13,aktif
+5520120104,Rizky Hermawan,TIF,2020,L,13,aktif
+5520120105,Raka Ikbar Setyadireza,TIF,2020,L,13,aktif
+5520120106,Muhammad Farhan Bintang P,TIF,2020,L,13,aktif
+5520120107,Ica Qurotulaeni,TIF,2020,P,13,aktif
+5520120108,"Syarif Hidayat. Md.T,S.Tr",TIF,2020,L,13,aktif
+5520120109,Fitra Maulana Pratama,TIF,2020,L,13,aktif
+5520120110,M. Maulana,TIF,2020,L,13,aktif
+5520120111,Muhamad Maulana Yasir,TIF,2020,L,13,aktif
+5520120112,Geugeut Aulia,TIF,2020,P,13,aktif
+5520120113,Ramdani As Sidiqi,TIF,2020,L,13,aktif
+5520120114,Gaos Muntako,TIF,2020,L,13,aktif
+5520120115,Aji Pangestu,TIF,2020,L,13,aktif
+5520120116,Azril Akbar,TIF,2020,L,13,aktif
+5520120117,Yumna Suwandi,TIF,2020,P,13,aktif
+5520120118,Hendri Andriyana,TIF,2020,L,13,aktif
+5520120119,Muhamad Feisal Akbar,TIF,2020,L,13,aktif
+5520120120,Asep Sopyan,TIF,2020,L,13,aktif
+5520120121,Awang Darmawan,TIF,2020,L,13,aktif
+5520120122,Dendi Pratama Putra P,TIF,2020,L,13,aktif
+5520122001,Silva Aulia Nursamsiah,TIF,2022,P,9,aktif
+5520122002,Ina Mutmainah,TIF,2022,P,9,aktif
+5520122003,Ilma Nursamya,TIF,2022,P,9,aktif
+5520122004,Revan Dara Rizki,TIF,2022,P,9,aktif
+5520122005,Rijki Hardiyanti,TIF,2022,L,9,aktif
+5520122006,Muhammad Ilham Ikhsani,TIF,2022,L,9,aktif
+5520122007,Salma Jilan Azzahra,TIF,2022,P,9,aktif
+5520122008,Sofia Azzahra Alamsyah,TIF,2022,L,9,aktif
+5520122009,M. Ari Rahman,TIF,2022,L,9,aktif
+5520122010,Alia Fatimah,TIF,2022,P,9,aktif
+5520122011,Salsabila Karunia Zaman,TIF,2022,P,9,aktif
+5520122012,Tubagus Rusli Sumirat,TIF,2022,L,9,aktif
+5520122013,Muhamad Suhendi,TIF,2022,L,9,aktif
+5520122014,M Alif Fadha,TIF,2022,L,9,aktif
+5520122015,Muhammad Ilsar Gymnastiar,TIF,2022,L,9,aktif
+5520122016,Nazwa Nurmaulida,TIF,2022,P,9,aktif
+5520122017,Sultan Abdul Malik,TIF,2022,L,9,aktif
+5520122018,Ramadhan Abdul Azis,TIF,2022,L,9,aktif
+5520122019,Iqbal Maulana A,TIF,2022,L,9,aktif
+5520122020,Nesya Nabila Putri,TIF,2022,P,9,aktif
+5520122021,Muhammad Azkia Ramdan,TIF,2022,L,9,aktif
+5520122022,Fiqri Yusup Masduki,TIF,2022,L,9,aktif
+5520122023,Virgiawan Listiyandi,TIF,2022,L,9,aktif
+5520122024,Deni CS Pratama,TIF,2022,L,9,aktif
+5520122025,Muhammad Riansyah Asmara,TIF,2022,L,9,aktif
+5520122026,M. Irsan,TIF,2022,L,9,aktif
+5520122027,Risky Chandra,TIF,2022,L,9,aktif
+5520122028,Alvalfa Qayyala Mudrika,TIF,2022,P,9,aktif
+5520122029,Adam Cahyo Nugroho,TIF,2022,L,9,aktif
+5520122030,Alya Fatinah,TIF,2022,P,9,aktif
+5520122031,Darius Darren,TIF,2022,L,9,aktif
+5520122032,Pitri Rahmawati,TIF,2022,P,9,aktif
+5520122033,Erika Nazwa Syalsabina,TIF,2022,P,9,aktif
+5520122034,Ega Virga Yugantara,TIF,2022,P,9,aktif
+5520122035,Muhammad Alwafaa Kuswandarsah,TIF,2022,L,9,aktif
+5520122036,Gina Sunandar,TIF,2022,P,9,aktif
+5520122037,Refi Aura Noviansyah,TIF,2022,L,9,aktif
+5520122038,Arinata Permana,TIF,2022,P,9,aktif
+5520122039,Sigit Purnama,TIF,2022,L,9,aktif
+5520122040,M Abdul Hadi Mufid,TIF,2022,L,9,aktif
+5520122041,Muhammad Yasyfa Al Fachrezi,TIF,2022,L,9,aktif
+5520122042,Robby Dwi Herdiyana,TIF,2022,L,9,aktif
+5520122043,Intan,TIF,2022,P,9,aktif
+5520122044,M Anggara Pradivta,TIF,2022,L,9,aktif
+5520122045,Fathurahman Musyadad,TIF,2022,L,9,aktif
+5520122046,Gilang Wardiansyah,TIF,2022,L,9,aktif
+5520122047,Ramdhani Bayu Rifkya,TIF,2022,L,9,aktif
+5520122048,Mochammad Nabil Fahrizal Rahmat,TIF,2022,L,9,aktif
+5520122049,Andi Aryo Pratama,TIF,2022,L,9,aktif
+5520122050,Dava Rahmatuloh,TIF,2022,P,9,aktif
+5520122051,Muhammad Early Maulana,TIF,2022,L,9,aktif
+5520122052,Rizal Idharudin,TIF,2022,L,9,aktif
+5520122053,Mohammad Ferdian Akbar Hikmatika,TIF,2022,L,9,aktif
+5520122054,Muhamad Zaini Attharik Putra Wijaya,TIF,2022,L,9,aktif
+5520122055,Daffa Andhika Hermansyah,TIF,2022,L,9,aktif
+5520122056,Muhammad Alvi Syahban,TIF,2022,L,9,aktif
+5520122057,Ratu Febri Cahya Haliza,TIF,2022,L,9,aktif
+5520122058,Tria Indriany S,TIF,2022,P,9,aktif
+5520122059,Azka Fauzan Tawakal,TIF,2022,P,9,aktif
+5520122060,Mochammad Zidan Gimnastiar,TIF,2022,L,9,aktif
+5520122061,Muhamad Ferziawan Ramadhan,TIF,2022,L,9,aktif
+5520122062,Ahmad Asmid,TIF,2022,L,9,aktif
+5520122063,Muhamad Fajri Ramadhani,TIF,2022,L,9,aktif
+5520122064,Alfitho Juliansyah,TIF,2022,L,9,aktif
+5520122065,Mochammad Iqbal Dwi Karya,TIF,2022,L,9,aktif
+5520122066,Siti Maryatul Aminiah,TIF,2022,P,9,aktif
+5520122067,Muhamad Rizkhy Akbar,TIF,2022,L,9,aktif
+5520122068,Herdi Ferdian Anwar,TIF,2022,L,9,aktif
+5520122069,Muhamad Farid Indrawan,TIF,2022,L,9,aktif
+5520122070,Abiyyatun Nazihah,TIF,2022,L,9,aktif
+5520122071,Mochamad Irgi Iskandar,TIF,2022,L,9,aktif
+5520122072,Adinda Febrianty Putri,TIF,2022,P,9,aktif
+5520122073,Muhamad Rizki Ramadani Ediyanto,TIF,2022,P,9,aktif
+5520122074,Gege Putra Mulia,TIF,2022,L,9,aktif
+5520122075,Salman Nurizal Arief,TIF,2022,L,9,aktif
+5520122076,Rizky Achmad Fadilah,TIF,2022,L,9,aktif
+5520122077,Muhammad Gagas SB,TIF,2022,L,9,aktif
+5520122078,Andalas Maulana Malik Ibrahim,TIF,2022,L,9,aktif
+5520122079,Fajar Nur Hilal,TIF,2022,L,9,aktif
+5520122080,Putri Amanda Haifa,TIF,2022,P,9,aktif
+5520122081,Tekun Muhammad Abduh,TIF,2022,L,9,aktif
+5520122082,Fauzi Agus Budiman,TIF,2022,L,9,aktif
+5520122083,Mohammad Hasnan Ali,TIF,2022,L,9,aktif
+5520122084,Susan Putri Anggraeni,TIF,2022,P,9,aktif
+5520122085,Siti Nisa Nurajizah,TIF,2022,P,9,aktif
+5520122086,Muhamad Fadhil,TIF,2022,L,9,aktif
+5520122087,Nuraini Siti Patimah,TIF,2022,P,9,aktif
+5520122088,Riki Firmansah,TIF,2022,L,9,aktif
+5520122089,Anis Sulastri,TIF,2022,L,9,aktif
+5520122090,Silvi Intan,TIF,2022,P,9,aktif
+5520122091,Rizal Rinaldi Ramadhan,TIF,2022,L,9,aktif
+5520122092,Rafli Radiansyah,TIF,2022,L,9,aktif
+5520122093,Isma Meinawati,TIF,2022,P,9,aktif
+5520122094,Muhamad Alif Atharizqi,TIF,2022,L,9,aktif
+5520122095,Dhias Dwi Putra,TIF,2022,L,9,aktif
+5520122096,Siti Amelia Hazimah,TIF,2022,P,9,aktif
+5520122097,Rindi Ariska Putri,TIF,2022,P,9,aktif
+5520122098,Deden Muhamad Rizal,TIF,2022,L,9,aktif
+5520122099,Bagus Dwi Risnaldi,TIF,2022,L,9,aktif
+5520122100,Mochamad Bayu Fauzi,TIF,2022,L,9,aktif
+5520122101,M Regi Agustian Heryandi,TIF,2022,L,9,aktif
+5520122102,Muhammad Irham Fahrezi,TIF,2022,L,9,aktif
+5520122103,Genis Generik,TIF,2022,L,9,aktif
+5520122104,Rama JG Putra Romadhan,TIF,2022,L,9,aktif
+5520122105,Irfan Halim Rahmat,TIF,2022,L,9,aktif
+5520122106,Muhammad Fazriel Ibrahim,TIF,2022,L,9,aktif
+5520122107,Muhammad Rafi Raditya,TIF,2022,L,9,aktif
+5520122108,Sandi Agung,TIF,2022,L,9,aktif
+5520122109,Fahmi Zulhijah,TIF,2022,L,9,aktif
+5520122110,Mochamad Faisal,TIF,2022,L,9,aktif
+5520122111,Reza Gulaman Zakiyya,TIF,2022,L,9,aktif
+5520122112,Muhammad Lutfi Alwiyansyah,TIF,2022,L,9,aktif
+5520122113,Abdul Hadi Maulidi,TIF,2022,L,9,aktif
+5520122114,Afzal Ataullah Ahmad,TIF,2022,L,9,aktif
+5520122115,Muhammad Riefa Framana Putra,TIF,2022,L,9,aktif
+5520122116,Aditya Adira Supriadi,TIF,2022,L,9,aktif
+5520122117,Muhammad Nur Alparizi,TIF,2022,L,9,aktif
+5520122118,Muis Nuryana,TIF,2022,L,9,aktif
+5520122119,Ridwan Nurjani,TIF,2022,L,9,aktif
+5520122120,Sandi Abdul Rohman,TIF,2022,L,9,aktif
+5520122121,Virgie Adrean Syach,TIF,2022,L,9,aktif
+5520122122,Andini Yasyfieka Wardhani,TIF,2022,L,9,aktif
+5520122123,Syamil Muhammad Ismail,TIF,2022,L,9,aktif
+5520122124,Fadilat Pranata Qodratul Bilhak,TIF,2022,L,9,aktif
+5520122125,Moch Radja Pangersa Amiruddin,TIF,2022,L,9,aktif
+5520122126,Elvira Mutia Pratiwi,TIF,2022,P,9,aktif
+5520122127,Angga Setiawan,TIF,2022,L,9,aktif
+5520122128,Muhammad Rizhabie Saputra,TIF,2022,L,9,aktif
+5520122129,Muhammad Taofik Apriana Surya,TIF,2022,L,9,aktif
+5520122130,Fikri Fatria Pamungkas,TIF,2022,L,9,aktif
+5520122131,Karunia Rizqi Artyanto,TIF,2022,P,9,aktif
+5520122132,Arya Galih Ismail,TIF,2022,L,9,aktif
+5520122133,Arip Lukmanul Hakim,TIF,2022,L,9,aktif
+5520122134,M Farhan akbar,TIF,2022,L,9,aktif
+5520122135,Prasetya Pratama Putra,TIF,2022,L,9,aktif
+5520122136,Fajar Julian Hermawan,TIF,2022,L,9,aktif
+5520122137,Nazwal Ali Pratama,TIF,2022,L,9,aktif
+5520122138,Moh. Najib,TIF,2022,L,9,aktif
+5520122139,Reza Puda Julianda,TIF,2022,L,9,aktif
+5520122140,Alby Mukhlis Pratama Ridwan,TIF,2022,L,9,aktif
+5520122141,Rizki Mohammad Bahari,TIF,2022,P,9,aktif
+5520122142,Ferry Akhmad Rizal,TIF,2022,L,9,aktif
+5520122143,Muhamad Rizki Maulana,TIF,2022,P,9,aktif
+5520122144,Moch Sariful Fahry,TIF,2022,L,9,aktif
+5520122145,Dikri Fardiansyah,TIF,2022,L,9,aktif
+5520122146,Muhamad Farijan,TIF,2022,L,9,aktif
+5520122147,Muhammad Agil Thorik Ruhaedin,TIF,2022,L,9,aktif
+5520122148,Hani Mutiara Anisa,TIF,2022,P,9,aktif
+5520122149,Imam Hidayatulloh,TIF,2022,L,9,aktif
+5520122150,Archel Ridzky Maulana S,TIF,2022,L,9,aktif
+5520122151,Muhammad Rizki Malik Aziz,TIF,2022,P,9,aktif
+5520122152,Della Maulany Jumiaty,TIF,2022,P,9,aktif
+5520122153,Putri Arum Garnasih,TIF,2022,P,9,aktif
+5520122154,Muchamad Erwin Pratama,TIF,2022,L,9,aktif
+5520122155,Krissuton,TIF,2022,L,9,aktif
+5520122156,Lisnawati,TIF,2022,P,9,aktif
+5520122157,Rizal Fauzan Mutaqin,TIF,2022,L,9,aktif
+5520122158,M Yasin Alghifari,TIF,2022,L,9,aktif
+5520122159,Moch Naufal Fawwaz Mulyadi,TIF,2022,L,9,aktif
+5520122160,Ahmad Rifal Hudori,TIF,2022,L,9,aktif
+5520122161,M Dzaki Akmal Almalik,TIF,2022,L,9,aktif
+2220113005,Muhammad Fadly,TSI,2013,L,14,aktif
+2220113006,Harits Adnan,TSI,2013,L,14,non_aktif
+2220114001,Mustofa Faisal,TSI,2014,L,14,non_aktif
+2220114005,Waldi Taufik Almubarok,TSI,2014,L,14,non_aktif
+2220114007,Dede Nurdinyansah,TSI,2014,L,14,non_aktif
+2220114013,Surya Abdullah,TSI,2014,L,14,aktif
+2220114017,Rio Diliawan Adilatama,TSI,2014,L,14,aktif
+2220114018,Irvan Nulhakim,TSI,2014,L,14,non_aktif
+2220114020,Moch Angga Effendi,TSI,2014,L,14,aktif
+2220114024,Salman Sigit,TSI,2014,L,14,aktif
+2220114027,Ahmad Irfan Hidayat,TSI,2014,L,14,aktif
+2220114028,Herdiansyah Permana,TSI,2014,L,14,non_aktif
+2220115001,Gilang Ramadhan Prawira Dirja,TSI,2015,L,14,non_aktif
+2220115002,Rijki Permadi,TSI,2015,L,14,aktif
+2220115003,Revy Triliun Subrata,TSI,2015,L,14,do
+2220115004,Opi Nopitasari,TSI,2015,L,14,do
+2220115006,Gilang Supriatna,TSI,2015,L,14,aktif
+2220115007,Deri Saepul Ramdani,TSI,2015,L,14,aktif
+2220115008,Ilham Fitriadi Samsudin,TSI,2015,L,14,cuti
+2220115012,Aditya Arigi Abdullah,TSI,2015,L,14,aktif
+2220115013,Abdul Rahman,TSI,2015,L,14,aktif
+2220115014,Tiani Gustianti,TSI,2015,L,14,aktif
+2220115015,Arif Zamzam Zulfikar,TSI,2015,L,14,non_aktif
+2220115016,Elgi Permana Putra,TSI,2015,L,14,aktif
+2220115018,Dede Marsus,TSI,2015,L,14,non_aktif
+2220115019,Asep Irawan,TSI,2015,L,14,non_aktif
+2220115020,Samsul Fauzi,TSI,2015,L,14,aktif
+2220116001,Siti Tsana Khoerunnisa,TSI,2016,P,14,aktif
+2220116002,Cipta Libradika Mustari,TSI,2016,P,14,non_aktif
+2220116003,Nurul Najma,TSI,2016,P,14,aktif
+2220116004,Angga Herlambang,TSI,2016,L,14,non_aktif
+2220116005,Tubagus Maulana Bayu R,TSI,2016,L,14,aktif
+2220116006,Ridho Hanityo,TSI,2016,L,14,aktif
+2220116007,Mohammad Fazar,TSI,2016,L,14,aktif
+2220116008,Enjang Ali Firmansah,TSI,2016,L,14,non_aktif
+2220116009,Fandi Laode Sadikin,TSI,2016,L,14,aktif
+2220116010,Muhammad Fajar Bahari,TSI,2016,L,14,aktif
+2220116011,Mochammad Akbar Jamaludin,TSI,2016,L,14,aktif
+2220116012,M Zaki,TSI,2016,L,14,aktif
+2220116013,Riki Darmawan,TSI,2016,L,14,non_aktif
+2220116014,Putra Fatkhur Rizki,TSI,2016,P,14,aktif
+2220116015,Zihan Fitriyani,TSI,2016,L,14,aktif
+2220116016,Suci Pratiwi,TSI,2016,L,14,aktif
+2220116017,Refa Fifi Nirwana,TSI,2016,P,14,aktif
+2220116018,Mochamad Anjar Syafe'i,TSI,2016,L,14,non_aktif
+2220116019,Nunu Nurapriliandi,TSI,2016,L,14,aktif
+2220116020,Gugum Gumelar,TSI,2016,L,14,non_aktif
+2220116021,Ahmad Yusuf Candra,TSI,2016,L,14,aktif
+2220116022,Asep Hilman,TSI,2016,L,14,aktif
+2220116023,Reza Muhamad Azis,TSI,2016,L,14,aktif
+2220116024,Hadi Andidian,TSI,2016,L,14,aktif
+2220116025,Zulkifli,TSI,2016,L,14,aktif
+2220116026,Muhammad Naufal Yusuf,TSI,2016,L,14,aktif
+2220116027,Idwan Yasmi Taufik,TSI,2016,L,14,non_aktif
+2220116028,Hilmi Ramlan,TSI,2016,L,14,aktif
+2220117001,Ihsan Taufik,TSI,2017,L,14,aktif
+2220117002,Mohamad Ahmad Hidayat,TSI,2017,L,14,aktif
+2220117003,Arizwan,TSI,2017,L,14,aktif
+2220117004,Salsa Nadia Inayah Rahmadika,TSI,2017,P,14,aktif
+2220117005,Randy Gustama,TSI,2017,L,14,aktif
+2220117006,Wenny Trikurnia,TSI,2017,L,14,aktif
+2220117007,Reza Nurwari Kamil,TSI,2017,L,14,aktif
+2220117008,Asmi Ayundia Abidin,TSI,2017,L,14,aktif
+2220117009,Moch Iqbal Suyudi,TSI,2017,L,14,aktif
+2220117010,Muhammad Ilham Nugraha,TSI,2017,L,14,aktif
+2220117011,Muhammad Rizky Hambali,TSI,2017,L,14,non_aktif
+2220117012,Zenal Aripin,TSI,2017,L,14,aktif
+2220117013,Muhamad Rofi,TSI,2017,L,14,non_aktif
+2220117014,Muhammad Fikri Assidik,TSI,2017,L,14,aktif
+2220117015,Hani Marliani Ramadhan,TSI,2017,P,14,aktif
+2220117016,Naufal Mahaputra,TSI,2017,L,14,non_aktif
+2220117017,Lani Sari fauziah,TSI,2017,P,14,aktif
+2220117018,Zairofi Fajriansah,TSI,2017,L,14,aktif
+2220117019,Nurma Salamah,TSI,2017,P,14,aktif
+2220117020,Asep Muhammad Hasan Sadili,TSI,2017,L,14,aktif
+2220117021,Sania Ainun Qolbi,TSI,2017,P,14,aktif
+2220117022,Yudi Dwi Pratama Putra,TSI,2017,L,14,non_aktif
+2220117023,Yudi Firmansyah,TSI,2017,L,14,non_aktif
+2220117024,Rizky Moch Gustira Pratama,TSI,2017,L,14,aktif
+2220117025,Deden Mulyana Saleh,TSI,2017,L,14,aktif
+2220117026,Riki Darmawan,TSI,2017,L,14,aktif
+2220117027,Muhamad Taufik,TSI,2017,L,14,non_aktif
+2220117028,Erwin Rusmalda,TSI,2017,L,14,aktif
+2220118001,Nanu Nurjaman,TSI,2018,L,14,aktif
+2220118002,Wan Wan hariansyah,TSI,2018,L,14,aktif
+2220118003,Muhammad Ihsan Toriq Hambali,TSI,2018,L,14,aktif
+2220118004,Muhammad Rizki Saidin Ramdhan,TSI,2018,P,14,aktif
+2220118005,Rifki Ahmad Dzulkifli,TSI,2018,L,14,non_aktif
+2220118006,Saepul Anwar,TSI,2018,L,14,aktif
+2220118007,M Irfan Fauji,TSI,2018,L,14,aktif
+2220118008,Muhammad Ramadhan Iskandar,TSI,2018,L,14,aktif
+2220118009,Teguh Wiguna,TSI,2018,L,14,aktif
+2220118010,Viya Masripah Inayatillah,TSI,2018,L,14,aktif
+2220118011,Azi Saepul Rohmat,TSI,2018,L,14,aktif
+2220118012,Taufan Dwi Prasetya,TSI,2018,L,14,aktif
+2220118013,Zunzunan Fadillah,TSI,2018,L,14,aktif
+2220118014,M Arief Budiman,TSI,2018,L,14,aktif
+2220118015,Rifky Nurhadistian M,TSI,2018,L,14,aktif
+2220118016,Muhammad Dhery Nurdiansyah,TSI,2018,L,14,aktif
+2220118017,Riska Arie Haryanti,TSI,2018,P,14,aktif
+2220118018,R Noval Prayoga,TSI,2018,L,14,aktif
+2220118019,Mohamad Naufal Abdul Hakim,TSI,2018,L,14,aktif
+2220118020,Indra Maulana Permana,TSI,2018,L,14,aktif
+2220118021,Irpan Maulana,TSI,2018,L,14,aktif
+2220118022,Ghiyats Faisal Rachman,TSI,2018,L,14,aktif
+2220118023,Dian Fitri Suryanti,TSI,2018,P,14,aktif
+2220119001,Diar Mulyana Yusuf,TSI,2019,L,14,non_aktif
+2220119002,Ary Patriadi Winata,TSI,2019,L,14,aktif
+2220119003,Nenden,TSI,2019,L,14,aktif
+2220119004,Muhamad Marjan Murtadho,TSI,2019,L,14,aktif
+2220119005,Aura Kristie Iskandar,TSI,2019,P,14,aktif
+2220119006,Retno Angelina Hermawan,TSI,2019,P,14,aktif
+2220119007,Hari Susanto,TSI,2019,L,14,aktif
+2220119008,Muhammad Gilang Haqul Yakin,TSI,2019,L,14,aktif
+2220119009,Nadiv Zarky Muchtar,TSI,2019,L,14,aktif
+2220119010,Siti Nurjanah,TSI,2019,P,14,aktif
+2220119011,Bayu Aditias,TSI,2019,L,14,aktif
+2220119012,Ferdi Ferdianto,TSI,2019,L,14,aktif
+2220119013,Agus Rama Tunggaraga,TSI,2019,L,14,aktif
+2220119014,Muhammad Zakaria,TSI,2019,L,14,aktif
+2220119015,M. Farhanul Hakim,TSI,2019,L,14,aktif
+2220119016,Mila Risti,TSI,2019,P,14,aktif
+2220119017,Bagus Subakti,TSI,2019,L,14,aktif
+2220119018,Raina Fiqi Nurfaizza Rachman,TSI,2019,P,14,aktif
+2220119019,Krisna Aditiya Eka Syaputra,TSI,2019,L,14,aktif
+2220119020,Dede Suhendi,TSI,2019,L,14,aktif
+2220119021,Muhammad Faisal Muslihin,TSI,2019,L,14,aktif
+2220119022,Abdul Nasir,TSI,2019,L,14,non_aktif
+2220119023,Aryo Samoedra,TSI,2019,L,14,aktif
+2220119024,Danu Komara,TSI,2019,L,14,aktif
+2220119025,M. Fikri Dzulkifli,TSI,2019,L,14,aktif
+2220119026,Muhammad Daffa Arkan Firmawan,TSI,2019,L,14,aktif
+2220119027,Rizki Esa Muharam,TSI,2019,P,14,do
+2220119028,Widad Nur Azizah,TSI,2019,L,14,aktif
+2220119029,Teddy Abdurrahman S,TSI,2019,L,14,aktif
+2220119030,Mylkha Amalia Amanda Hanna,TSI,2019,P,14,aktif
+2220119031,Shopia Putri Anindhita,TSI,2019,P,14,aktif
+2220119032,Nisrina Nabilla Junaedi,TSI,2019,P,14,aktif
+2220119033,Muhamad Chaikal Kafka,TSI,2019,L,14,aktif
+2220119034,Siti Rahmatika Maulidiani,TSI,2019,P,14,aktif
+2220119035,Fachmi Alkhadar,TSI,2019,L,14,aktif
+2220119036,Agreny Arcellita s,TSI,2019,L,14,aktif
+2220119037,Salwa Salsabila,TSI,2019,P,14,aktif
+2220120001,Dwivania Destya Riantini Nur Fadzila,TSI,2020,P,13,aktif
+2220120002,Erva Rahmawati,TSI,2020,P,13,aktif
+2220120003,Muhammad Willy Andriansyah,TSI,2020,L,13,aktif
+2220120004,Muhammad Fikhri Abdul Haq,TSI,2020,L,13,aktif
+2220120005,Syfa Apriliyani,TSI,2020,P,13,aktif
+2220120006,Farhan Abdilah,TSI,2020,L,13,aktif
+2220120007,Ahsan Syahrullah,TSI,2020,L,13,aktif
+2220120008,Ripal Ahmad Yusup,TSI,2020,L,13,aktif
+2220120009,Tupu Yabgi Akdan,TSI,2020,L,13,aktif
+2220120010,Tiara Syaharani Putri,TSI,2020,P,13,aktif
+2220120011,Reqy Noor Ashfiya,TSI,2020,L,13,aktif
+2220120012,Reza ahmad Fakhryan,TSI,2020,L,13,aktif
+2220120013,Pajar Abdurrosyid,TSI,2020,L,13,aktif
+2220120014,Moch. Ramdan,TSI,2020,L,13,aktif
+2220120015,Ainun Nisa,TSI,2020,P,13,aktif
+2220120016,Fitry Erlina,TSI,2020,P,13,aktif
+2220120017,M Aiman Yusuf ismail,TSI,2020,L,13,aktif
+2220120018,Thariq Mubarak Ahmad,TSI,2020,L,13,aktif
+2220120019,M. Iqbal Maulana,TSI,2020,L,13,aktif
+2220120020,Purno Setyo,TSI,2020,L,13,aktif
+2220120021,Riswandi Putra Permana,TSI,2020,L,13,aktif
+2220120022,M Syihab Malik Maulidi,TSI,2020,L,13,aktif
+2220122001,Mochammad Ramdhani,TSI,2022,L,9,aktif
+2220122002,Dickry Elwansyah Suwanda,TSI,2022,L,9,aktif
+2220122003,Siti Neiyhayah Nur Hubby,TSI,2022,P,9,aktif
+2220122004,D. Gita Irpriyanti,TSI,2022,P,9,aktif
+2220122005,Andini Dwi Utami,TSI,2022,L,9,aktif
+2220122006,Arnes Januar,TSI,2022,L,9,aktif
+2220122007,Zidan,TSI,2022,L,9,aktif
+2220122008,Sherly Dwi Kurniasih,TSI,2022,P,9,aktif
+2220122009,Muhamad Ikbal,TSI,2022,L,9,aktif
+2220122010,Risman Ismail,TSI,2022,L,9,aktif
+2220122011,Anggoro Adji Poernomo,TSI,2022,L,9,aktif
+2220122012,Muhammad Faisal Akbar,TSI,2022,L,9,aktif
+2220122013,Rendi Julian Cahya,TSI,2022,L,9,aktif
+2220122014,Hafsah Maulida Wendy,TSI,2022,L,9,aktif
+2220122015,M. Padjar Ramdhani,TSI,2022,L,9,aktif
+2220122016,Raka Ramanda Satriaji,TSI,2022,L,9,aktif
+2220122017,Rafa Rasya Rahmanissa,TSI,2022,P,9,aktif
+2220122018,Moch. Ilham Fadilah,TSI,2022,L,9,aktif
+2220122019,Wisnu Ramdani,TSI,2022,L,9,aktif
+2220122020,Rizqi El Barkah,TSI,2022,L,9,aktif
+2220122021,Shofa Nazhirah Wahyudi,TSI,2022,P,9,aktif
+2220122022,Haikal Atha Nurzally,TSI,2022,L,9,aktif
+2220122023,Zalfa Afryani Kartika Sari,TSI,2022,P,9,aktif
+2220122024,Diki Zainal Mutakin,TSI,2022,L,9,aktif
+2220122025,Farhan Fauzan Ramadhan,TSI,2022,L,9,aktif
+2220122026,Zalfa Aliyah Alzayan,TSI,2022,P,9,aktif
+2220122027,Rais Januari,TSI,2022,L,9,aktif
+2220122028,Muhammad Rifki Fathoni,TSI,2022,L,9,aktif
+2220122029,Eka Fawwaz Widiyatno,TSI,2022,L,9,aktif
+2220122030,Annisa Ardhiningrum,TSI,2022,P,9,aktif
+2220122031,Moch. Iilham Firdaus,TSI,2022,L,9,aktif
+2220122032,Muhamad Vikram Junava Zaen,TSI,2022,L,9,aktif
+2220122033,Edo Gusti Bramawan,TSI,2022,L,9,aktif
+2220122034,Angga Aditya Ramadani,TSI,2022,L,9,aktif
+2220122035,Dika Risyana,TSI,2022,P,9,aktif
+2220122036,Deki Sahrial Darajat,TSI,2022,L,9,aktif
+2220122037,M. Reynaldi Firdaus,TSI,2022,L,9,aktif
+2220122038,Zhafran Aufa Mudhaffari,TSI,2022,L,9,aktif
