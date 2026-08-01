@@ -16,6 +16,12 @@ class ProgramSeeder extends Seeder
 {
     public function run(): void
     {
+        // Idempoten (sekali isi): lewati bila program contoh sudah pernah dibuat,
+        // agar aman dijalankan tiap deploy (db:seed berulang).
+        if (Program::query()->exists()) {
+            return;
+        }
+
         // 1) Beasiswa: butuh status aktif + IPK memadai + keterlibatan kegiatan.
         $beasiswa = Program::create([
             'nama' => 'Beasiswa Unggulan 2026',

@@ -12,7 +12,6 @@ use App\Models\KknLokasi;
 use App\Models\KknPeserta;
 use App\Models\KlasterisasiKategori;
 use App\Models\Mahasiswa;
-use App\Models\NilaiIpkSemester;
 use App\Models\PengabdianHibah;
 use App\Models\Pengguna;
 use App\Models\Prestasi;
@@ -28,13 +27,23 @@ class DatabaseSeeder extends Seeder
      *  - 5 akun pengguna demo (satu per peran: admin, WD III, Staf WD III,
      *    Kaprodi, Staf Prodi).
      *  - 4 program studi FT UNSUR.
-     *  - 30 mahasiswa (>=5 per prodi) dengan riwayat IPK 4-6 semester.
+     *  - Roster NYATA 1.225 mahasiswa Teknik dari berkas PMB via
+     *    MahasiswaTeknikSeeder (tanpa data mahasiswa dummy).
+     *  - Riwayat IPK DEMO/SIMULASI untuk mahasiswa aktif via NilaiIpkDemoSeeder
+     *    (berkas PMB tak memuat IPK) agar klasterisasi K-Means dapat didemokan.
      */
     public function run(): void
     {
         $this->seedPengguna();
         $prodi = $this->seedProgramStudi();
-        $this->seedMahasiswaDanIpk($prodi);
+
+        // Roster mahasiswa Teknik NYATA (1.225 mhs) dari ekstraksi berkas PMB
+        // 2019–2023. Ini satu-satunya sumber mahasiswa (tanpa data dummy).
+        $this->call(MahasiswaTeknikSeeder::class);
+
+        // Riwayat IPK per semester — DEMO/SIMULASI (berkas PMB tak memuat IPK)
+        // agar klasterisasi K-Means bisa didemonstrasikan. Hanya mahasiswa aktif.
+        $this->call(NilaiIpkDemoSeeder::class);
 
         // Data contoh modul pendukung (SIMULASI untuk demo, bukan data riil).
         $this->seedPrestasi();
@@ -83,55 +92,39 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        // Idempoten: firstOrCreate berdasarkan `nama` label.
         foreach ($definisi as $isi) {
-            KlasterisasiKategori::create([...$isi, 'aktif' => true]);
+            KlasterisasiKategori::firstOrCreate(['nama' => $isi['nama']], [...$isi, 'aktif' => true]);
         }
     }
 
     /**
      * Lima akun pengguna demo — satu untuk tiap peran.
+     *
+     * Idempoten: firstOrCreate berdasarkan `nip`. Bila akun sudah ada, TIDAK
+     * ditimpa (kata sandi yang mungkin sudah diganti admin tetap aman).
      */
     protected function seedPengguna(): void
     {
-        Pengguna::factory()->create([
-            'nip' => 'admin',
-            'nama' => 'Administrator Sistem',
-            'email' => 'admin@ft.unsur.ac.id',
-            'kata_sandi' => Hash::make('rahasia123'),
-            'peran' => 'admin',
-        ]);
+        $daftar = [
+            ['nip' => 'admin', 'nama' => 'Administrator Sistem', 'email' => 'admin@ft.unsur.ac.id', 'peran' => 'admin'],
+            ['nip' => '197003051998031001', 'nama' => 'Dr. Ir. Budi Santoso, M.T.', 'email' => 'budi.santoso@ft.unsur.ac.id', 'peran' => 'wd3'],
+            ['nip' => '198506152012121002', 'nama' => 'Siti Nurhaliza, S.Kom.', 'email' => 'siti@ft.unsur.ac.id', 'peran' => 'staf_wd3'],
+            ['nip' => '197805102003121003', 'nama' => 'Ir. Dedi Kurniawan, M.Kom.', 'email' => 'dedi@ft.unsur.ac.id', 'peran' => 'kaprodi'],
+            ['nip' => '199103252015042004', 'nama' => 'Rina Marlina, S.T.', 'email' => 'rina@ft.unsur.ac.id', 'peran' => 'staf_prodi'],
+        ];
 
-        Pengguna::factory()->create([
-            'nip' => '197003051998031001',
-            'nama' => 'Dr. Ir. Budi Santoso, M.T.',
-            'email' => 'budi.santoso@ft.unsur.ac.id',
-            'kata_sandi' => Hash::make('rahasia123'),
-            'peran' => 'wd3',
-        ]);
-
-        Pengguna::factory()->create([
-            'nip' => '198506152012121002',
-            'nama' => 'Siti Nurhaliza, S.Kom.',
-            'email' => 'siti@ft.unsur.ac.id',
-            'kata_sandi' => Hash::make('rahasia123'),
-            'peran' => 'staf_wd3',
-        ]);
-
-        Pengguna::factory()->create([
-            'nip' => '197805102003121003',
-            'nama' => 'Ir. Dedi Kurniawan, M.Kom.',
-            'email' => 'dedi@ft.unsur.ac.id',
-            'kata_sandi' => Hash::make('rahasia123'),
-            'peran' => 'kaprodi',
-        ]);
-
-        Pengguna::factory()->create([
-            'nip' => '199103252015042004',
-            'nama' => 'Rina Marlina, S.T.',
-            'email' => 'rina@ft.unsur.ac.id',
-            'kata_sandi' => Hash::make('rahasia123'),
-            'peran' => 'staf_prodi',
-        ]);
+        foreach ($daftar as $akun) {
+            Pengguna::firstOrCreate(
+                ['nip' => $akun['nip']],
+                [
+                    'nama' => $akun['nama'],
+                    'email' => $akun['email'],
+                    'kata_sandi' => Hash::make('rahasia123'),
+                    'peran' => $akun['peran'],
+                ],
+            );
+        }
     }
 
     /**
@@ -148,60 +141,16 @@ class DatabaseSeeder extends Seeder
             ['kode' => 'TID', 'nama' => 'Teknik Industri'],
         ];
 
+        // Idempoten: firstOrCreate berdasarkan `kode` prodi.
         $prodi = [];
         foreach ($definisi as $isi) {
-            $prodi[$isi['kode']] = ProgramStudi::create([
-                ...$isi,
-                'jenjang' => 'S1',
-            ]);
+            $prodi[$isi['kode']] = ProgramStudi::firstOrCreate(
+                ['kode' => $isi['kode']],
+                ['nama' => $isi['nama'], 'jenjang' => 'S1'],
+            );
         }
 
         return $prodi;
-    }
-
-    /**
-     * Hasilkan 30 mahasiswa terdistribusi merata ke 4 prodi (>=5/ prodi)
-     * lengkap dengan riwayat IPK semester 1 .. semester_aktif.
-     *
-     * @param  array<string, ProgramStudi>  $prodi
-     */
-    protected function seedMahasiswaDanIpk(array $prodi): void
-    {
-        $daftarProdi = array_values($prodi);
-        $totalProdi = count($daftarProdi);
-        $jumlahMahasiswa = 30;
-
-        for ($i = 0; $i < $jumlahMahasiswa; $i++) {
-            // Distribusi round-robin agar tiap prodi pasti >= 5 mahasiswa
-            // (30 / 4 = 7 atau 8 per prodi).
-            $prodiTerpilih = $daftarProdi[$i % $totalProdi];
-
-            $semesterAktif = fake()->numberBetween(3, 7);
-
-            $mahasiswa = Mahasiswa::factory()
-                ->untukProdi($prodiTerpilih)
-                ->denganSemester($semesterAktif)
-                ->create();
-
-            $this->seedRiwayatIpk($mahasiswa, $semesterAktif);
-        }
-    }
-
-    /**
-     * Buat catatan IPK dari semester 1 sampai semester aktif mahasiswa,
-     * dengan minimal 4 dan maksimal 6 catatan (mengikuti ketentuan task).
-     */
-    protected function seedRiwayatIpk(Mahasiswa $mahasiswa, int $semesterAktif): void
-    {
-        $jumlahCatatan = min($semesterAktif, fake()->numberBetween(4, 6));
-
-        for ($semester = 1; $semester <= $jumlahCatatan; $semester++) {
-            NilaiIpkSemester::factory()->create([
-                'mahasiswa_id' => $mahasiswa->id,
-                'semester' => $semester,
-                'semester_ganjil_genap' => $semester % 2 === 1 ? 'ganjil' : 'genap',
-            ]);
-        }
     }
 
     /**
@@ -210,6 +159,11 @@ class DatabaseSeeder extends Seeder
      */
     protected function seedPrestasi(): void
     {
+        // Idempoten (sekali isi): lewati bila sudah pernah di-seed.
+        if (Prestasi::query()->exists()) {
+            return;
+        }
+
         $terpilih = Mahasiswa::query()->inRandomOrder()->take(15)->get();
 
         foreach ($terpilih as $mahasiswa) {
@@ -220,27 +174,30 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * Data contoh tracer study. Membuat 8 mahasiswa "alumni" (status lulus)
-     * agar tidak mengganggu kohort klasterisasi (yang memakai mahasiswa aktif),
-     * lalu mengisi tracer untuk masing-masing. SIMULASI untuk demo.
+     * Data contoh tracer study memakai mahasiswa NYATA berstatus lulus
+     * (bukan alumni dummy) agar konsisten dengan prinsip "data real saja".
+     * Isi tracer-nya tetap SIMULASI untuk demo.
      *
-     * @param  array<string, ProgramStudi>  $prodi
+     * @param  array<string, ProgramStudi>  $prodi  (tak dipakai; dipertahankan
+     *                                               agar tanda tangan run() stabil)
      */
     protected function seedTracer(array $prodi): void
     {
-        $daftarProdi = array_values($prodi);
+        // Idempoten (sekali isi): lewati bila sudah pernah di-seed.
+        if (TracerStudy::query()->exists()) {
+            return;
+        }
 
-        for ($i = 0; $i < 8; $i++) {
-            $alumni = Mahasiswa::factory()
-                ->untukProdi($daftarProdi[$i % count($daftarProdi)])
-                ->create([
-                    'status' => 'lulus',
-                    'semester_aktif' => 8,
-                ]);
+        $alumni = Mahasiswa::query()
+            ->where('status', 'lulus')
+            ->inRandomOrder()
+            ->take(8)
+            ->get();
 
+        foreach ($alumni as $mahasiswa) {
             TracerStudy::factory()->create([
-                'mahasiswa_id' => $alumni->id,
-                'tahun_lulus' => (int) $alumni->angkatan + 4,
+                'mahasiswa_id' => $mahasiswa->id,
+                'tahun_lulus' => (int) $mahasiswa->angkatan + 4,
             ]);
         }
     }
@@ -250,6 +207,11 @@ class DatabaseSeeder extends Seeder
      */
     protected function seedPromosi(): void
     {
+        // Idempoten (sekali isi): lewati bila sudah pernah di-seed.
+        if (KegiatanPromosi::query()->exists()) {
+            return;
+        }
+
         KegiatanPromosi::factory()->count(10)->create();
     }
 
@@ -265,9 +227,15 @@ class DatabaseSeeder extends Seeder
             ['kode' => 'LLDIKTI4', 'nama' => 'Beasiswa LLDIKTI Wilayah IV', 'jenis_bantuan' => 'total', 'sumber_dana' => 'lldikti'],
         ];
 
+        // Kategori bersifat master → idempoten via firstOrCreate (kode unik).
         $kategori = [];
         foreach ($definisiKategori as $isi) {
-            $kategori[] = BeasiswaKategori::create([...$isi, 'aktif' => true]);
+            $kategori[] = BeasiswaKategori::firstOrCreate(['kode' => $isi['kode']], [...$isi, 'aktif' => true]);
+        }
+
+        // Penerima = data demo (sekali isi): lewati bila sudah ada.
+        if (BeasiswaPenerima::query()->exists()) {
+            return;
         }
 
         // Penerima untuk 10 mahasiswa aktif terpilih.
@@ -287,6 +255,11 @@ class DatabaseSeeder extends Seeder
      */
     protected function seedKkn(): void
     {
+        // Idempoten (sekali isi): lewati bila kelompok KKN sudah pernah dibuat.
+        if (KknKelompok::query()->exists()) {
+            return;
+        }
+
         $lokasi = KknLokasi::factory()->count(4)->create();
         $dpl = KknDpl::factory()->count(4)->create();
 
@@ -323,6 +296,11 @@ class DatabaseSeeder extends Seeder
      */
     protected function seedSkkm(): void
     {
+        // Idempoten (sekali isi): lewati bila sudah pernah di-seed.
+        if (KegiatanKemahasiswaan::query()->exists()) {
+            return;
+        }
+
         $terpilih = Mahasiswa::query()->where('status', 'aktif')->inRandomOrder()->take(18)->get();
 
         foreach ($terpilih as $i => $mahasiswa) {
