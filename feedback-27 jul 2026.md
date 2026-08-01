@@ -4,3 +4,7 @@
     1. Beasiswa -> IPK cukpu, ekonomi pas-pasan, kegiatan berkaitan turnamen
 4. TAmbah profiling ekonomi/orang tua -> jumlah penghasilan
 5. Wakil Rektor 3 -> Laporan
+
+
+Jelaskan alasannya dari perbandingan dengan simkatmawa
+UI untuk mengubah permission
