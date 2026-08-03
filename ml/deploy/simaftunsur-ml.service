@@ -1,0 +1,30 @@
+# Unit systemd untuk service klasterisasi K-Means SIMAFTUNSUR.
+# Salin ke: /etc/systemd/system/simaftunsur-ml.service
+# Lalu: sudo systemctl daemon-reload && sudo systemctl enable --now simaftunsur-ml
+#
+# Menjalankan uvicorn HANYA di localhost (127.0.0.1:8001); akses publik
+# ditangani nginx + TLS (lihat nginx-ml.conf). Kunci API dibaca dari
+# /etc/simaftunsur-ml.env (file terpisah, mode 600).
+
+[Unit]
+Description=SIMAFTUNSUR - Service Klasterisasi K-Means (FastAPI/uvicorn)
+After=network.target
+
+[Service]
+Type=simple
+User=simaftunsur
+Group=simaftunsur
+WorkingDirectory=/opt/simaftunsur-ml
+EnvironmentFile=/etc/simaftunsur-ml.env
+ExecStart=/opt/simaftunsur-ml/.venv/bin/uvicorn api:app --host 127.0.0.1 --port 8001 --workers 2
+Restart=on-failure
+RestartSec=3
+
+# Pengerasan dasar
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
