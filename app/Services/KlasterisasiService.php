@@ -74,6 +74,7 @@ class KlasterisasiService
     {
         try {
             return Http::timeout(5)
+                ->withHeaders($this->header())
                 ->get($this->url('/sehat'))
                 ->successful();
         } catch (Throwable) {
@@ -112,6 +113,7 @@ class KlasterisasiService
 
         try {
             $respons = Http::timeout((int) config('services.ml.timeout', 60))
+                ->withHeaders($this->header())
                 ->acceptJson()
                 ->asJson()
                 ->post($this->url('/klasterisasi'), $muatan);
@@ -308,5 +310,18 @@ class KlasterisasiService
     protected function url(string $path): string
     {
         return rtrim((string) config('services.ml.base_url'), '/').$path;
+    }
+
+    /**
+     * Header autentikasi untuk service ML. Mengirim X-API-Key hanya bila
+     * kunci dikonfigurasi (di server); saat lokal tanpa kunci → header kosong.
+     *
+     * @return array<string, string>
+     */
+    protected function header(): array
+    {
+        $kunci = (string) config('services.ml.api_key');
+
+        return $kunci !== '' ? ['X-API-Key' => $kunci] : [];
     }
 }
