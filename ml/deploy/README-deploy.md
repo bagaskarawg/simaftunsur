@@ -56,6 +56,19 @@ sudo systemctl enable simaftunsur-ml
 # venv belum ada sebelum deploy pertama; deploy script (langkah 5) yang membuatnya.
 ```
 
+## 4b. Izinkan forge me-restart service tanpa password (WAJIB)
+Deploy script berjalan non-interaktif, jadi `sudo systemctl restart` akan gagal
+("a password is required") kecuali user `forge` diberi sudoers khusus:
+```bash
+sudo tee /etc/sudoers.d/simaftunsur-ml >/dev/null <<'EOF'
+forge ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart simaftunsur-ml, /usr/bin/systemctl start simaftunsur-ml, /usr/bin/systemctl stop simaftunsur-ml, /usr/bin/systemctl status simaftunsur-ml
+EOF
+sudo chmod 440 /etc/sudoers.d/simaftunsur-ml
+sudo visudo -cf /etc/sudoers.d/simaftunsur-ml     # harus: parsed OK
+which systemctl                                    # pastikan /usr/bin/systemctl
+sudo -n systemctl restart simaftunsur-ml          # uji: tidak minta password
+```
+
 ## 5. Deploy Script Forge
 Buka **Forge → site → Deploy Script**. Hapus baris composer/artisan bawaan
 (site ini bukan app Laravel), sisakan bagian git pull Forge, lalu tempel isi
@@ -104,6 +117,6 @@ Ubah versi Python? Perbaiki di server lalu hapus `shared/ml-venv` agar dibuat ul
 - 502 dari nginx → uvicorn mati; `systemctl status simaftunsur-ml`.
 - 401 saat Laravel memanggil → `ML_API_KEY` beda antara `shared/ml.env` (VPS)
   dan `.env` (cPanel).
-- `sudo` minta password di deploy script → user forge belum passwordless sudo;
-  tambah entri sudoers: `forge ALL=(ALL) NOPASSWD: /bin/systemctl restart simaftunsur-ml`.
+- `sudo` minta password di deploy script ("a password is required") → langkah
+  sudoers (4b) belum dipasang, atau path systemctl beda (`which systemctl`).
 - Python 3.12 disarankan (wheel scikit-learn paling stabil). Cek `python3 --version`.
