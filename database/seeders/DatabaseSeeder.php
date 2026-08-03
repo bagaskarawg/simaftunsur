@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
      *  - 4 program studi FT UNSUR.
      *  - Roster NYATA 1.225 mahasiswa Teknik dari berkas PMB via
      *    MahasiswaTeknikSeeder (tanpa data mahasiswa dummy).
-     *  - Riwayat IPK DEMO/SIMULASI untuk mahasiswa aktif via NilaiIpkDemoSeeder
-     *    (berkas PMB tak memuat IPK) agar klasterisasi K-Means dapat didemokan.
+     *  - Profil klasterisasi DEMO (IPK F1–F4 + non-akademik F5–F7) via
+     *    ProfilKlasterDemoSeeder, sebaran 2D akademik × non-akademik.
      */
     public function run(): void
     {
@@ -41,9 +41,11 @@ class DatabaseSeeder extends Seeder
         // 2019–2023. Ini satu-satunya sumber mahasiswa (tanpa data dummy).
         $this->call(MahasiswaTeknikSeeder::class);
 
-        // Riwayat IPK per semester — DEMO/SIMULASI (berkas PMB tak memuat IPK)
-        // agar klasterisasi K-Means bisa didemonstrasikan. Hanya mahasiswa aktif.
-        $this->call(NilaiIpkDemoSeeder::class);
+        // Profil klasterisasi DEMO/SIMULASI (berkas PMB tak memuat IPK/SKKM):
+        // IPK per semester (F1–F4) + catatan prestasi/kegiatan/pengabdian
+        // (F5–F7) dengan sebaran 2 dimensi akademik × non-akademik agar edge
+        // case (mis. IPK tinggi tapi non-akademik rendah) benar-benar ada.
+        $this->call(ProfilKlasterDemoSeeder::class);
 
         // Data contoh modul pendukung (SIMULASI untuk demo, bukan data riil).
         $this->seedPrestasi();
