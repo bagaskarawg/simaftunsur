@@ -15,7 +15,10 @@ dari App\\Services\\KlasterisasiService.
 
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException
+import os
+import secrets
+
+from fastapi import Depends, FastAPI, Header, HTTPException
 
 from pipeline import jalankan_klasterisasi
 from schemas import PermintaanKlasterisasi, TanggapanKlasterisasi
@@ -26,6 +29,24 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Kunci API bersama (shared secret) antara Laravel dan service ini.
+# Diambil dari environment; bila KOSONG, autentikasi dinonaktifkan
+# (mode pengembangan lokal). Di server WAJIB diisi.
+KUNCI_API = os.getenv("ML_API_KEY", "").strip()
+
+
+def verifikasi_kunci(x_api_key: str | None = Header(default=None)) -> None:
+    """
+    Dependency FastAPI: verifikasi header `X-API-Key` terhadap ML_API_KEY.
+
+    - Bila ML_API_KEY tidak diset (lokal), pemeriksaan dilewati.
+    - Perbandingan memakai compare_digest agar aman dari timing attack.
+    """
+    if not KUNCI_API:
+        return
+    if not x_api_key or not secrets.compare_digest(x_api_key, KUNCI_API):
+        raise HTTPException(status_code=401, detail="Kunci API tidak valid.")
+
 
 @app.get("/sehat")
 def sehat() -> dict:
@@ -33,7 +54,11 @@ def sehat() -> dict:
     return {"status": "ok", "service": "klasterisasi-kmeans"}
 
 
-@app.post("/klasterisasi", response_model=TanggapanKlasterisasi)
+@app.post(
+    "/klasterisasi",
+    response_model=TanggapanKlasterisasi,
+    dependencies=[Depends(verifikasi_kunci)],
+)
 def klasterisasi(permintaan: PermintaanKlasterisasi) -> dict:
     """
     Jalankan pipeline klasterisasi atas data mahasiswa yang dikirim Laravel.
