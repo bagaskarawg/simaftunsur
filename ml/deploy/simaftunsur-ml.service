@@ -1,10 +1,17 @@
-# Unit systemd untuk service klasterisasi K-Means SIMAFTUNSUR.
+# Unit systemd untuk service klasterisasi K-Means SIMAFTUNSUR (Laravel Forge).
 # Salin ke: /etc/systemd/system/simaftunsur-ml.service
-# Lalu: sudo systemctl daemon-reload && sudo systemctl enable --now simaftunsur-ml
+# Lalu   : sudo systemctl daemon-reload && sudo systemctl enable --now simaftunsur-ml
 #
-# Menjalankan uvicorn HANYA di localhost (127.0.0.1:8001); akses publik
-# ditangani nginx + TLS (lihat nginx-ml.conf). Kunci API dibaca dari
-# /etc/simaftunsur-ml.env (file terpisah, mode 600).
+# Struktur Forge zero-downtime:
+#   /home/forge/k-means-service.bahas.tech/
+#   ├── current -> releases/<x>     (WorkingDirectory; berganti tiap deploy)
+#   ├── releases/
+#   └── shared/                     (persisten lintas rilis)
+#       ├── ml-venv/                (virtualenv Python — TIDAK ikut terhapus)
+#       └── ml.env                  (ML_API_KEY)
+#
+# uvicorn hanya dengar di 127.0.0.1:8001; akses publik + TLS ditangani nginx
+# (dikelola Forge). Service di-restart otomatis oleh deploy script Forge.
 
 [Unit]
 Description=SIMAFTUNSUR - Service Klasterisasi K-Means (FastAPI/uvicorn)
@@ -12,19 +19,17 @@ After=network.target
 
 [Service]
 Type=simple
-User=simaftunsur
-Group=simaftunsur
-WorkingDirectory=/opt/simaftunsur-ml
-EnvironmentFile=/etc/simaftunsur-ml.env
-ExecStart=/opt/simaftunsur-ml/.venv/bin/uvicorn api:app --host 127.0.0.1 --port 8001 --workers 2
+User=forge
+Group=forge
+WorkingDirectory=/home/forge/k-means-service.bahas.tech/current/ml
+EnvironmentFile=/home/forge/k-means-service.bahas.tech/shared/ml.env
+ExecStart=/home/forge/k-means-service.bahas.tech/shared/ml-venv/bin/uvicorn api:app --host 127.0.0.1 --port 8001 --workers 2
 Restart=on-failure
 RestartSec=3
 
-# Pengerasan dasar
+# Pengerasan dasar (ProtectHome TIDAK dipakai karena app berada di /home/forge)
 NoNewPrivileges=true
 PrivateTmp=true
-ProtectSystem=full
-ProtectHome=true
 
 [Install]
 WantedBy=multi-user.target

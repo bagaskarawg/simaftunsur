@@ -1,112 +1,109 @@
-# Deploy Service Klasterisasi ke VPS (DigitalOcean)
+# Deploy Service Klasterisasi — Laravel Forge (zero-downtime)
 
-Panduan menempatkan service Python (`ml/`) di VPS terpisah, diakses oleh
-aplikasi Laravel (di cPanel) via HTTPS. Shared hosting tidak cocok untuk
-proses Python persisten, sehingga service ini berdiri sendiri.
+Service Python (`ml/`) berjalan di VPS yang dikelola **Laravel Forge**, di site
+`k-means-service.bahas.tech`, dan dipanggil aplikasi Laravel (cPanel) via HTTPS.
 
 ```
-Laravel (cPanel, https)  ──HTTPS──▶  https://ml.domainmu  ──▶  uvicorn 127.0.0.1:8001
-      KlasterisasiService              nginx + TLS (VPS)          systemd: simaftunsur-ml
-      kirim header X-API-Key
+Laravel (cPanel, https) ──X-API-Key──▶ https://k-means-service.bahas.tech ──▶ uvicorn 127.0.0.1:8001
+   KlasterisasiService              nginx + TLS (Forge)         systemd: simaftunsur-ml
 ```
 
-Arsitektur: uvicorn hanya dengar di `127.0.0.1`; nginx yang menghadap publik
-dengan TLS; autentikasi via shared secret `X-API-Key`.
+Struktur direktori Forge (zero-downtime):
+```
+/home/forge/k-means-service.bahas.tech/
+├── current -> releases/<x>        # berganti tiap deploy
+├── releases/
+└── shared/                        # PERSISTEN lintas rilis
+    ├── ml-venv/                    # virtualenv Python
+    └── ml.env                     # ML_API_KEY
+```
+
+Prinsip: kode ikut rilis (`current/ml`), tapi **venv & kunci di `shared/`** agar
+tidak hilang tiap deploy.
 
 ---
 
-## 0. Prasyarat
-- Droplet DigitalOcean (Ubuntu 22.04/24.04 LTS), akses `root`/sudo.
-- Subdomain, mis. `ml.domainmu`, dengan **A record → IP droplet** (atur di DNS).
-- Firewall DO/ufw mengizinkan port 80 & 443 (JANGAN buka 8001 ke publik).
+## 1. Site di Forge
+- Buat/siapkan site **k-means-service.bahas.tech**, aktifkan **Zero Downtime
+  Deployment** (menghasilkan `current`+`releases`+`shared`).
+- Hubungkan ke repo git yang sama (branch `main`). `ml/` adalah subfolder repo,
+  sehingga kode service berada di `current/ml`.
+- Pastikan DNS A record `k-means-service.bahas.tech` → IP server (biasanya sudah,
+  karena Forge yang mengelola).
 
-## 1. Paket dasar
+## 2. Prasyarat sistem (sekali, via SSH sebagai forge)
 ```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y python3-venv python3-pip nginx
-# firewall (opsional tapi disarankan)
-sudo ufw allow OpenSSH && sudo ufw allow 'Nginx Full' && sudo ufw enable
+sudo apt update && sudo apt install -y python3-venv python3-pip
 ```
+(nginx sudah dipasang Forge.)
 
-## 2. User khusus + kode service
+## 3. Kunci API (shared secret) — di shared/
 ```bash
-sudo useradd -r -m -d /opt/simaftunsur-ml -s /usr/sbin/nologin simaftunsur
-```
-Salin isi folder `ml/` proyek ke `/opt/simaftunsur-ml/` (via `git clone`
-lalu copy subfolder `ml/`, atau `scp`). Yang WAJIB ada: `api.py`, `schemas.py`,
-`requirements.txt`, dan folder `pipeline/`. `.venv/`, `tests/`, cache TIDAK perlu.
-
-```bash
-# contoh via git (repo publik/privat dengan akses):
-sudo -u simaftunsur git clone <URL_REPO> /tmp/simaftunsur-src
-sudo -u simaftunsur cp -r /tmp/simaftunsur-src/ml/. /opt/simaftunsur-ml/
-sudo rm -rf /tmp/simaftunsur-src
-```
-
-## 3. Virtualenv + dependensi
-```bash
-cd /opt/simaftunsur-ml
-sudo -u simaftunsur python3 -m venv .venv
-sudo -u simaftunsur .venv/bin/pip install --upgrade pip
-sudo -u simaftunsur .venv/bin/pip install -r requirements.txt
-```
-
-## 4. Kunci API (shared secret)
-```bash
-openssl rand -hex 32          # SALIN hasilnya
-sudo cp /opt/simaftunsur-ml/deploy/simaftunsur-ml.env.example /etc/simaftunsur-ml.env
-sudo nano /etc/simaftunsur-ml.env    # isi ML_API_KEY dengan hasil di atas
-sudo chown root:simaftunsur /etc/simaftunsur-ml.env
-sudo chmod 640 /etc/simaftunsur-ml.env
+openssl rand -hex 32                      # SALIN hasilnya
+SITE=/home/forge/k-means-service.bahas.tech
+cp "$SITE/current/ml/deploy/simaftunsur-ml.env.example" "$SITE/shared/ml.env"
+nano "$SITE/shared/ml.env"                 # isi ML_API_KEY = hasil di atas
+chmod 600 "$SITE/shared/ml.env"
 ```
 > Kunci yang sama nanti dipasang di `.env` Laravel (cPanel) sebagai `ML_API_KEY`.
 
-## 5. Jalankan sebagai service (systemd)
+## 4. systemd service
 ```bash
-sudo cp /opt/simaftunsur-ml/deploy/simaftunsur-ml.service /etc/systemd/system/
+SITE=/home/forge/k-means-service.bahas.tech
+sudo cp "$SITE/current/ml/deploy/simaftunsur-ml.service" /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now simaftunsur-ml
-sudo systemctl status simaftunsur-ml         # harus "active (running)"
-curl -s http://127.0.0.1:8001/sehat          # {"status":"ok",...}
+sudo systemctl enable simaftunsur-ml
+# venv belum ada sebelum deploy pertama; deploy script (langkah 5) yang membuatnya.
 ```
 
-## 6. nginx + HTTPS
+## 5. Deploy Script Forge
+Buka **Forge → site → Deploy Script**. Hapus baris composer/artisan bawaan
+(site ini bukan app Laravel), sisakan bagian git pull Forge, lalu tempel isi
+`ml/deploy/forge-deploy-script.sh` di bawahnya. Inti yang dijalankan tiap deploy:
 ```bash
-sudo cp /opt/simaftunsur-ml/deploy/nginx-ml.conf /etc/nginx/sites-available/ml.domainmu
-sudo sed -i 's/ml.domainmu/ml.DOMAIN_ASLIMU/g' /etc/nginx/sites-available/ml.domainmu
-sudo ln -s /etc/nginx/sites-available/ml.domainmu /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
-
-# TLS Let's Encrypt
-sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d ml.DOMAIN_ASLIMU
+SITE=/home/forge/k-means-service.bahas.tech
+VENV="$SITE/shared/ml-venv"
+[ -d "$VENV" ] || python3 -m venv "$VENV"
+"$VENV/bin/pip" install -q --upgrade pip
+"$VENV/bin/pip" install -q -r "$SITE/current/ml/requirements.txt"
+sudo systemctl restart simaftunsur-ml
 ```
-Uji dari luar (harus 401 tanpa kunci — artinya auth aktif):
+Klik **Deploy Now**. Setelah selesai, cek:
 ```bash
-curl -s https://ml.DOMAIN_ASLIMU/sehat                       # 200 ok (sehat terbuka)
-curl -s -X POST https://ml.DOMAIN_ASLIMU/klasterisasi        # 401 kunci tidak valid
+sudo systemctl status simaftunsur-ml       # active (running)
+curl -s http://127.0.0.1:8001/sehat        # {"status":"ok",...}
+```
+
+## 6. nginx + SSL (via UI Forge)
+- **Forge → site → Edit Nginx Configuration**: ganti isi blok `location / { … }`
+  bawaan dengan blok proxy di `ml/deploy/nginx-ml.conf`. Simpan (Forge auto
+  `nginx -t` + reload).
+- **Forge → site → SSL → Let's Encrypt**: terbitkan sertifikat.
+
+Uji dari luar:
+```bash
+curl -s https://k-means-service.bahas.tech/sehat            # 200 ok
+curl -s -X POST https://k-means-service.bahas.tech/klasterisasi   # 401 (auth aktif)
 ```
 
 ## 7. Sisi Laravel (cPanel `.env`)
-Tambahkan/ubah:
 ```
-ML_BASE_URL=https://ml.DOMAIN_ASLIMU
-ML_API_KEY=<kunci_hex_yang_sama_dengan_langkah_4>
+ML_BASE_URL=https://k-means-service.bahas.tech
+ML_API_KEY=<kunci_hex_yang_sama_dengan_langkah_3>
 ML_TIMEOUT=120
 ```
-Lalu bersihkan cache config (via file: hapus `bootstrap/cache/config.php`, atau
-jalankan `optimize:clear` bila memungkinkan). Buka halaman Klasterisasi →
-tombol Jalankan. Bila service sehat, klaster akan terisi.
+Bersihkan cache config (hapus `bootstrap/cache/config.php` atau `optimize:clear`),
+lalu buka halaman Klasterisasi → Jalankan.
 
-## 8. Update service saat kode berubah
-```bash
-# salin ulang isi ml/ ke /opt/simaftunsur-ml, lalu:
-cd /opt/simaftunsur-ml && sudo -u simaftunsur .venv/bin/pip install -r requirements.txt
-sudo systemctl restart simaftunsur-ml
-```
+## Update berikutnya
+Cukup **Deploy Now** di Forge — deploy script otomatis pip install + restart.
+Ubah versi Python? Perbaiki di server lalu hapus `shared/ml-venv` agar dibuat ulang.
 
 ## Troubleshooting
 - `journalctl -u simaftunsur-ml -n 50` — log service.
-- 502 dari nginx → uvicorn mati; cek `systemctl status simaftunsur-ml`.
-- 401 saat Laravel memanggil → `ML_API_KEY` beda antara VPS dan cPanel.
-- Timeout → naikkan `ML_TIMEOUT` (Laravel) dan `proxy_read_timeout` (nginx).
+- 502 dari nginx → uvicorn mati; `systemctl status simaftunsur-ml`.
+- 401 saat Laravel memanggil → `ML_API_KEY` beda antara `shared/ml.env` (VPS)
+  dan `.env` (cPanel).
+- `sudo` minta password di deploy script → user forge belum passwordless sudo;
+  tambah entri sudoers: `forge ALL=(ALL) NOPASSWD: /bin/systemctl restart simaftunsur-ml`.
+- Python 3.12 disarankan (wheel scikit-learn paling stabil). Cek `python3 --version`.
