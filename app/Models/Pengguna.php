@@ -88,6 +88,13 @@ class Pengguna extends Authenticatable
      */
     public function labelPeran(): string
     {
+        // Utamakan nama peran dari DB (dapat diubah admin); fallback ke label
+        // bawaan bila peran belum ada di tabel (mis. sebelum seeding).
+        $nama = Peran::query()->where('kode', $this->peran)->value('nama');
+        if ($nama) {
+            return $nama;
+        }
+
         return match ($this->peran) {
             'admin'      => 'Administrator',
             'wd3'        => 'Wakil Dekan III',
@@ -161,6 +168,13 @@ class Pengguna extends Authenticatable
      */
     protected function daftarIzinPeran(): array
     {
+        // Sumber utama: peta peran→izin dari DB (dikelola admin lewat UI).
+        $petaDb = Peran::petaIzin();
+        if (array_key_exists($this->peran, $petaDb)) {
+            return array_values($petaDb[$this->peran]);
+        }
+
+        // Fallback: config/peran.php (mis. saat DB belum di-seed).
         $peta = (array) Config::get('peran.peta', []);
 
         return array_values((array) ($peta[$this->peran] ?? []));

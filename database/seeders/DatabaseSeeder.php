@@ -34,6 +34,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Peran & penugasan izin (RBAC di DB) — sebelum pengguna agar peran ada.
+        $this->call(PeranSeeder::class);
+
         $this->seedPengguna();
         $prodi = $this->seedProgramStudi();
 
