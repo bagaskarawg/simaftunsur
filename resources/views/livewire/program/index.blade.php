@@ -492,6 +492,11 @@ class extends Component {
                                                     @if ($c->kategori() === 'administratif')<option value="{{ $c->value }}">{{ $c->label() }}</option>@endif
                                                 @endforeach
                                             </optgroup>
+                                            <optgroup label="Ekonomi">
+                                                @foreach (\App\Enums\BidangKriteria::cases() as $c)
+                                                    @if ($c->kategori() === 'ekonomi')<option value="{{ $c->value }}">{{ $c->label() }}</option>@endif
+                                                @endforeach
+                                            </optgroup>
                                             <optgroup label="Klasterisasi">
                                                 @foreach (\App\Enums\BidangKriteria::cases() as $c)
                                                     @if ($c->kategori() === 'klasterisasi')<option value="{{ $c->value }}">{{ $c->label() }}</option>@endif

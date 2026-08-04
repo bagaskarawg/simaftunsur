@@ -33,6 +33,11 @@ enum BidangKriteria: string
     case Angkatan = 'angkatan';
     case SemesterAktif = 'semester_aktif';
 
+    // Ekonomi/orang tua (kolom langsung pada tabel mahasiswa) — untuk
+    // penyaringan beasiswa dsb. BUKAN fitur klasterisasi.
+    case KategoriEkonomi = 'kategori_ekonomi';
+    case PenghasilanOrangTua = 'penghasilan_orang_tua';
+
     // Hasil klasterisasi (label klaster dari eksekusi K-Means terbaru).
     case LabelKlaster = 'label_klaster';
 
@@ -52,6 +57,8 @@ enum BidangKriteria: string
             self::ProgramStudi => 'Program studi',
             self::Angkatan => 'Angkatan',
             self::SemesterAktif => 'Semester aktif',
+            self::KategoriEkonomi => 'Kategori ekonomi',
+            self::PenghasilanOrangTua => 'Penghasilan orang tua (Rp/bulan)',
             self::LabelKlaster => 'Label klaster (K-Means)',
         };
     }
@@ -63,6 +70,7 @@ enum BidangKriteria: string
             self::IpkRataRata, self::IpkTerakhir, self::Tren, self::Konsistensi => 'akademik',
             self::SkorPrestasi, self::SkorKegiatan, self::SkorPengabdian, self::JumlahPrestasiMinTingkat => 'non_akademik',
             self::Status, self::ProgramStudi, self::Angkatan, self::SemesterAktif => 'administratif',
+            self::KategoriEkonomi, self::PenghasilanOrangTua => 'ekonomi',
             self::LabelKlaster => 'klasterisasi',
         };
     }
@@ -76,8 +84,8 @@ enum BidangKriteria: string
         return match ($this) {
             self::IpkRataRata, self::IpkTerakhir, self::Tren, self::Konsistensi => 'desimal',
             self::SkorPrestasi, self::SkorKegiatan, self::SkorPengabdian,
-            self::Angkatan, self::SemesterAktif => 'bilangan',
-            self::Status, self::ProgramStudi, self::LabelKlaster => 'pilihan',
+            self::Angkatan, self::SemesterAktif, self::PenghasilanOrangTua => 'bilangan',
+            self::Status, self::ProgramStudi, self::LabelKlaster, self::KategoriEkonomi => 'pilihan',
             self::JumlahPrestasiMinTingkat => 'khusus',
         };
     }
@@ -111,7 +119,8 @@ enum BidangKriteria: string
     public function bisaQuery(): bool
     {
         return match ($this) {
-            self::Status, self::Angkatan, self::SemesterAktif, self::ProgramStudi => true,
+            self::Status, self::Angkatan, self::SemesterAktif, self::ProgramStudi,
+            self::KategoriEkonomi, self::PenghasilanOrangTua => true,
             default => false,
         };
     }
@@ -132,6 +141,11 @@ enum BidangKriteria: string
                 'non_aktif' => 'Non-aktif',
                 'lulus' => 'Lulus',
                 'do' => 'DO',
+            ],
+            self::KategoriEkonomi => [
+                'rendah' => 'Rendah',
+                'menengah' => 'Menengah',
+                'tinggi' => 'Tinggi',
             ],
             default => null,
         };

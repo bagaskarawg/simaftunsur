@@ -58,5 +58,26 @@ class ProgramSeeder extends Seeder
             // Kriteria opsional (tidak memengaruhi kelayakan) — hanya informatif.
             ['bidang' => 'label_klaster', 'operator' => 'eq', 'nilai' => 'Berprestasi', 'wajib' => false, 'label' => 'Label klaster (K-Means) = Berprestasi'],
         ]);
+
+        // 3) Beasiswa berbasis ekonomi: IPK cukup + ekonomi bawah/menengah.
+        $beasiswaEkonomi = Program::create([
+            'nama' => 'Beasiswa Bantuan Ekonomi 2026',
+            'jenis' => 'beasiswa',
+            'deskripsi' => 'Bantuan bagi mahasiswa aktif berekonomi rendah/menengah dengan IPK memadai.',
+            'penyelenggara' => 'Fakultas Teknik UNSUR',
+            'kuota' => 30,
+            'aktif' => true,
+        ]);
+        $beasiswaEkonomi->syarat()->createMany([
+            ['bidang' => 'status', 'operator' => 'eq', 'nilai' => 'aktif', 'wajib' => true, 'label' => 'Status mahasiswa = Aktif'],
+            ['bidang' => 'ipk_rata_rata', 'operator' => 'gte', 'nilai' => '3.00', 'wajib' => true, 'label' => 'IPK rata-rata ≥ 3,00'],
+            [
+                'bidang' => 'kategori_ekonomi',
+                'operator' => 'in',
+                'nilai' => json_encode(['rendah', 'menengah']),
+                'wajib' => true,
+                'label' => 'Kategori ekonomi: Rendah atau Menengah',
+            ],
+        ]);
     }
 }

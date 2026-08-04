@@ -184,6 +184,8 @@ class EvaluatorKelayakan
             BidangKriteria::ProgramStudi => $mahasiswa->programStudi?->kode,
             BidangKriteria::Angkatan => $mahasiswa->angkatan,
             BidangKriteria::SemesterAktif => $mahasiswa->semester_aktif,
+            BidangKriteria::KategoriEkonomi => $mahasiswa->kategori_ekonomi,
+            BidangKriteria::PenghasilanOrangTua => $mahasiswa->penghasilan_orang_tua,
             BidangKriteria::LabelKlaster => $this->labelKlaster($mahasiswa->id),
             default => null,
         };
@@ -220,6 +222,8 @@ class EvaluatorKelayakan
             BidangKriteria::Status => 'status',
             BidangKriteria::Angkatan => 'angkatan',
             BidangKriteria::SemesterAktif => 'semester_aktif',
+            BidangKriteria::KategoriEkonomi => 'kategori_ekonomi',
+            BidangKriteria::PenghasilanOrangTua => 'penghasilan_orang_tua',
             default => null,
         };
         if ($kolom === null) {

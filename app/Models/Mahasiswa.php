@@ -30,6 +30,9 @@ class Mahasiswa extends Model
         'status_akhir',
         'email',
         'nomor_telepon',
+        'penghasilan_orang_tua',
+        'kategori_ekonomi',
+        'pekerjaan_orang_tua',
     ];
 
     protected function casts(): array
@@ -37,6 +40,7 @@ class Mahasiswa extends Model
         return [
             'angkatan' => 'integer',
             'semester_aktif' => 'integer',
+            'penghasilan_orang_tua' => 'integer',
         ];
     }
 

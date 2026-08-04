@@ -25,6 +25,9 @@ class extends Component {
     public ?string $status_akhir = null;
     public ?string $email = null;
     public ?string $nomor_telepon = null;
+    public ?int $penghasilan_orang_tua = null;
+    public ?string $kategori_ekonomi = null;
+    public ?string $pekerjaan_orang_tua = null;
 
     public function mount(Mahasiswa $mahasiswa): void
     {
@@ -35,6 +38,7 @@ class extends Component {
             'npm', 'nama', 'program_studi_id', 'angkatan',
             'semester_aktif', 'jenis_kelamin', 'status', 'status_akhir',
             'email', 'nomor_telepon',
+            'penghasilan_orang_tua', 'kategori_ekonomi', 'pekerjaan_orang_tua',
         ]));
     }
 
@@ -59,6 +63,9 @@ class extends Component {
             'status_akhir'     => ['nullable', Rule::in(['lulus_tepat', 'lulus_terlambat', 'do'])],
             'email'            => ['nullable', 'email', 'max:160'],
             'nomor_telepon'    => ['nullable', 'string', 'max:20'],
+            'penghasilan_orang_tua' => ['nullable', 'integer', 'min:0', 'max:1000000000'],
+            'kategori_ekonomi'      => ['nullable', Rule::in(['rendah', 'menengah', 'tinggi'])],
+            'pekerjaan_orang_tua'   => ['nullable', 'string', 'max:120'],
         ];
     }
 
@@ -204,6 +211,36 @@ class extends Component {
                         <input wire:model="nomor_telepon" id="telepon" type="tel"
                                class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm tabular-nums text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                         @error('nomor_telepon') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </x-card>
+
+            <x-card title="Ekonomi / Orang Tua" subtitle="Opsional — untuk penyaringan (mis. beasiswa)">
+                <div class="space-y-4">
+                    <div>
+                        <label for="kategori_ekonomi" class="block text-sm font-medium text-slate-700 mb-1.5">Kategori Ekonomi</label>
+                        <select wire:model="kategori_ekonomi" id="kategori_ekonomi"
+                                class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                            <option value="">— Belum ditentukan —</option>
+                            <option value="rendah">Rendah</option>
+                            <option value="menengah">Menengah</option>
+                            <option value="tinggi">Tinggi</option>
+                        </select>
+                        @error('kategori_ekonomi') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="penghasilan" class="block text-sm font-medium text-slate-700 mb-1.5">Penghasilan Orang Tua <span class="text-slate-400">(Rp/bulan)</span></label>
+                        <input wire:model="penghasilan_orang_tua" id="penghasilan" type="number" min="0" step="100000"
+                               placeholder="mis. 2500000"
+                               class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm tabular-nums text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
+                        @error('penghasilan_orang_tua') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="pekerjaan" class="block text-sm font-medium text-slate-700 mb-1.5">Pekerjaan Orang Tua</label>
+                        <input wire:model="pekerjaan_orang_tua" id="pekerjaan" type="text" maxlength="120"
+                               placeholder="mis. Petani, Wiraswasta"
+                               class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
+                        @error('pekerjaan_orang_tua') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </x-card>

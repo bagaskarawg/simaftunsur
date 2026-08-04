@@ -40,6 +40,7 @@ class ProfilKlasterDemoSeeder extends Seeder
 
     public function run(): void
     {
+        $this->seedEkonomi();
         $this->seedIpk();
 
         // Non-akademik: hanya sekali (guard) agar tidak menggandakan saat re-seed.
@@ -78,6 +79,36 @@ class ProfilKlasterDemoSeeder extends Seeder
         };
 
         return ['akademik' => $aka, 'nonakademik' => $non];
+    }
+
+    /* ===================== BLOK EKONOMI (profil) ===================== */
+
+    /**
+     * Isi profil ekonomi/orang tua DEMO untuk seluruh mahasiswa (deterministik
+     * per id). Dipakai kriteria Penyaringan Kandidat (mis. beasiswa). Hanya
+     * mengisi baris yang masih NULL agar aman di-seed ulang & tak menimpa input
+     * manual. ~40% rendah, ~40% menengah, ~20% tinggi.
+     */
+    private function seedEkonomi(): void
+    {
+        $jumlah = DB::update(<<<'SQL'
+            UPDATE mahasiswa SET
+              kategori_ekonomi = CASE
+                  WHEN MOD(id,10) < 4 THEN 'rendah'
+                  WHEN MOD(id,10) < 8 THEN 'menengah'
+                  ELSE 'tinggi' END,
+              penghasilan_orang_tua = CASE
+                  WHEN MOD(id,10) < 4 THEN 1000000 + MOD(id,16) * 100000
+                  WHEN MOD(id,10) < 8 THEN 3000000 + MOD(id,21) * 100000
+                  ELSE 7000000 + MOD(id,26) * 200000 END,
+              pekerjaan_orang_tua = CASE
+                  WHEN MOD(id,10) < 4 THEN 'Buruh/Petani'
+                  WHEN MOD(id,10) < 8 THEN 'Wiraswasta'
+                  ELSE 'PNS/Profesional' END
+            WHERE kategori_ekonomi IS NULL
+        SQL);
+
+        $this->command?->info("Profil ekonomi demo: {$jumlah} mahasiswa diisi.");
     }
 
     /* ===================== BLOK AKADEMIK (F1–F4) ===================== */
