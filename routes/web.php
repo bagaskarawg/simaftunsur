@@ -71,6 +71,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/template', [TemplatePenggunaController::class, 'unduh'])->name('template');
     });
 
+    // Peran & Hak Akses (RBAC) — khusus Administrator.
+    Route::prefix('peran')->name('peran.')->middleware('peran:admin')->group(function () {
+        Volt::route('/', 'peran.index')->name('index');
+    });
+
     // Pengaturan Sistem — konfigurasi ringan, khusus Administrator.
     Route::prefix('pengaturan')->name('pengaturan.')->middleware('peran:admin')->group(function () {
         Volt::route('/', 'pengaturan.index')->name('index');
