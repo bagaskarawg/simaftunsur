@@ -14,44 +14,41 @@ beforeEach(function () {
     $this->seed();
 });
 
-it('mengisi 4 prodi & 30 mahasiswa aktif dengan 3–6 catatan IPK per mahasiswa', function () {
+it('mengisi 4 prodi & roster mahasiswa aktif dengan >= 3 catatan IPK per mahasiswa layak', function () {
     expect(ProgramStudi::count())->toBe(4);
 
-    // Kohort klasterisasi: 30 mahasiswa aktif, masing-masing punya catatan IPK.
-    $aktif = Mahasiswa::where('status', 'aktif')->withCount('nilaiIpkSemester')->get();
-    expect($aktif)->toHaveCount(30);
+    // Roster nyata dari berkas PMB: jumlah mahasiswa aktif melebihi ambang
+    // minimum klasterisasi (100).
+    expect(Mahasiswa::where('status', 'aktif')->count())->toBeGreaterThan(100);
 
-    // Seeder memberi tiap mahasiswa aktif min(semester_aktif, 4..6) catatan,
-    // dengan semester_aktif 3..7 → 3–6 catatan IPK.
-    $aktif->each(function ($mahasiswa) {
-        expect($mahasiswa->nilai_ipk_semester_count)
-            ->toBeGreaterThanOrEqual(3)
-            ->toBeLessThanOrEqual(6);
-    });
+    // Tiap mahasiswa aktif yang memiliki IPK punya >= 3 catatan (syarat fitur
+    // tren & konsistensi bermakna).
+    Mahasiswa::where('status', 'aktif')->has('nilaiIpkSemester')
+        ->withCount('nilaiIpkSemester')->get()
+        ->each(fn ($mahasiswa) => expect($mahasiswa->nilai_ipk_semester_count)->toBeGreaterThanOrEqual(3));
 
-    // Total catatan berada pada rentang 30×3 .. 30×6.
-    expect(NilaiIpkSemester::count())
-        ->toBeGreaterThanOrEqual(90)
-        ->toBeLessThanOrEqual(180);
+    expect(NilaiIpkSemester::count())->toBeGreaterThan(1000);
 });
 
-it('mengisi data contoh modul pendukung (alumni, prestasi, tracer, promosi)', function () {
-    // 8 alumni (status lulus) untuk tracer, terpisah dari kohort aktif.
-    expect(Mahasiswa::where('status', 'lulus')->count())->toBe(8)
-        ->and(TracerStudy::count())->toBe(8)
+it('mengisi data contoh modul pendukung (tracer, prestasi, promosi)', function () {
+    // Tracer memakai mahasiswa lulus NYATA (bukan alumni dummy); jumlahnya
+    // mengikuti roster, dibatasi maksimal 8.
+    $jumlahLulus = Mahasiswa::where('status', 'lulus')->count();
+
+    expect(TracerStudy::count())->toBe(min(8, $jumlahLulus))
         ->and(Prestasi::count())->toBeGreaterThan(0)
         ->and(KegiatanPromosi::count())->toBe(10);
 });
 
-it('memastikan tiap prodi terisi minimal 5 mahasiswa', function () {
-    $rekap = ProgramStudi::withCount('mahasiswa')->get();
+it('mengisi roster ketiga prodi Teknik dari berkas PMB', function () {
+    // Berkas PMB memuat Teknik Informatika, Sipil, dan Industri; Teknik Mesin
+    // tidak ada dalam berkas sehingga wajar tanpa mahasiswa.
+    $perKode = ProgramStudi::withCount('mahasiswa')->get()->pluck('mahasiswa_count', 'kode');
 
-    expect($rekap)->toHaveCount(4);
-
-    foreach ($rekap as $prodi) {
-        expect($prodi->mahasiswa_count)
-            ->toBeGreaterThanOrEqual(5, "Prodi {$prodi->kode} hanya punya {$prodi->mahasiswa_count} mahasiswa");
-    }
+    expect($perKode['TIF'])->toBeGreaterThan(0)
+        ->and($perKode['TSI'])->toBeGreaterThan(0)
+        ->and($perKode['TID'])->toBeGreaterThan(0)
+        ->and(Mahasiswa::count())->toBeGreaterThan(1000);
 });
 
 it('menghitung rata-rata IPK konsisten dengan data tersimpan', function () {

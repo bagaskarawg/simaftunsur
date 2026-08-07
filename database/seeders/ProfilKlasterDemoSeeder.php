@@ -91,19 +91,21 @@ class ProfilKlasterDemoSeeder extends Seeder
      */
     private function seedEkonomi(): void
     {
+        // Operator modulo '%' portabel di MySQL maupun SQLite (fungsi MOD()
+        // tidak tersedia di SQLite yang dipakai saat pengujian).
         $jumlah = DB::update(<<<'SQL'
             UPDATE mahasiswa SET
               kategori_ekonomi = CASE
-                  WHEN MOD(id,10) < 4 THEN 'rendah'
-                  WHEN MOD(id,10) < 8 THEN 'menengah'
+                  WHEN (id % 10) < 4 THEN 'rendah'
+                  WHEN (id % 10) < 8 THEN 'menengah'
                   ELSE 'tinggi' END,
               penghasilan_orang_tua = CASE
-                  WHEN MOD(id,10) < 4 THEN 1000000 + MOD(id,16) * 100000
-                  WHEN MOD(id,10) < 8 THEN 3000000 + MOD(id,21) * 100000
-                  ELSE 7000000 + MOD(id,26) * 200000 END,
+                  WHEN (id % 10) < 4 THEN 1000000 + (id % 16) * 100000
+                  WHEN (id % 10) < 8 THEN 3000000 + (id % 21) * 100000
+                  ELSE 7000000 + (id % 26) * 200000 END,
               pekerjaan_orang_tua = CASE
-                  WHEN MOD(id,10) < 4 THEN 'Buruh/Petani'
-                  WHEN MOD(id,10) < 8 THEN 'Wiraswasta'
+                  WHEN (id % 10) < 4 THEN 'Buruh/Petani'
+                  WHEN (id % 10) < 8 THEN 'Wiraswasta'
                   ELSE 'PNS/Profesional' END
             WHERE kategori_ekonomi IS NULL
         SQL);
