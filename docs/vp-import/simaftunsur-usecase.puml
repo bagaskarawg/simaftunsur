@@ -10,175 +10,128 @@
 
 @startuml UC-SIMAFTUNSUR
 skinparam backgroundColor #FFFFFF
-left to right direction
 skinparam actorStyle awesome
+skinparam packageStyle rectangle
+left to right direction
 
-actor "Wakil Dekan III" as wd3
-actor "Staf WD III" as stafwd3
-actor "Ketua Program Studi" as kaprodi
-actor "Staf Prodi" as stafprodi
+' Aktor umum "Pengguna" digeneralisasi oleh 6 peran (mengurangi garis asosiasi
+' untuk use case bersama; generalisasi aktor = notasi UML baku).
+actor "Pengguna" as user
 actor "Administrator" as admin
+actor "Staf WD III" as stafwd3
+actor "Staf Prodi" as stafprodi
+actor "Wakil Dekan III" as wd3
+actor "Ketua Program Studi" as kaprodi
 actor "Wakil Rektor III" as wr3
 
+admin    --|> user
+stafwd3  --|> user
+stafprodi --|> user
+wd3      --|> user
+kaprodi  --|> user
+wr3      --|> user
+
 rectangle SIMAFTUNSUR {
-  ' --- Autentikasi ---
-  usecase "Masuk (Login)" as ucMasuk
-  usecase "Mereset Kata Sandi" as ucReset
-  usecase "Keluar (Logout)" as ucKeluar
-  usecase "Melihat Beranda" as ucBeranda
-  usecase "Mengelola Profil Akun" as ucProfil
-
-  ' --- Data Mahasiswa ---
-  usecase "Melihat Data Mahasiswa" as ucMhsLihat
-  usecase "Mengelola Data Mahasiswa" as ucMhsKelola
-  usecase "Mengimpor Data Mahasiswa (Excel)" as ucMhsImpor
-  usecase "Mengelola Nilai IPK per Semester" as ucIpk
-  usecase "Mengimpor IPK Massal (Excel)" as ucIpkImpor
-  usecase "Mengunduh Template Impor" as ucTemplate
-
-  ' --- Klasterisasi K-Means ---
-  usecase "Melihat Hasil Klasterisasi" as ucKlasterLihat
-  usecase "Melihat Detail Klaster" as ucKlasterDetail
-  usecase "Menjalankan Klasterisasi K-Means" as ucKlasterJalan
-
-  ' --- Modul pendukung ---
-  usecase "Melihat Data Prestasi" as ucPrestasiL
-  usecase "Mengelola Data Prestasi" as ucPrestasiK
-  usecase "Melihat Kegiatan & Organisasi" as ucKegiatanL
-  usecase "Mengelola Kegiatan & Organisasi" as ucKegiatanK
-  usecase "Melihat Pengabdian & Hibah" as ucPengabdianL
-  usecase "Mengelola Pengabdian & Hibah" as ucPengabdianK
-  usecase "Melihat Data Beasiswa" as ucBeasiswaL
-  usecase "Mengelola Data Beasiswa" as ucBeasiswaK
-  usecase "Melihat Data KKN" as ucKknL
-  usecase "Mengelola Data KKN" as ucKknK
-  usecase "Melihat Tracer Study" as ucTracerL
-  usecase "Mengelola Tracer Study" as ucTracerK
-  usecase "Melihat Kegiatan Promosi/PMB" as ucPromosiL
-  usecase "Mengelola Kegiatan Promosi/PMB" as ucPromosiK
-  usecase "Mengelola Sekolah Target" as ucSekolah
-
-  ' --- Penyaringan kandidat (memanfaatkan hasil klasterisasi) ---
-  usecase "Menyaring Kandidat Program\n(Beasiswa / Mawapres)" as ucSaring
-  usecase "Mengelola Program & Syarat" as ucProgram
-
-  ' --- Laporan & administrasi sistem ---
-  usecase "Melihat Laporan Kemahasiswaan" as ucLaporanL
-  usecase "Mengekspor Laporan (CSV/PDF)" as ucLaporanE
-  usecase "Mengelola Pengguna & Peran\n(RBAC)" as ucPengguna
-  usecase "Mengelola Pengaturan Sistem" as ucPengaturan
-  usecase "Mengunduh Backup Data (JSON)" as ucBackup
-  usecase "Melihat Log Aktivitas" as ucLog
+  package "Autentikasi & Akun" {
+    usecase "Masuk (Login)" as ucMasuk
+    usecase "Mereset Kata Sandi" as ucReset
+    usecase "Keluar (Logout)" as ucKeluar
+    usecase "Melihat Beranda" as ucBeranda
+    usecase "Mengelola Profil Akun" as ucProfil
+  }
+  package "Data Mahasiswa" {
+    usecase "Melihat Data Mahasiswa" as ucMhsLihat
+    usecase "Mengelola Data Mahasiswa" as ucMhsKelola
+    usecase "Mengimpor Data Mahasiswa (Excel)" as ucMhsImpor
+    usecase "Mengelola Nilai IPK per Semester" as ucIpk
+    usecase "Mengimpor IPK Massal (Excel)" as ucIpkImpor
+  }
+  package "Klasterisasi K-Means" {
+    usecase "Menjalankan Klasterisasi K-Means" as ucKlasterJalan
+    usecase "Melihat Hasil Klasterisasi" as ucKlasterLihat
+    usecase "Melihat Detail Klaster" as ucKlasterDetail
+  }
+  package "Penilaian Non-Akademik (SKKM)" {
+    usecase "Mengelola Prestasi" as ucPrestasi
+    usecase "Mengelola Kegiatan & Organisasi" as ucKegiatan
+    usecase "Mengelola Pengabdian & Hibah" as ucPengabdian
+  }
+  package "Penyaringan & Laporan" {
+    usecase "Menyaring Kandidat Program (Beasiswa / Mawapres)" as ucSaring
+    usecase "Mengelola Program & Syarat" as ucProgram
+    usecase "Melihat Laporan Kemahasiswaan" as ucLaporanL
+    usecase "Mengekspor Laporan (CSV/PDF)" as ucLaporanE
+  }
+  package "Modul Pendukung (CRUD)" {
+    usecase "Mengelola Beasiswa" as ucBeasiswa
+    usecase "Mengelola KKN" as ucKkn
+    usecase "Mengelola Tracer Study" as ucTracer
+    usecase "Mengelola Promosi / PMB" as ucPromosi
+  }
+  package "Administrasi Sistem" {
+    usecase "Mengelola Pengguna & Peran (RBAC)" as ucPengguna
+    usecase "Mengelola Pengaturan Sistem" as ucPengaturan
+    usecase "Melihat Log Aktivitas" as ucLog
+  }
 }
+
+' --- Use case bersama via aktor umum (hemat garis) ---
+user -- ucMasuk
+user -- ucKeluar
+user -- ucBeranda
+user -- ucProfil
 
 ' --- Relasi extend / include ---
 ucReset ..> ucMasuk : <<extend>>
 ucMhsImpor ..> ucMhsKelola : <<extend>>
 ucIpkImpor ..> ucIpk : <<extend>>
-ucMhsImpor ..> ucTemplate : <<include>>
-ucIpkImpor ..> ucTemplate : <<include>>
 ucKlasterDetail ..> ucKlasterLihat : <<extend>>
-ucSekolah ..> ucPromosiK : <<extend>>
 ucLaporanE ..> ucLaporanL : <<extend>>
-ucBackup ..> ucPengaturan : <<extend>>
 ucSaring ..> ucKlasterLihat : <<include>>
-ucProgram ..> ucSaring : <<extend>>
 
-' --- Autentikasi: seluruh aktor ---
-wd3 -- ucMasuk
-wd3 -- ucKeluar
-wd3 -- ucBeranda
-wd3 -- ucProfil
-stafwd3 -- ucMasuk
-stafwd3 -- ucKeluar
-stafwd3 -- ucBeranda
-stafwd3 -- ucProfil
-kaprodi -- ucMasuk
-kaprodi -- ucKeluar
-kaprodi -- ucBeranda
-kaprodi -- ucProfil
-stafprodi -- ucMasuk
-stafprodi -- ucKeluar
-stafprodi -- ucBeranda
-stafprodi -- ucProfil
-admin -- ucMasuk
-admin -- ucKeluar
-admin -- ucBeranda
-admin -- ucProfil
-
-' --- Wakil Dekan III: konsumen utama (read-only) ---
-wd3 -- ucMhsLihat
-wd3 -- ucKlasterLihat
-wd3 -- ucLaporanL
-wd3 -- ucPrestasiL
-wd3 -- ucKegiatanL
-wd3 -- ucPengabdianL
-wd3 -- ucBeasiswaL
-wd3 -- ucKknL
-wd3 -- ucTracerL
-wd3 -- ucPromosiL
-
-' --- Staf WD III: data mahasiswa/IPK + jalankan klasterisasi ---
-stafwd3 -- ucMhsLihat
+' --- Staf WD III: data mahasiswa/IPK + jalankan klasterisasi + penyaringan ---
 stafwd3 -- ucMhsKelola
+stafwd3 -- ucMhsImpor
 stafwd3 -- ucIpk
-stafwd3 -- ucKlasterLihat
 stafwd3 -- ucKlasterJalan
+stafwd3 -- ucKlasterLihat
+stafwd3 -- ucSaring
 
-' --- Kaprodi: monitoring read-only ---
-kaprodi -- ucMhsLihat
-kaprodi -- ucBeasiswaL
-
-' --- Staf Prodi: prestasi & kegiatan ---
+' --- Staf Prodi: penilaian non-akademik ---
 stafprodi -- ucMhsLihat
-stafprodi -- ucPrestasiL
-stafprodi -- ucPrestasiK
-stafprodi -- ucKegiatanL
-stafprodi -- ucKegiatanK
+stafprodi -- ucPrestasi
+stafprodi -- ucKegiatan
+stafprodi -- ucPengabdian
+
+' --- Kaprodi: monitoring (read-only) ---
+kaprodi -- ucMhsLihat
+
+' --- Wakil Dekan III: konsumen hasil + penyaringan + laporan ---
+wd3 -- ucKlasterLihat
+wd3 -- ucSaring
+wd3 -- ucProgram
+wd3 -- ucLaporanL
+wd3 -- ucLaporanE
+
+' --- Wakil Rektor III: laporan tingkat universitas ---
+wr3 -- ucLaporanL
+wr3 -- ucLaporanE
 
 ' --- Administrator: seluruh modul (wildcard) ---
-admin -- ucMhsLihat
 admin -- ucMhsKelola
-admin -- ucIpk
-admin -- ucKlasterLihat
 admin -- ucKlasterJalan
-admin -- ucPrestasiL
-admin -- ucPrestasiK
-admin -- ucKegiatanL
-admin -- ucKegiatanK
-admin -- ucPengabdianL
-admin -- ucPengabdianK
-admin -- ucBeasiswaL
-admin -- ucBeasiswaK
-admin -- ucKknL
-admin -- ucKknK
-admin -- ucTracerL
-admin -- ucTracerK
-admin -- ucPromosiL
-admin -- ucPromosiK
-admin -- ucLaporanL
-admin -- ucLaporanE
+admin -- ucPrestasi
+admin -- ucKegiatan
+admin -- ucPengabdian
 admin -- ucSaring
 admin -- ucProgram
+admin -- ucBeasiswa
+admin -- ucKkn
+admin -- ucTracer
+admin -- ucPromosi
 admin -- ucPengguna
 admin -- ucPengaturan
 admin -- ucLog
-
-' --- Wakil Dekan III: penyaringan kandidat + ekspor laporan ---
-wd3 -- ucSaring
-wd3 -- ucProgram
-wd3 -- ucLaporanE
-
-' --- Staf WD III: penyaringan kandidat ---
-stafwd3 -- ucSaring
-
-' --- Wakil Rektor III: laporan tingkat universitas ---
-wr3 -- ucMasuk
-wr3 -- ucKeluar
-wr3 -- ucBeranda
-wr3 -- ucProfil
-wr3 -- ucLaporanL
-wr3 -- ucLaporanE
 @enduml
 
 ' Versi ringkas khusus modul fokus penelitian — lebih mudah dibaca di naskah.
