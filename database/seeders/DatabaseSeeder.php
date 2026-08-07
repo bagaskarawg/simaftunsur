@@ -18,6 +18,7 @@ use App\Models\Prestasi;
 use App\Models\ProgramStudi;
 use App\Models\TracerStudy;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -43,6 +44,10 @@ class DatabaseSeeder extends Seeder
         // Roster mahasiswa Teknik NYATA (1.225 mhs) dari ekstraksi berkas PMB
         // 2019–2023. Ini satu-satunya sumber mahasiswa (tanpa data dummy).
         $this->call(MahasiswaTeknikSeeder::class);
+
+        // Ragamkan status studi (demo) agar cuti/lulus/do tampil jelas untuk
+        // modul manajemen status mahasiswa.
+        $this->seedStatusDemo();
 
         // Profil klasterisasi DEMO/SIMULASI (berkas PMB tak memuat IPK/SKKM):
         // IPK per semester (F1–F4) + catatan prestasi/kegiatan/pengabdian
@@ -159,6 +164,20 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
+     * Ragamkan status studi (DEMO) agar tiap status — cuti, lulus, do —
+     * terwakili jelas untuk mendemokan modul manajemen status, karena roster
+     * nyata hanya memuat sedikit contoh non-aktif. Deterministik berdasarkan id
+     * (operator % portabel MySQL/SQLite) sehingga idempoten. Hanya menyentuh
+     * sebagian mahasiswa yang MASIH 'aktif'; status nyata lain tidak diubah.
+     */
+    protected function seedStatusDemo(): void
+    {
+        DB::table('mahasiswa')->where('status', 'aktif')->whereRaw('id % 60 = 7')->update(['status' => 'lulus']);
+        DB::table('mahasiswa')->where('status', 'aktif')->whereRaw('id % 60 = 17')->update(['status' => 'cuti']);
+        DB::table('mahasiswa')->where('status', 'aktif')->whereRaw('id % 90 = 23')->update(['status' => 'do']);
+    }
+
+    /**
      * Data contoh prestasi (1-2 per ~15 mahasiswa terpilih).
      * SIMULASI untuk keperluan demo — bukan data riil.
      */
@@ -243,13 +262,44 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
-        // Penerima untuk 10 mahasiswa aktif terpilih.
-        $terpilih = Mahasiswa::query()->where('status', 'aktif')->inRandomOrder()->take(10)->get();
+        // Kasuistik: kandidat diambil dari mahasiswa yang MEMENUHI kriteria
+        // beasiswa ekonomi (aktif + ekonomi rendah/menengah + IPK ≥ 3,0),
+        // sehingga data "calon penerima" dan "penerima" koheren dengan syarat.
+        $kandidat = Mahasiswa::query()
+            ->where('status', 'aktif')
+            ->whereIn('kategori_ekonomi', ['rendah', 'menengah'])
+            ->has('nilaiIpkSemester', '>=', 3)
+            ->with('nilaiIpkSemester')
+            ->get()
+            ->filter(fn (Mahasiswa $m) => $m->ipkRataRata() >= 3.0)
+            ->values();
 
-        foreach ($terpilih as $i => $mahasiswa) {
-            BeasiswaPenerima::factory()->create([
+        // Rencana status membentuk dua kelompok kasus yang diminta:
+        //   - "calon penerima"  → status diusulkan/diverifikasi
+        //   - "penerima"        → status ditetapkan/selesai (ber-SK & nominal)
+        //   - pelengkap siklus  → ditolak
+        $rencana = array_merge(
+            array_fill(0, 15, 'diusulkan'),
+            array_fill(0, 4, 'diverifikasi'),
+            array_fill(0, 10, 'ditetapkan'),
+            array_fill(0, 5, 'selesai'),
+            array_fill(0, 3, 'ditolak'),
+        );
+
+        foreach ($kandidat->take(count($rencana)) as $i => $mahasiswa) {
+            $status = $rencana[$i];
+            $berSk = in_array($status, ['ditetapkan', 'selesai'], true);
+
+            BeasiswaPenerima::create([
                 'mahasiswa_id' => $mahasiswa->id,
                 'beasiswa_kategori_id' => $kategori[$i % count($kategori)]->id,
+                'tahun_akademik' => '2025/2026',
+                'semester' => 'ganjil',
+                'status' => $status,
+                'nominal' => $berSk ? [2400000, 3600000, 6000000][$i % 3] : null,
+                'no_sk' => $berSk ? 'SK/'.(100 + $i).'/FT/2026' : null,
+                'tanggal_sk' => $berSk ? '2026-01-15' : null,
+                'sumber_usulan' => 'Prodi',
             ]);
         }
     }
