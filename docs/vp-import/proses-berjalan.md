@@ -4,11 +4,23 @@ Diagram proses **pengelolaan data kemahasiswaan yang berjalan saat ini** (manual
 untuk BAB III — Analisis Sistem yang Sedang Berjalan. Menyoroti titik nyeri: rekapitulasi manual,
 profiling berbasis asumsi, dan adanya perulangan permintaan data (rework).
 
-## Cara pakai di Visual Paradigm
-- **Import BPMN:** `docs/vp-import/proses-berjalan.bpmn` (BPMN 2.0). Di VP: *Project → Import → BPMN 2.0…*
-  lalu pilih file tersebut. Bila tata letak perlu dirapikan, gunakan *Layout → Auto Layout*.
-- **Gambar latar putih**, hindari PNG transparan saat ekspor (sesuai catatan pembimbing).
-- Mermaid di bawah hanya untuk **verifikasi alur** cepat (render di editor Markdown); bukan untuk VP.
+## Cara membuat diagram TANPA Visual Paradigm (gratis)
+
+Tersedia tiga bentuk sumber — pakai yang paling mudah bagimu:
+
+1. **PlantUML (disarankan)** — `proses-berjalan.puml`. Activity Diagram swimlane, notasi UML baku,
+   umum dipakai skripsi SI/TI di Indonesia. Render gratis:
+   - **planttext.com** — tempel isi `.puml`, klik *Refresh*, lalu *Download* PNG/SVG.
+   - **plantuml.com/plantuml** — server resmi PlantUML.
+   - **VS Code** + ekstensi *PlantUML* (Alt+D untuk pratinjau, lalu ekspor).
+2. **BPMN 2.0** — `proses-berjalan.bpmn`. Bisa diimpor ke **draw.io / diagrams.net** (gratis, GUI):
+   *Extras → Edit Diagram* atau *File → Import*; draw.io juga punya bentuk BPMN/Flowmap bawaan bila
+   ingin menggambar ulang secara manual.
+3. **Mermaid** — blok di bawah, untuk verifikasi alur cepat (render di editor Markdown/GitHub).
+
+> **Ekspor latar PUTIH**, hindari PNG transparan (sesuai catatan pembimbing).
+> Alternatif GUI penuh pengganti VP: **draw.io (diagrams.net)** — gratis, punya stensil UML, BPMN,
+> dan Flowmap; cocok bila ingin menata diagram secara manual.
 
 ## Alur (referensi visual — Mermaid)
 

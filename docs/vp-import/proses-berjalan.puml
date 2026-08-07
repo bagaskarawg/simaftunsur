@@ -1,0 +1,41 @@
+@startuml proses-berjalan
+' =====================================================================
+' Proses bisnis yang SEDANG BERJALAN (manual) - Activity Diagram swimlane
+' Notasi UML baku. Render GRATIS tanpa Visual Paradigm:
+'   - https://www.planttext.com  (tempel, unduh PNG/SVG)
+'   - https://www.plantuml.com/plantuml
+'   - VS Code + ekstensi "PlantUML"
+' Ekspor latar PUTIH (bukan transparan) sesuai catatan pembimbing.
+' =====================================================================
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam ActivityBackgroundColor #F4F6F8
+skinparam ActivityBorderColor #33566E
+skinparam ActivityDiamondBackgroundColor #FDF3D8
+title Prosedur Pengelolaan Data Kemahasiswaan yang Sedang Berjalan (Manual)
+
+|Wakil Dekan III|
+start
+:Perlu gambaran karakteristik mahasiswa;
+:Ajukan permintaan rekapitulasi data;
+
+repeat
+  |Staf Kemahasiswaan|
+  :Kumpulkan data dari berkas tiap unit;
+  |Unit / Program Studi|
+  :Sediakan berkas data
+  (lembar kerja terpisah);
+  |Staf Kemahasiswaan|
+  :Rekapitulasi data secara manual;
+  :Susun profil mahasiswa
+  berdasarkan asumsi;
+  :Serahkan rekapitulasi ke pimpinan;
+  |Wakil Dekan III|
+  :Tinjau rekapitulasi;
+repeat while (Data memadai?) is (Tidak, lengkapi data) not (Ya)
+
+:Rumuskan strategi pembinaan mahasiswa;
+stop
+
+@enduml
