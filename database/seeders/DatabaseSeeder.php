@@ -45,15 +45,16 @@ class DatabaseSeeder extends Seeder
         // 2019–2023. Ini satu-satunya sumber mahasiswa (tanpa data dummy).
         $this->call(MahasiswaTeknikSeeder::class);
 
-        // Ragamkan status studi (demo) agar cuti/lulus/do tampil jelas untuk
-        // modul manajemen status mahasiswa.
-        $this->seedStatusDemo();
-
         // Profil klasterisasi DEMO/SIMULASI (berkas PMB tak memuat IPK/SKKM):
         // IPK per semester (F1–F4) + catatan prestasi/kegiatan/pengabdian
         // (F5–F7) dengan sebaran 2 dimensi akademik × non-akademik agar edge
         // case (mis. IPK tinggi tapi non-akademik rendah) benar-benar ada.
         $this->call(ProfilKlasterDemoSeeder::class);
+
+        // Ragamkan status studi (demo) SETELAH IPK terisi, agar mahasiswa
+        // cuti/lulus/do tetap memiliki riwayat IPK namun otomatis ter-exclude
+        // dari klasterisasi (hanya status 'aktif' yang diklaster).
+        $this->seedStatusDemo();
 
         // Data contoh modul pendukung (SIMULASI untuk demo, bukan data riil).
         $this->seedPrestasi();
