@@ -17,14 +17,18 @@ left to right direction
 ' Aktor umum "Pengguna" digeneralisasi oleh 6 peran (mengurangi garis asosiasi
 ' untuk use case bersama; generalisasi aktor = notasi UML baku).
 actor "Pengguna" as user
-actor "Administrator" as admin
 actor "Staf WD III" as stafwd3
 actor "Staf Prodi" as stafprodi
 actor "Wakil Dekan III" as wd3
 actor "Ketua Program Studi" as kaprodi
 actor "Wakil Rektor III" as wr3
 
-admin    --|> user
+note as NAdmin
+  Administrator memiliki SELURUH akses (peran wildcard).
+  Tidak digambarkan sebagai aktor agar diagram fokus
+  pada peran fungsional.
+end note
+
 stafwd3  --|> user
 stafprodi --|> user
 wd3      --|> user
@@ -117,21 +121,7 @@ wd3 -- ucLaporanE
 wr3 -- ucLaporanL
 wr3 -- ucLaporanE
 
-' --- Administrator: seluruh modul (wildcard) ---
-admin -- ucMhsKelola
-admin -- ucKlasterJalan
-admin -- ucPrestasi
-admin -- ucKegiatan
-admin -- ucPengabdian
-admin -- ucSaring
-admin -- ucProgram
-admin -- ucBeasiswa
-admin -- ucKkn
-admin -- ucTracer
-admin -- ucPromosi
-admin -- ucPengguna
-admin -- ucPengaturan
-admin -- ucLog
+' Use case administrasi & CRUD pendukung diakses Administrator (lihat catatan).
 @enduml
 
 ' Versi ringkas khusus modul fokus penelitian — lebih mudah dibaca di naskah.
