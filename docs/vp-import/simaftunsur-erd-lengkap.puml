@@ -1,6 +1,9 @@
 ' =====================================================================
-' SIMAFTUNSUR — ERD LENGKAP (satu gambar utuh, 22 entitas)
-' Notasi: crow's foot (Information Engineering), model logis MySQL 8.x.
+' SIMAFTUNSUR — ERD LENGKAP (satu gambar utuh)
+' Notasi kardinalitas KAKI-GAGAK (crow's foot / Information Engineering),
+' merujuk Elmasri & Navathe, "Fundamentals of Database Systems" (2016) dan
+' Connolly & Begg, "Database Systems" (2015). Model logis untuk MySQL 8.x.
+' Termasuk atribut ekonomi mahasiswa & tabel RBAC (peran, izin_peran).
 '
 ' Tujuan penyajian (permintaan pembimbing): SELURUH entitas & relasi
 ' tampil dalam SATU gambar, dicetak di kertas A4 ORIENTASI LANDSCAPE
@@ -61,6 +64,9 @@ entity mahasiswa {
   status_akhir <<lanjutan>>
   email
   nomor_telepon
+  penghasilan_orang_tua
+  kategori_ekonomi
+  pekerjaan_orang_tua
 }
 
 entity nilai_ipk_semester {
@@ -297,9 +303,29 @@ entity pengguna {
   * nama
   email <<UK>>
   * kata_sandi
-  * peran
+  * peran <<FK ke peran.kode>>
   email_terverifikasi_pada
 }
+
+entity peran {
+  * id <<PK>>
+  --
+  * kode <<UK>>
+  * nama
+  deskripsi
+  * dilindungi
+  * wildcard
+}
+
+entity izin_peran {
+  * id <<PK>>
+  --
+  * peran_id <<FK>>
+  * izin_kode
+}
+
+pengguna }o--|| peran
+peran ||--o{ izin_peran
 
 entity log_aktivitas {
   * id <<PK>>

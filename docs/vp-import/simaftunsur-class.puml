@@ -1,7 +1,11 @@
 ' =====================================================================
 ' SIMAFTUNSUR — Class Diagram (PlantUML)
-' Sumber render cepat; padanan model VP: simaftunsur-class.xmi.
+' Notasi mengikuti OMG Unified Modeling Language (UML) v2.5.1
+' (Object Management Group, 2017); konsisten dengan Pressman & Maxim (2020):
+' visibilitas +/-/#, atribut : tipe, operasi(): tipe, relasi asosiasi
+' dengan multiplisitas, agregasi/komposisi, dan dependensi (..>).
 ' Dua diagram: (1) kelas fokus penelitian, (2) modul pendukung.
+' Render gratis: planttext.com / plantuml.com/plantuml / VS Code.
 ' =====================================================================
 
 @startuml Class-Fokus

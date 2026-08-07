@@ -1,8 +1,12 @@
 ' =====================================================================
 ' SIMAFTUNSUR — ERD terpecah per kelompok modul (PlantUML, crow's foot)
+' Notasi kardinalitas kaki-gagak (crow's foot / Information Engineering),
+' merujuk Elmasri & Navathe (2016) dan Connolly & Begg (2015).
 ' Dipecah menjadi: 1 peta ringkas + 5 ERD detail, LENGKAP DENGAN TIPE DATA.
 '
-' PERAN BERKAS INI: pelengkap/lampiran (pembacaan rinci per modul).
+' PERAN BERKAS INI: pelengkap/lampiran (pembacaan rinci per modul). Untuk
+' atribut ekonomi mahasiswa & tabel RBAC (peran, izin_peran) yang terbaru,
+' rujuk berkas UTUH simaftunsur-erd-lengkap.puml sebagai acuan kanonik.
 ' Gambar UTAMA di naskah adalah ERD UTUH satu halaman A4 landscape —
 ' lihat simaftunsur-erd-lengkap.puml (permintaan pembimbing: seluruh
 ' relasi tampil dalam satu gambar). Versi utuh tidak memuat tipe data

@@ -1,5 +1,8 @@
 ' =====================================================================
 ' SIMAFTUNSUR — Activity Diagram (PlantUML, notasi UML baku)
+' Notasi mengikuti OMG Unified Modeling Language (UML) v2.5.1
+' (Object Management Group, 2017); partition/swimlane menandai tanggung
+' jawab tiap komponen; percabangan dengan guard [Ya]/[Tidak].
 ' Cadangan render cepat di luar Visual Paradigm:
 '   - Online: https://www.plantuml.com/plantuml (tempel per blok @startuml)
 '   - VS Code: ekstensi "PlantUML" (Alt+D untuk preview)

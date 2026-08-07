@@ -1,5 +1,8 @@
 ' =====================================================================
 ' SIMAFTUNSUR — Sequence Diagram integrasi ML <-> Sistem Informasi
+' Notasi mengikuti OMG Unified Modeling Language (UML) v2.5.1
+' (Object Management Group, 2017): lifeline, pesan sinkron/balasan,
+' fragmen kombinasi bila diperlukan.
 ' (PlantUML, latar putih). Padanan render dari sequence Mermaid di
 ' docs/bab2-scikit-learn-integrasi.md.
 ' =====================================================================

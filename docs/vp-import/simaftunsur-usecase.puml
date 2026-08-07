@@ -1,7 +1,11 @@
 ' =====================================================================
 ' SIMAFTUNSUR — Use Case Diagram (PlantUML)
-' Sumber render cepat; padanan model VP: simaftunsur-usecase.xmi.
-' 5 aktor sesuai kesepakatan bimbingan 2 Juli 2026.
+' Notasi mengikuti OMG Unified Modeling Language (UML) v2.5.1
+' (Object Management Group, 2017); konsisten dengan Pressman & Maxim (2020).
+' Sesuai spesifikasi, AKTOR eksternal terhadap subjek → digambar DI LUAR
+' system boundary; use case DI DALAM boundary.
+' 6 aktor (kesepakatan bimbingan 2 Jul 2026 + Wakil Rektor III, masukan 27 Jul 2026).
+' Render gratis: planttext.com / plantuml.com/plantuml / VS Code (ekstensi PlantUML).
 ' =====================================================================
 
 @startuml UC-SIMAFTUNSUR
@@ -14,6 +18,7 @@ actor "Staf WD III" as stafwd3
 actor "Ketua Program Studi" as kaprodi
 actor "Staf Prodi" as stafprodi
 actor "Administrator" as admin
+actor "Wakil Rektor III" as wr3
 
 rectangle SIMAFTUNSUR {
   ' --- Autentikasi ---
@@ -53,10 +58,14 @@ rectangle SIMAFTUNSUR {
   usecase "Mengelola Kegiatan Promosi/PMB" as ucPromosiK
   usecase "Mengelola Sekolah Target" as ucSekolah
 
+  ' --- Penyaringan kandidat (memanfaatkan hasil klasterisasi) ---
+  usecase "Menyaring Kandidat Program\n(Beasiswa / Mawapres)" as ucSaring
+  usecase "Mengelola Program & Syarat" as ucProgram
+
   ' --- Laporan & administrasi sistem ---
   usecase "Melihat Laporan Kemahasiswaan" as ucLaporanL
   usecase "Mengekspor Laporan (CSV/PDF)" as ucLaporanE
-  usecase "Mengelola Pengguna & Peran" as ucPengguna
+  usecase "Mengelola Pengguna & Peran\n(RBAC)" as ucPengguna
   usecase "Mengelola Pengaturan Sistem" as ucPengaturan
   usecase "Mengunduh Backup Data (JSON)" as ucBackup
   usecase "Melihat Log Aktivitas" as ucLog
@@ -72,6 +81,8 @@ ucKlasterDetail ..> ucKlasterLihat : <<extend>>
 ucSekolah ..> ucPromosiK : <<extend>>
 ucLaporanE ..> ucLaporanL : <<extend>>
 ucBackup ..> ucPengaturan : <<extend>>
+ucSaring ..> ucKlasterLihat : <<include>>
+ucProgram ..> ucSaring : <<extend>>
 
 ' --- Autentikasi: seluruh aktor ---
 wd3 -- ucMasuk
@@ -146,9 +157,28 @@ admin -- ucTracerK
 admin -- ucPromosiL
 admin -- ucPromosiK
 admin -- ucLaporanL
+admin -- ucLaporanE
+admin -- ucSaring
+admin -- ucProgram
 admin -- ucPengguna
 admin -- ucPengaturan
 admin -- ucLog
+
+' --- Wakil Dekan III: penyaringan kandidat + ekspor laporan ---
+wd3 -- ucSaring
+wd3 -- ucProgram
+wd3 -- ucLaporanE
+
+' --- Staf WD III: penyaringan kandidat ---
+stafwd3 -- ucSaring
+
+' --- Wakil Rektor III: laporan tingkat universitas ---
+wr3 -- ucMasuk
+wr3 -- ucKeluar
+wr3 -- ucBeranda
+wr3 -- ucProfil
+wr3 -- ucLaporanL
+wr3 -- ucLaporanE
 @enduml
 
 ' Versi ringkas khusus modul fokus penelitian — lebih mudah dibaca di naskah.
