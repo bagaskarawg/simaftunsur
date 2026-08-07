@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
      * Mengisi data awal:
      *  - 5 akun pengguna demo (satu per peran: admin, WD III, Staf WD III,
      *    Kaprodi, Staf Prodi).
-     *  - 4 program studi FT UNSUR.
+     *  - 3 program studi FT UNSUR (yang ada datanya di roster PMB).
      *  - Roster NYATA 1.225 mahasiswa Teknik dari berkas PMB via
      *    MahasiswaTeknikSeeder (tanpa data mahasiswa dummy).
      *  - Profil klasterisasi DEMO (IPK F1–F4 + non-akademik F5–F7) via
@@ -139,16 +139,18 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * Empat program studi resmi FT UNSUR (seluruhnya jenjang S1).
+     * Tiga program studi FT UNSUR yang memiliki data pada roster (jenjang S1).
      *
      * @return array<string, ProgramStudi>
      */
     protected function seedProgramStudi(): array
     {
+        // Tiga prodi yang benar-benar memiliki data mahasiswa pada roster PMB
+        // (Teknik Mesin tidak ada dalam berkas sehingga tidak diikutkan agar
+        // data konsisten — tidak ada prodi kosong).
         $definisi = [
             ['kode' => 'TIF', 'nama' => 'Teknik Informatika'],
             ['kode' => 'TSI', 'nama' => 'Teknik Sipil'],
-            ['kode' => 'TMI', 'nama' => 'Teknik Mesin'],
             ['kode' => 'TID', 'nama' => 'Teknik Industri'],
         ];
 

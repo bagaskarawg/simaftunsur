@@ -15,7 +15,7 @@ beforeEach(function () {
 });
 
 it('mengisi 4 prodi & roster mahasiswa aktif dengan >= 3 catatan IPK per mahasiswa layak', function () {
-    expect(ProgramStudi::count())->toBe(4);
+    expect(ProgramStudi::count())->toBe(3);
 
     // Roster nyata dari berkas PMB: jumlah mahasiswa aktif melebihi ambang
     // minimum klasterisasi (100).
