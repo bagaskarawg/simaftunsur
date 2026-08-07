@@ -45,9 +45,9 @@ it('mengisi roster ketiga prodi Teknik dari berkas PMB', function () {
     // tidak ada dalam berkas sehingga wajar tanpa mahasiswa.
     $perKode = ProgramStudi::withCount('mahasiswa')->get()->pluck('mahasiswa_count', 'kode');
 
-    expect($perKode['TIF'])->toBeGreaterThan(0)
-        ->and($perKode['TSI'])->toBeGreaterThan(0)
-        ->and($perKode['TID'])->toBeGreaterThan(0)
+    expect($perKode['55201'])->toBeGreaterThan(0)
+        ->and($perKode['22201'])->toBeGreaterThan(0)
+        ->and($perKode['26201'])->toBeGreaterThan(0)
         ->and(Mahasiswa::count())->toBeGreaterThan(1000);
 });
 

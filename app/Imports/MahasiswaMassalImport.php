@@ -17,7 +17,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
  *   email, nomor_telepon
  *
  * Aturan:
- *  - `prodi` diisi KODE prodi (mis. TIF). Kode tidak terdaftar → baris gagal.
+ *  - `prodi` diisi KODE prodi (mis. 55201). Kode tidak terdaftar → baris gagal.
  *  - Upsert berdasarkan NPM: NPM yang sudah ada akan diperbarui (ditimpa).
  *  - `status` opsional, default "aktif". `email`/`nomor_telepon` opsional.
  *  - Baris yang gagal divalidasi dilewati & dilaporkan, tidak membatalkan

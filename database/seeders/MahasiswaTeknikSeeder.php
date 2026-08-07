@@ -45,7 +45,7 @@ class MahasiswaTeknikSeeder extends Seeder
             return;
         }
 
-        // Peta kode prodi -> id (mis. 'TIF' => 1). ProgramStudi wajib sudah di-seed.
+        // Peta kode prodi -> id (mis. '55201' => 1). ProgramStudi wajib sudah di-seed.
         $petaProdi = ProgramStudi::query()->pluck('id', 'kode');
 
         $pegangan = fopen($berkas, 'r');

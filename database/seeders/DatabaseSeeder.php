@@ -148,10 +148,11 @@ class DatabaseSeeder extends Seeder
         // Tiga prodi yang benar-benar memiliki data mahasiswa pada roster PMB
         // (Teknik Mesin tidak ada dalam berkas sehingga tidak diikutkan agar
         // data konsisten — tidak ada prodi kosong).
+        // Kode prodi resmi (PDDIKTI/Forlap) sesuai prefix NPM.
         $definisi = [
-            ['kode' => 'TIF', 'nama' => 'Teknik Informatika'],
-            ['kode' => 'TSI', 'nama' => 'Teknik Sipil'],
-            ['kode' => 'TID', 'nama' => 'Teknik Industri'],
+            ['kode' => '55201', 'nama' => 'Teknik Informatika'],
+            ['kode' => '22201', 'nama' => 'Teknik Sipil'],
+            ['kode' => '26201', 'nama' => 'Teknik Industri'],
         ];
 
         // Idempoten: firstOrCreate berdasarkan `kode` prodi.

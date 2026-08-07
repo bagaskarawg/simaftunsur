@@ -19,7 +19,7 @@ class TemplateMahasiswaController extends Controller
 
         $kolom = ['npm', 'nama', 'prodi', 'angkatan', 'semester_aktif', 'jenis_kelamin', 'status', 'email', 'nomor_telepon'];
 
-        $kodeProdi = ProgramStudi::query()->orderBy('kode')->value('kode') ?? 'TIF';
+        $kodeProdi = ProgramStudi::query()->orderBy('kode')->value('kode') ?? '55201';
 
         $contoh = [
             ['20200000001', 'Budi Santoso', $kodeProdi, 2020, 7, 'L', 'aktif', 'budi@example.ac.id', '081234567890'],
